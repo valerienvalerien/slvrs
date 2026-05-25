@@ -15,9 +15,20 @@
 
 - Télésecrétaires **francophones natives**, formées au secret médical, **8h–20h**.
 - Intégration **Doctolib / Maiia / Médistory / Cegedim**.
-- **1,20 €/appel** ou forfait à partir de **350 €/mois**.
+- **Facturation au forfait mensuel** (paliers par volume d'appels) — pas de facturation à l'appel.
 - **Essai 15 jours sans engagement**, le praticien garde la main sur les agendas.
 - Fuseau compatible France, coût ~40 % inférieur à une secrétaire en métropole.
+
+### Grille de forfaits (proposition à valider)
+
+| Forfait | Volume inclus | Prix mensuel* |
+|---|---|---|
+| **Essentiel** | jusqu'à ~250 appels/mois | 350 € |
+| **Confort** | jusqu'à ~500 appels/mois | 590 € |
+| **Intensif** | jusqu'à ~900 appels/mois | 950 € |
+| **Sur-mesure** | > 900 appels/mois | sur devis |
+
+\* Montants **indicatifs à valider**. En cas de dépassement, bascule sur le palier supérieur (jamais de surfacturation à l'appel). Essai 15 jours offert sur tous les forfaits.
 
 ---
 
