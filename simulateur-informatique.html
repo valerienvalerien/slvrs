@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Salverys — Simulateur support &amp; helpdesk IT</title>
+<style>
+  :root {
+    /* Palette vive — jaune électrique / encre profonde · univers IT */
+    --bg: #FFFDF5;
+    --bg-card: #FFFFFF;
+    --bg-elevated: #FFFFFF;
+    --ink: #15161D;
+    --ink-soft: #23252F;
+    --line: #EDE7D4;
+    --line-strong: #DCD4BC;
+    --yellow: #FFC400;
+    --yellow-bright: #FFD43B;
+    --yellow-deep: #D89E00;
+    --yellow-tint: #FFF1BF;
+    --accent: #2F5BFF;
+    --good: #12A150;
+    --text: #1A1B22;
+    --text-soft: #4C4E59;
+    --text-mute: #8A8C97;
+    --danger: #E5484D;
+    --shadow-sm: 0 1px 2px rgba(21, 22, 29, 0.07), 0 1px 3px rgba(21, 22, 29, 0.05);
+    --shadow-md: 0 6px 16px rgba(21, 22, 29, 0.10), 0 2px 6px rgba(21, 22, 29, 0.06);
+    --shadow-lg: 0 16px 40px rgba(21, 22, 29, 0.16), 0 6px 14px rgba(21, 22, 29, 0.08);
+    --shadow-yellow: 0 8px 24px rgba(255, 196, 0, 0.35);
+    --radius-sm: 6px;
+    --radius-md: 12px;
+    --radius-lg: 20px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+  a { color: inherit; }
+
+  /* ============ NAV ============ */
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(255, 253, 245, 0.85);
+    backdrop-filter: saturate(160%) blur(10px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-inner { display: flex; align-items: center; gap: 24px; height: 64px; }
+  .brand {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--ink);
+    text-decoration: none;
+    letter-spacing: -0.02em;
+  }
+  .brand span {
+    background: var(--yellow);
+    padding: 0 6px;
+    border-radius: 5px;
+  }
+  .nav-links { display: flex; gap: 22px; margin-left: 12px; flex: 1; }
+  .nav-links a {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-soft);
+    text-decoration: none;
+    padding: 6px 0;
+    border-bottom: 2px solid transparent;
+    transition: color 0.15s, border-color 0.15s;
+  }
+  .nav-links a:hover { color: var(--ink); }
+  .nav-links a.active { color: var(--ink); border-bottom-color: var(--yellow); }
+  .nav-cta {
+    background: var(--yellow);
+    color: var(--ink);
+    padding: 9px 18px;
+    border-radius: 100px;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .nav-cta:hover { transform: translateY(-1px); box-shadow: var(--shadow-yellow); }
+  @media (max-width: 720px) { .nav-links { display: none; } }
+
+  /* ============ HERO ============ */
+  .hero {
+    padding: 84px 0 72px;
+    text-align: center;
+    background: var(--ink);
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::after {
+    content: "";
+    position: absolute;
+    width: 520px; height: 520px;
+    background: radial-gradient(circle, rgba(255,196,0,0.22), transparent 70%);
+    top: -180px; right: -120px;
+    pointer-events: none;
+  }
+
+  .hero-badge {
+    display: inline-block;
+    background: rgba(255, 196, 0, 0.16);
+    color: var(--yellow-bright);
+    padding: 6px 14px;
+    border-radius: 100px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+
+  .hero h1 {
+    font-size: clamp(38px, 5.4vw, 60px);
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+    margin-bottom: 20px;
+  }
+  .hero h1 em {
+    font-style: normal;
+    color: var(--ink);
+    background: var(--yellow);
+    padding: 0 10px;
+    border-radius: 8px;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+  }
+
+  .hero p {
+    font-size: 18px;
+    color: rgba(255,255,255,0.72);
+    max-width: 640px;
+    margin: 0 auto 36px;
+  }
+
+  .hero-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--yellow);
+    color: var(--ink);
+    padding: 15px 30px;
+    border-radius: 100px;
+    font-size: 15px;
+    font-weight: 700;
+    text-decoration: none;
+    box-shadow: var(--shadow-yellow);
+    transition: transform 0.2s;
+  }
+  .hero-cta:hover { transform: translateY(-2px); }
+
+  /* ============ SIMULATEUR ============ */
+  .simulator-section { padding: 56px 0 80px; }
+
+  .section-header { text-align: center; margin-bottom: 48px; }
+  .section-header h2 {
+    font-size: 36px;
+    font-weight: 800;
+    color: var(--ink);
+    letter-spacing: -0.025em;
+    margin-bottom: 12px;
+  }
+  .section-header p { color: var(--text-soft); font-size: 16px; }
+
+  .simulator-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; align-items: start; }
+  @media (max-width: 900px) { .simulator-grid { grid-template-columns: 1fr; } }
+
+  .controls-card, .results-card {
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    padding: 32px;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .results-card {
+    background: var(--ink);
+    color: #fff;
+    border-color: var(--ink);
+    position: sticky;
+    top: 88px;
+  }
+
+  .control-group { margin-bottom: 28px; }
+  .control-group:last-child { margin-bottom: 0; }
+
+  .control-label { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 12px; }
+  .control-label-text { font-size: 14px; font-weight: 700; color: var(--ink); letter-spacing: 0.01em; }
+  .control-value {
+    font-size: 17px;
+    color: var(--yellow-deep);
+    font-weight: 800;
+  }
+
+  .slider-wrap { position: relative; padding: 8px 0; }
+
+  input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 6px;
+    background: var(--line-strong);
+    border-radius: 100px;
+    outline: none;
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 24px; height: 24px;
+    background: var(--yellow);
+    border: 3px solid var(--ink);
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(255,196,0,0.5);
+    transition: transform 0.15s;
+  }
+  input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.15); }
+  input[type="range"]::-moz-range-thumb {
+    width: 24px; height: 24px;
+    background: var(--yellow);
+    border: 3px solid var(--ink);
+    border-radius: 50%;
+    cursor: pointer;
+  }
+
+  .pill-group { display: flex; gap: 8px; flex-wrap: wrap; }
+  .pill {
+    flex: 1;
+    min-width: fit-content;
+    padding: 10px 14px;
+    background: #fff;
+    border: 1.5px solid var(--line-strong);
+    border-radius: 100px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-soft);
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.15s;
+  }
+  .pill:hover { border-color: var(--yellow-deep); color: var(--ink); }
+  .pill.active {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: #fff;
+  }
+
+  .result-primary {
+    text-align: center;
+    padding-bottom: 24px;
+    border-bottom: 1px solid rgba(255,255,255,0.12);
+    margin-bottom: 24px;
+  }
+  .result-label { font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(255,255,255,0.55); margin-bottom: 8px; }
+  .result-price { font-size: 56px; font-weight: 800; letter-spacing: -0.03em; line-height: 1; }
+  .result-price-unit { font-size: 18px; color: rgba(255,255,255,0.7); margin-left: 4px; }
+  .result-strikethrough { margin-top: 12px; font-size: 14px; color: rgba(255,255,255,0.55); }
+  .result-strikethrough .old { text-decoration: line-through; text-decoration-color: var(--danger); text-decoration-thickness: 2px; }
+
+  .savings-badge {
+    display: inline-block;
+    margin-top: 14px;
+    background: var(--yellow);
+    color: var(--ink);
+    padding: 8px 16px;
+    border-radius: 100px;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+  }
+
+  .result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+  .result-stat { background: rgba(255,255,255,0.06); border-radius: var(--radius-md); padding: 16px; }
+  .result-stat-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(255,255,255,0.55); margin-bottom: 6px; }
+  .result-stat-value { font-size: 22px; font-weight: 800; color: #fff; }
+  .result-stat-value.accent { color: var(--yellow-bright); }
+
+  .recommendation {
+    background: linear-gradient(135deg, rgba(255,196,0,0.18), rgba(47,91,255,0.10));
+    border: 1px solid rgba(255,196,0,0.35);
+    border-radius: var(--radius-md);
+    padding: 16px;
+    text-align: center;
+  }
+  .recommendation-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--yellow-bright); margin-bottom: 6px; font-weight: 700; }
+  .recommendation-text { font-size: 16px; font-weight: 600; color: #fff; }
+  .recommendation-text strong { color: var(--yellow-bright); }
+
+  .disclaimer { margin-top: 16px; font-size: 12px; color: rgba(255,255,255,0.5); text-align: center; }
+
+  /* ============ FORFAITS ============ */
+  .packages-section { padding: 80px 0; background: #FFFBEC; }
+  .packages-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 48px; }
+  @media (max-width: 900px) { .packages-grid { grid-template-columns: 1fr; } }
+
+  .package {
+    background: var(--bg-elevated);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    padding: 32px 28px;
+    position: relative;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .package:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
+
+  .package.featured {
+    background: var(--ink);
+    color: #fff;
+    border-color: var(--ink);
+    transform: scale(1.04);
+    box-shadow: var(--shadow-lg);
+  }
+  .package.featured:hover { transform: scale(1.04) translateY(-4px); }
+
+  .package-badge {
+    position: absolute;
+    top: -12px; left: 50%;
+    transform: translateX(-50%);
+    background: var(--yellow);
+    color: var(--ink);
+    padding: 5px 14px;
+    border-radius: 100px;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .package-name { font-size: 24px; font-weight: 800; color: var(--ink); margin-bottom: 6px; letter-spacing: -0.01em; }
+  .package.featured .package-name { color: #fff; }
+  .package-tagline { font-size: 13px; color: var(--text-mute); margin-bottom: 24px; }
+  .package.featured .package-tagline { color: rgba(255,255,255,0.65); }
+
+  .package-price { font-size: 44px; font-weight: 800; color: var(--ink); letter-spacing: -0.03em; line-height: 1; }
+  .package.featured .package-price { color: var(--yellow-bright); }
+  .package-price-unit { font-size: 16px; color: var(--text-mute); }
+  .package.featured .package-price-unit { color: rgba(255,255,255,0.7); }
+
+  .package-equiv {
+    font-size: 13px;
+    color: var(--yellow-deep);
+    margin-top: 8px;
+    margin-bottom: 28px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--line);
+    font-weight: 600;
+  }
+  .package.featured .package-equiv { color: var(--yellow-bright); border-bottom-color: rgba(255,255,255,0.15); }
+
+  .package-features { list-style: none; }
+  .package-features li { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; font-size: 14px; color: var(--text-soft); }
+  .package.featured .package-features li { color: rgba(255,255,255,0.85); }
+  .package-features li::before { content: "✓"; color: var(--yellow-deep); font-weight: 800; flex-shrink: 0; }
+  .package.featured .package-features li::before { color: var(--yellow-bright); }
+
+  .package-cta {
+    display: block;
+    width: 100%;
+    margin-top: 28px;
+    padding: 13px 20px;
+    background: transparent;
+    border: 1.5px solid var(--ink);
+    color: var(--ink);
+    border-radius: 100px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    transition: all 0.15s;
+  }
+  .package-cta:hover { background: var(--ink); color: #fff; }
+  .package.featured .package-cta { background: var(--yellow); border-color: var(--yellow); color: var(--ink); }
+  .package.featured .package-cta:hover { background: var(--yellow-bright); border-color: var(--yellow-bright); }
+
+  /* ============ COMPARAISON ============ */
+  .compare-section { padding: 80px 0; }
+  .compare-table { background: var(--bg-card); border-radius: var(--radius-lg); overflow: hidden; border: 1px solid var(--line); margin-top: 48px; }
+  .compare-row { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr; align-items: center; padding: 18px 24px; border-bottom: 1px solid var(--line); }
+  .compare-row:last-child { border-bottom: none; }
+  .compare-row.header { background: var(--ink); color: #fff; font-weight: 700; font-size: 13px; letter-spacing: 0.04em; text-transform: uppercase; }
+  .compare-row.header .col-feature { color: rgba(255,255,255,0.85); }
+  .compare-row.header .compare-cell.salverys { color: var(--yellow-bright); }
+  .compare-row.highlight { background: linear-gradient(90deg, rgba(255,196,0,0.08), transparent); }
+  .col-feature { color: var(--text); font-weight: 600; font-size: 14px; }
+  .compare-cell { text-align: center; font-size: 13px; color: var(--text-soft); }
+  .compare-cell.salverys { color: var(--yellow-deep); font-weight: 800; }
+  .compare-cell.good { color: var(--good); font-weight: 700; }
+  .compare-cell.bad { color: var(--danger); }
+  .compare-cell.neutral { color: var(--text-mute); }
+  @media (max-width: 800px) {
+    .compare-row { grid-template-columns: 1.5fr 1fr 1fr; font-size: 12px; }
+    .col-esn, .col-offshore { display: none; }
+  }
+
+  /* ============ FOOTER CTA ============ */
+  .footer-cta { background: var(--ink); color: #fff; padding: 80px 0; text-align: center; position: relative; overflow: hidden; }
+  .footer-cta::after {
+    content: "";
+    position: absolute;
+    width: 460px; height: 460px;
+    background: radial-gradient(circle, rgba(255,196,0,0.18), transparent 70%);
+    bottom: -200px; left: -120px;
+    pointer-events: none;
+  }
+  .footer-cta h2 { font-size: 40px; font-weight: 800; margin-bottom: 16px; letter-spacing: -0.02em; }
+  .footer-cta h2 em { font-style: normal; color: var(--yellow); }
+  .footer-cta p { font-size: 17px; color: rgba(255,255,255,0.75); max-width: 540px; margin: 0 auto 32px; }
+  .footer-cta-button {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: var(--yellow); color: var(--ink);
+    padding: 16px 32px; border-radius: 100px;
+    font-size: 15px; font-weight: 700; text-decoration: none;
+    box-shadow: var(--shadow-yellow);
+    transition: transform 0.15s;
+  }
+  .footer-cta-button:hover { transform: translateY(-2px); }
+  .footer-meta { margin-top: 40px; padding-top: 32px; border-top: 1px solid rgba(255,255,255,0.1); font-size: 13px; color: rgba(255,255,255,0.5); }
+
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+  .animate { animation: fadeIn 0.3s ease-out; }
+</style>
+</head>
+<body>
+
+<!-- ============ NAV ============ -->
+<header class="nav">
+  <div class="container nav-inner">
+    <a class="brand" href="index.html">Sal<span>verys</span></a>
+    <nav class="nav-links">
+      <a href="index.html">Accueil</a>
+      <a href="simulateur-salverys.html">Télésecrétariat médical</a>
+      <a href="simulateur-informatique.html" class="active">Support &amp; Helpdesk IT</a>
+    </nav>
+    <a href="#contact" class="nav-cta">Réserver un appel</a>
+  </div>
+</header>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-badge">Support applicatif &amp; Helpdesk IT · N1 francophone</div>
+    <h1>Votre support N1,<br/><em>réactif</em> et francophone.</h1>
+    <p>Des agents techniques dédiés, formés à vos outils : support applicatif pour éditeurs SaaS et helpdesk IT distant. Configurez votre équipe, le tarif s'affiche en direct.</p>
+    <a href="#simulator" class="hero-cta">Simuler mon équipe →</a>
+  </div>
+</section>
+
+<!-- ============ SIMULATEUR ============ -->
+<section class="simulator-section" id="simulator">
+  <div class="container">
+    <div class="section-header">
+      <h2>Configurez votre équipe support</h2>
+      <p>Ajustez les paramètres — votre tarif se calcule en temps réel.</p>
+    </div>
+
+    <div class="simulator-grid">
+      <!-- CONTRÔLES -->
+      <div class="controls-card">
+
+        <div class="control-group">
+          <div class="control-label">
+            <span class="control-label-text">Nombre d'agents</span>
+            <span class="control-value" id="posts-value">1 agent</span>
+          </div>
+          <div class="slider-wrap">
+            <input type="range" id="posts" min="1" max="10" value="1" step="1" />
+          </div>
+        </div>
+
+        <div class="control-group">
+          <div class="control-label">
+            <span class="control-label-text">Heures / semaine / agent</span>
+            <span class="control-value" id="hours-value">35 h</span>
+          </div>
+          <div class="slider-wrap">
+            <input type="range" id="hours" min="10" max="40" value="35" step="5" />
+          </div>
+        </div>
+
+        <div class="control-group">
+          <div class="control-label">
+            <span class="control-label-text">Niveau de service</span>
+          </div>
+          <div class="pill-group" data-group="service">
+            <button class="pill" data-value="shared" data-multiplier="0.85">Mutualisé</button>
+            <button class="pill active" data-value="dedicated" data-multiplier="1.0">Dédié</button>
+            <button class="pill" data-value="premium" data-multiplier="1.25">Premium</button>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <div class="control-label">
+            <span class="control-label-text">Canaux traités</span>
+          </div>
+          <div class="pill-group" data-group="channels">
+            <button class="pill active" data-value="single" data-multiplier="1.0">Ticket / email</button>
+            <button class="pill" data-value="multi" data-multiplier="1.08">Tél + ticket</button>
+            <button class="pill" data-value="omni" data-multiplier="1.15">Omnicanal</button>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <div class="control-label">
+            <span class="control-label-text">Langue</span>
+          </div>
+          <div class="pill-group" data-group="language">
+            <button class="pill active" data-value="fr" data-multiplier="1.0">FR</button>
+            <button class="pill" data-value="en" data-multiplier="1.12">EN</button>
+            <button class="pill" data-value="bi" data-multiplier="1.22">Bilingue</button>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <div class="control-label">
+            <span class="control-label-text">Horaires de couverture</span>
+          </div>
+          <div class="pill-group" data-group="schedule">
+            <button class="pill active" data-value="office" data-multiplier="1.0">Bureau</button>
+            <button class="pill" data-value="extended" data-multiplier="1.15">Étendu</button>
+            <button class="pill" data-value="weekend" data-multiplier="1.28">Astreinte soir+WE</button>
+            <button class="pill" data-value="247" data-multiplier="1.45">24·7</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- RÉSULTATS -->
+      <div class="results-card">
+        <div class="result-primary">
+          <div class="result-label">Votre forfait mensuel</div>
+          <div>
+            <span class="result-price" id="price-monthly">1 290</span><span class="result-price-unit">€/mois</span>
+          </div>
+          <div class="result-strikethrough">
+            Équivalent technicien France : <span class="old" id="price-fr-hourly">18,5 €/h</span> · <span class="old" id="price-fr">3 200 €/mois</span>
+          </div>
+          <div class="savings-badge" id="savings-badge">Économie : 58 %</div>
+        </div>
+
+        <div class="result-grid">
+          <div class="result-stat">
+            <div class="result-stat-label">Heures / mois</div>
+            <div class="result-stat-value" id="hours-monthly">152 h</div>
+          </div>
+          <div class="result-stat">
+            <div class="result-stat-label">Tarif horaire affiché</div>
+            <div class="result-stat-value" id="hourly-displayed">8,5 €</div>
+          </div>
+          <div class="result-stat">
+            <div class="result-stat-label">Tarif horaire productif</div>
+            <div class="result-stat-value accent" id="hourly-productive">10,0 €</div>
+          </div>
+          <div class="result-stat">
+            <div class="result-stat-label">Économie annuelle</div>
+            <div class="result-stat-value accent" id="annual-savings">22 000 €</div>
+          </div>
+        </div>
+
+        <div class="recommendation">
+          <div class="recommendation-label">★ Recommandé pour vous</div>
+          <div class="recommendation-text" id="recommendation">
+            Forfait <strong>Support Pro</strong> — meilleur rapport coût / disponibilité.
+          </div>
+        </div>
+
+        <div class="disclaimer">Montants indicatifs à valider · sans engagement long terme.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FORFAITS ============ -->
+<section class="packages-section">
+  <div class="container">
+    <div class="section-header">
+      <h2>Trois forfaits, une logique</h2>
+      <p>Choisissez l'offre packagée, ou configurez sur mesure ci-dessus.</p>
+    </div>
+
+    <div class="packages-grid">
+      <div class="package">
+        <div class="package-name">Helpdesk Starter</div>
+        <div class="package-tagline">Premier niveau, sans recruter</div>
+        <div>
+          <span class="package-price">690</span><span class="package-price-unit"> €/mois</span>
+        </div>
+        <div class="package-equiv">≈ 8 €/h · Économie ~ 55 %</div>
+        <ul class="package-features">
+          <li>1 agent mutualisé · 20 h / semaine</li>
+          <li>Tickets + email</li>
+          <li>SLA standard · réponse &lt; 4 h</li>
+          <li>Base de connaissance partagée</li>
+          <li>Onboarding 5 jours</li>
+        </ul>
+        <a href="#contact" class="package-cta">Démarrer</a>
+      </div>
+
+      <div class="package featured">
+        <div class="package-badge">★ Le plus choisi</div>
+        <div class="package-name">Support Pro</div>
+        <div class="package-tagline">L'équivalent d'un technicien N1, sans le coût</div>
+        <div>
+          <span class="package-price">1 290</span><span class="package-price-unit"> €/mois</span>
+        </div>
+        <div class="package-equiv">≈ 8,5 €/h · Économie ~ 58 %</div>
+        <ul class="package-features">
+          <li>1 agent 100 % dédié · 35 h / semaine</li>
+          <li>Téléphone + ticketing + chat</li>
+          <li>Escalade N2 cadrée</li>
+          <li>Reporting hebdomadaire + KPI</li>
+          <li>Backup agent inclus</li>
+          <li>Supervision QA mensuelle</li>
+        </ul>
+        <a href="#contact" class="package-cta">Choisir Support Pro</a>
+      </div>
+
+      <div class="package">
+        <div class="package-name">Centre N1 Scale</div>
+        <div class="package-tagline">Équipe N1, couverture étendue</div>
+        <div>
+          <span class="package-price">2 490</span><span class="package-price-unit"> €/mois</span>
+        </div>
+        <div class="package-equiv">≈ 8 €/h · Économie ~ 60 %</div>
+        <ul class="package-features">
+          <li>2 agents dédiés · 35 h / semaine chacun</li>
+          <li>Superviseur dédié</li>
+          <li>Horaires étendus (8 h – 20 h)</li>
+          <li>Astreinte soir / week-end possible</li>
+          <li>KPI personnalisés mensuels</li>
+          <li>Account manager dédié</li>
+        </ul>
+        <a href="#contact" class="package-cta">Passer à Scale</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ COMPARAISON ============ -->
+<section class="compare-section">
+  <div class="container">
+    <div class="section-header">
+      <h2>Ce que vous remplacez vraiment</h2>
+      <p>Comparaison réaliste pour un poste de support N1 équivalent temps plein.</p>
+    </div>
+
+    <div class="compare-table">
+      <div class="compare-row header">
+        <div class="col-feature">Critère</div>
+        <div class="compare-cell">Technicien interne</div>
+        <div class="compare-cell col-esn">Régie / ESN</div>
+        <div class="compare-cell col-offshore">Offshore générique</div>
+        <div class="compare-cell salverys">Salverys</div>
+      </div>
+      <div class="compare-row highlight">
+        <div class="col-feature">Coût mensuel chargé</div>
+        <div class="compare-cell bad">3 200 €</div>
+        <div class="compare-cell col-esn neutral">350-550 €/jour</div>
+        <div class="compare-cell col-offshore neutral">Variable</div>
+        <div class="compare-cell salverys">1 290 €</div>
+      </div>
+      <div class="compare-row">
+        <div class="col-feature">Disponibilité garantie</div>
+        <div class="compare-cell good">Oui (35 h)</div>
+        <div class="compare-cell col-esn neutral">Selon contrat</div>
+        <div class="compare-cell col-offshore bad">Variable</div>
+        <div class="compare-cell salverys">Oui + backup</div>
+      </div>
+      <div class="compare-row highlight">
+        <div class="col-feature">Maîtrise du français</div>
+        <div class="compare-cell good">Native</div>
+        <div class="compare-cell col-esn good">Native</div>
+        <div class="compare-cell col-offshore bad">Accent / variable</div>
+        <div class="compare-cell salverys">Native</div>
+      </div>
+      <div class="compare-row">
+        <div class="col-feature">Recrutement / turnover</div>
+        <div class="compare-cell bad">3 à 6 mois</div>
+        <div class="compare-cell col-esn neutral">Rotation fréquente</div>
+        <div class="compare-cell col-offshore neutral">À refaire</div>
+        <div class="compare-cell salverys">Géré sous 7 j</div>
+      </div>
+      <div class="compare-row highlight">
+        <div class="col-feature">Supervision / QA</div>
+        <div class="compare-cell neutral">+ Manager</div>
+        <div class="compare-cell col-esn neutral">Selon contrat</div>
+        <div class="compare-cell col-offshore bad">Aucune</div>
+        <div class="compare-cell salverys">Incluse</div>
+      </div>
+      <div class="compare-row">
+        <div class="col-feature">Engagement minimum</div>
+        <div class="compare-cell bad">CDI</div>
+        <div class="compare-cell col-esn neutral">Forfait jours</div>
+        <div class="compare-cell col-offshore good">Flexible</div>
+        <div class="compare-cell salverys">3 mois</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER CTA ============ -->
+<section class="footer-cta" id="contact">
+  <div class="container">
+    <h2>Votre helpdesk N1, <em>lancé en 10 jours</em>.</h2>
+    <p>Onboarding offert · sans engagement long terme · un interlocuteur unique de bout en bout.</p>
+    <a href="mailto:contact@salverys.fr" class="footer-cta-button">Réserver un appel découverte →</a>
+    <div class="footer-meta">
+      Salverys · Support applicatif &amp; helpdesk IT francophone · Antananarivo → France · Calculs indicatifs, devis personnalisé sur demande.
+    </div>
+  </div>
+</section>
+
+<script>
+  // ============ CALCULS ============
+  const COST_BASE_FULLTIME = 585.53; // €/mois coût direct agent dédié temps plein
+  const MARGIN_TARGET = 0.58;        // marge brute cible
+  const HOURS_PRODUCTIVE_RATIO = 0.85;
+  const FR_EMPLOYEE_FULLTIME_COST = 3200; // €/mois coût employeur chargé d'un technicien N1
+  const FR_SCHEDULE_PENALTY_EXP = 1.35;   // 24/7 en interne = équipes en rotation
+
+  const state = { posts: 1, hours: 35, service: 1.0, channels: 1.0, language: 1.0, schedule: 1.0 };
+
+  function formatPrice(n) { return Math.round(n).toLocaleString('fr-FR'); }
+  function formatHourly(n) { return n.toFixed(1).replace('.', ',') + ' €'; }
+
+  function volumeDiscount(posts) {
+    if (posts >= 6) return 0.90;
+    if (posts >= 3) return 0.95;
+    return 1.0;
+  }
+
+  function calculate() {
+    const hoursPerMonth = state.hours * 4.33;
+    const hoursRatio = hoursPerMonth / 152;
+    const costPerPost = COST_BASE_FULLTIME * hoursRatio;
+    const basePrice = costPerPost / (1 - MARGIN_TARGET);
+    const mult = state.service * state.channels * state.language * state.schedule;
+    const unitPrice = basePrice * mult;
+    const discount = volumeDiscount(state.posts);
+    const totalPrice = unitPrice * state.posts * discount;
+
+    const frMultiplier = state.language * Math.pow(state.schedule, FR_SCHEDULE_PENALTY_EXP);
+    const frCost = FR_EMPLOYEE_FULLTIME_COST * hoursRatio * state.posts * frMultiplier;
+    const savings = frCost - totalPrice;
+    const savingsPct = (savings / frCost) * 100;
+
+    const totalHoursMonth = hoursPerMonth * state.posts;
+    const hourlyDisplayed = totalPrice / totalHoursMonth;
+    const hourlyProductive = totalPrice / (totalHoursMonth * HOURS_PRODUCTIVE_RATIO);
+
+    document.getElementById('price-monthly').textContent = formatPrice(totalPrice);
+    const frHourly = frCost / totalHoursMonth;
+    document.getElementById('price-fr-hourly').textContent = frHourly.toFixed(1).replace('.', ',') + ' €/h';
+    document.getElementById('price-fr').textContent = formatPrice(frCost) + ' €/mois';
+    document.getElementById('savings-badge').textContent = 'Économie : ' + Math.round(savingsPct) + ' %';
+    document.getElementById('hours-monthly').textContent = Math.round(totalHoursMonth) + ' h';
+    document.getElementById('hourly-displayed').textContent = formatHourly(hourlyDisplayed);
+    document.getElementById('hourly-productive').textContent = formatHourly(hourlyProductive);
+    document.getElementById('annual-savings').textContent = formatPrice(savings * 12) + ' €';
+
+    let recommendation;
+    if (state.posts === 1 && state.hours <= 20 && state.service <= 0.85) {
+      recommendation = 'Forfait <strong>Helpdesk Starter</strong> — idéal pour démarrer.';
+    } else if (state.posts >= 2 || (state.posts === 1 && state.hours >= 35 && state.service >= 1.0 && state.schedule > 1.0)) {
+      recommendation = 'Forfait <strong>Centre N1 Scale</strong> — couverture étendue + backup.';
+    } else {
+      recommendation = 'Forfait <strong>Support Pro</strong> — meilleur rapport coût / disponibilité.';
+    }
+    document.getElementById('recommendation').innerHTML = recommendation;
+
+    const el = document.getElementById('price-monthly');
+    el.classList.remove('animate');
+    void el.offsetWidth;
+    el.classList.add('animate');
+  }
+
+  // ============ EVENTS ============
+  document.getElementById('posts').addEventListener('input', e => {
+    state.posts = parseInt(e.target.value);
+    document.getElementById('posts-value').textContent = state.posts + ' agent' + (state.posts > 1 ? 's' : '');
+    calculate();
+  });
+
+  document.getElementById('hours').addEventListener('input', e => {
+    state.hours = parseInt(e.target.value);
+    let label;
+    if (state.hours <= 20) label = state.hours + ' h · temps partiel';
+    else if (state.hours <= 30) label = state.hours + ' h · 4/5e';
+    else if (state.hours === 35) label = '35 h · temps plein';
+    else label = state.hours + ' h · temps plein +';
+    document.getElementById('hours-value').textContent = label;
+    calculate();
+  });
+
+  document.querySelectorAll('.pill-group').forEach(group => {
+    const groupName = group.dataset.group;
+    group.querySelectorAll('.pill').forEach(pill => {
+      pill.addEventListener('click', () => {
+        group.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+        pill.classList.add('active');
+        state[groupName] = parseFloat(pill.dataset.multiplier);
+        calculate();
+      });
+    });
+  });
+
+  calculate();
+</script>
+
+</body>
+</html>

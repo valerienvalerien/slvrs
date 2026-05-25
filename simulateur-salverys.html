@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Valones — Simulateur de votre support externalisé</title>
+<title>Salverys — Simulateur télésecrétariat médical</title>
 <style>
   :root {
-    /* Palette greige chaud / vert sauge / bleu profond désaturé */
+    /* Palette greige chaud / vert sauge / bleu profond — univers médical */
     --bg: #F4EFE6;
     --bg-card: #FBF7F0;
     --bg-elevated: #FFFFFF;
@@ -46,6 +46,65 @@
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 24px;
+  }
+
+  a { color: inherit; }
+
+  /* ============ NAV ============ */
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(251, 247, 240, 0.85);
+    backdrop-filter: saturate(160%) blur(10px);
+    border-bottom: 1px solid var(--greige);
+  }
+  .nav-inner {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    height: 64px;
+  }
+  .brand {
+    font-family: 'Georgia', serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--blue);
+    text-decoration: none;
+    letter-spacing: -0.01em;
+  }
+  .brand span { color: var(--sage-dark); }
+  .nav-links {
+    display: flex;
+    gap: 22px;
+    margin-left: 12px;
+    flex: 1;
+  }
+  .nav-links a {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-soft);
+    text-decoration: none;
+    padding: 6px 0;
+    border-bottom: 2px solid transparent;
+    transition: color 0.15s, border-color 0.15s;
+  }
+  .nav-links a:hover { color: var(--blue); }
+  .nav-links a.active { color: var(--blue); border-bottom-color: var(--sage); }
+  .nav-cta {
+    background: var(--blue);
+    color: #fff;
+    padding: 9px 18px;
+    border-radius: 100px;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: transform 0.15s;
+  }
+  .nav-cta:hover { transform: translateY(-1px); }
+  @media (max-width: 720px) {
+    .nav-links { display: none; }
   }
 
   /* ============ HERO ============ */
@@ -108,14 +167,9 @@
   .hero-cta:hover { transform: translateY(-1px); box-shadow: var(--shadow-lg); }
 
   /* ============ SIMULATEUR ============ */
-  .simulator-section {
-    padding: 40px 0 80px;
-  }
+  .simulator-section { padding: 40px 0 80px; }
 
-  .section-header {
-    text-align: center;
-    margin-bottom: 48px;
-  }
+  .section-header { text-align: center; margin-bottom: 48px; }
 
   .section-header h2 {
     font-family: 'Georgia', serif;
@@ -126,10 +180,7 @@
     margin-bottom: 12px;
   }
 
-  .section-header p {
-    color: var(--text-soft);
-    font-size: 16px;
-  }
+  .section-header p { color: var(--text-soft); font-size: 16px; }
 
   .simulator-grid {
     display: grid;
@@ -138,9 +189,7 @@
     align-items: start;
   }
 
-  @media (max-width: 900px) {
-    .simulator-grid { grid-template-columns: 1fr; }
-  }
+  @media (max-width: 900px) { .simulator-grid { grid-template-columns: 1fr; } }
 
   .controls-card, .results-card {
     background: var(--bg-card);
@@ -155,13 +204,10 @@
     color: white;
     border-color: var(--blue);
     position: sticky;
-    top: 24px;
+    top: 88px;
   }
 
-  .control-group {
-    margin-bottom: 28px;
-  }
-
+  .control-group { margin-bottom: 28px; }
   .control-group:last-child { margin-bottom: 0; }
 
   .control-label {
@@ -185,11 +231,7 @@
     font-weight: 500;
   }
 
-  /* Slider styles */
-  .slider-wrap {
-    position: relative;
-    padding: 8px 0;
-  }
+  .slider-wrap { position: relative; padding: 8px 0; }
 
   input[type="range"] {
     -webkit-appearance: none;
@@ -225,12 +267,7 @@
     box-shadow: 0 2px 6px rgba(0,0,0,0.15);
   }
 
-  /* Pill selectors */
-  .pill-group {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-  }
+  .pill-group { display: flex; gap: 8px; flex-wrap: wrap; }
 
   .pill {
     flex: 1;
@@ -249,13 +286,8 @@
 
   .pill:hover { border-color: var(--sage); color: var(--blue); }
 
-  .pill.active {
-    background: var(--sage);
-    border-color: var(--sage);
-    color: white;
-  }
+  .pill.active { background: var(--sage); border-color: var(--sage); color: white; }
 
-  /* Results panel */
   .result-primary {
     text-align: center;
     padding-bottom: 24px;
@@ -357,19 +389,18 @@
     font-weight: 600;
   }
 
-  .recommendation-text {
-    font-family: 'Georgia', serif;
-    font-size: 16px;
-    color: white;
-  }
-
+  .recommendation-text { font-family: 'Georgia', serif; font-size: 16px; color: white; }
   .recommendation-text strong { color: var(--gold-soft); }
 
-  /* ============ FORFAITS ============ */
-  .packages-section {
-    padding: 80px 0;
-    background: var(--bg-card);
+  .disclaimer {
+    margin-top: 16px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.5);
+    text-align: center;
   }
+
+  /* ============ FORFAITS ============ */
+  .packages-section { padding: 80px 0; background: var(--bg-card); }
 
   .packages-grid {
     display: grid;
@@ -378,9 +409,7 @@
     margin-top: 48px;
   }
 
-  @media (max-width: 900px) {
-    .packages-grid { grid-template-columns: 1fr; }
-  }
+  @media (max-width: 900px) { .packages-grid { grid-template-columns: 1fr; } }
 
   .package {
     background: var(--bg-elevated);
@@ -416,6 +445,7 @@
     font-weight: 700;
     letter-spacing: 0.08em;
     text-transform: uppercase;
+    white-space: nowrap;
   }
 
   .package-name {
@@ -428,12 +458,7 @@
 
   .package.featured .package-name { color: white; }
 
-  .package-tagline {
-    font-size: 13px;
-    color: var(--text-mute);
-    margin-bottom: 24px;
-  }
-
+  .package-tagline { font-size: 13px; color: var(--text-mute); margin-bottom: 24px; }
   .package.featured .package-tagline { color: rgba(255,255,255,0.65); }
 
   .package-price {
@@ -447,12 +472,7 @@
 
   .package.featured .package-price { color: white; }
 
-  .package-price-unit {
-    font-size: 16px;
-    font-family: 'Inter', sans-serif;
-    color: var(--text-mute);
-  }
-
+  .package-price-unit { font-size: 16px; font-family: 'Inter', sans-serif; color: var(--text-mute); }
   .package.featured .package-price-unit { color: rgba(255,255,255,0.7); }
 
   .package-equiv {
@@ -464,14 +484,9 @@
     border-bottom: 1px solid var(--greige);
   }
 
-  .package.featured .package-equiv {
-    color: var(--gold-soft);
-    border-bottom-color: rgba(255,255,255,0.15);
-  }
+  .package.featured .package-equiv { color: var(--gold-soft); border-bottom-color: rgba(255,255,255,0.15); }
 
-  .package-features {
-    list-style: none;
-  }
+  .package-features { list-style: none; }
 
   .package-features li {
     display: flex;
@@ -512,18 +527,11 @@
 
   .package-cta:hover { background: var(--blue); color: white; }
 
-  .package.featured .package-cta {
-    background: var(--gold);
-    border-color: var(--gold);
-    color: white;
-  }
-
+  .package.featured .package-cta { background: var(--gold); border-color: var(--gold); color: white; }
   .package.featured .package-cta:hover { background: var(--gold-soft); border-color: var(--gold-soft); }
 
   /* ============ COMPARAISON ============ */
-  .compare-section {
-    padding: 80px 0;
-  }
+  .compare-section { padding: 80px 0; }
 
   .compare-table {
     background: var(--bg-card);
@@ -554,43 +562,23 @@
 
   .compare-row.header .col-feature { color: rgba(255,255,255,0.85); }
 
-  .compare-row.highlight {
-    background: linear-gradient(90deg, rgba(143,163,143,0.06), transparent);
-  }
+  .compare-row.highlight { background: linear-gradient(90deg, rgba(143,163,143,0.06), transparent); }
 
-  .col-feature {
-    color: var(--text);
-    font-weight: 500;
-    font-size: 14px;
-  }
+  .col-feature { color: var(--text); font-weight: 500; font-size: 14px; }
 
-  .compare-cell {
-    text-align: center;
-    font-size: 13px;
-    color: var(--text-soft);
-  }
-
-  .compare-cell.valones {
-    color: var(--sage-dark);
-    font-weight: 600;
-  }
-
+  .compare-cell { text-align: center; font-size: 13px; color: var(--text-soft); }
+  .compare-cell.salverys { color: var(--sage-dark); font-weight: 600; }
   .compare-cell.good { color: var(--sage-dark); font-weight: 600; }
   .compare-cell.bad { color: var(--danger); }
   .compare-cell.neutral { color: var(--text-mute); }
 
   @media (max-width: 800px) {
     .compare-row { grid-template-columns: 1.5fr 1fr 1fr; font-size: 12px; }
-    .col-freelance, .col-assistant { display: none; }
+    .col-standard, .col-repondeur { display: none; }
   }
 
   /* ============ FOOTER CTA ============ */
-  .footer-cta {
-    background: var(--blue);
-    color: white;
-    padding: 80px 0;
-    text-align: center;
-  }
+  .footer-cta { background: var(--blue); color: white; padding: 80px 0; text-align: center; }
 
   .footer-cta h2 {
     font-family: 'Georgia', serif;
@@ -600,12 +588,7 @@
     letter-spacing: -0.01em;
   }
 
-  .footer-cta p {
-    font-size: 17px;
-    color: rgba(255,255,255,0.75);
-    max-width: 540px;
-    margin: 0 auto 32px;
-  }
+  .footer-cta p { font-size: 17px; color: rgba(255,255,255,0.75); max-width: 540px; margin: 0 auto 32px; }
 
   .footer-cta-button {
     display: inline-flex;
@@ -631,25 +614,35 @@
     color: rgba(255,255,255,0.5);
   }
 
-  /* ============ ANIMATIONS ============ */
   @keyframes fadeIn {
     from { opacity: 0; transform: translateY(8px); }
     to { opacity: 1; transform: translateY(0); }
   }
-
   .animate { animation: fadeIn 0.3s ease-out; }
-
 </style>
 </head>
 <body>
 
+<!-- ============ NAV ============ -->
+<header class="nav">
+  <div class="container nav-inner">
+    <a class="brand" href="index.html">Sal<span>verys</span></a>
+    <nav class="nav-links">
+      <a href="index.html">Accueil</a>
+      <a href="simulateur-salverys.html" class="active">Télésecrétariat médical</a>
+      <a href="simulateur-informatique.html">Support &amp; Helpdesk IT</a>
+    </nav>
+    <a href="#contact" class="nav-cta">Réserver un appel</a>
+  </div>
+</header>
+
 <!-- ============ HERO ============ -->
 <section class="hero">
   <div class="container">
-    <div class="hero-badge">Support client externalisé · Francophone</div>
-    <h1>Un poste opérationnel<br/><em>à moitié coût</em>.</h1>
-    <p>Construisez votre équipe support sur-mesure. Agents francophones dédiés, supervisés, formés. Calculez votre forfait en 30 secondes.</p>
-    <a href="#simulator" class="hero-cta">Simuler mon coût →</a>
+    <div class="hero-badge">Télésecrétariat médical · Francophone</div>
+    <h1>Plus aucun appel patient<br/><em>qui sonne dans le vide</em>.</h1>
+    <p>Des télésecrétaires francophones natives, formées au secret médical, prennent vos appels et gèrent vos agendas pendant que vous consultez. Calculez votre forfait en 30 secondes.</p>
+    <a href="#simulator" class="hero-cta">Simuler mon forfait →</a>
   </div>
 </section>
 
@@ -657,8 +650,8 @@
 <section class="simulator-section" id="simulator">
   <div class="container">
     <div class="section-header">
-      <h2>Configurez votre équipe</h2>
-      <p>Ajustez les paramètres — votre tarif se calcule en temps réel.</p>
+      <h2>Configurez votre télésecrétariat</h2>
+      <p>Ajustez le volume et la couverture — votre forfait se calcule en temps réel.</p>
     </div>
 
     <div class="simulator-grid">
@@ -667,66 +660,43 @@
 
         <div class="control-group">
           <div class="control-label">
-            <span class="control-label-text">Nombre de postes</span>
-            <span class="control-value" id="posts-value">1 poste</span>
+            <span class="control-label-text">Volume d'appels / mois</span>
+            <span class="control-value" id="calls-value">250 appels</span>
           </div>
           <div class="slider-wrap">
-            <input type="range" id="posts" min="1" max="10" value="1" step="1" />
+            <input type="range" id="calls" min="50" max="1200" value="250" step="25" />
           </div>
         </div>
 
         <div class="control-group">
           <div class="control-label">
-            <span class="control-label-text">Heures / semaine / poste</span>
-            <span class="control-value" id="hours-value">35 h</span>
+            <span class="control-label-text">Jours couverts / semaine</span>
+            <span class="control-value" id="days-value">5 j</span>
           </div>
           <div class="slider-wrap">
-            <input type="range" id="hours" min="10" max="40" value="35" step="5" />
+            <input type="range" id="days" min="5" max="7" value="5" step="1" />
           </div>
         </div>
 
         <div class="control-group">
           <div class="control-label">
-            <span class="control-label-text">Niveau de service</span>
-          </div>
-          <div class="pill-group" data-group="service">
-            <button class="pill" data-value="shared" data-multiplier="0.85">Mutualisé</button>
-            <button class="pill active" data-value="dedicated" data-multiplier="1.0">Dédié</button>
-            <button class="pill" data-value="premium" data-multiplier="1.25">Premium</button>
-          </div>
-        </div>
-
-        <div class="control-group">
-          <div class="control-label">
-            <span class="control-label-text">Canaux</span>
-          </div>
-          <div class="pill-group" data-group="channels">
-            <button class="pill active" data-value="single" data-multiplier="1.0">1 canal</button>
-            <button class="pill" data-value="multi" data-multiplier="1.08">2-3 canaux</button>
-            <button class="pill" data-value="omni" data-multiplier="1.15">Omnicanal</button>
-          </div>
-        </div>
-
-        <div class="control-group">
-          <div class="control-label">
-            <span class="control-label-text">Langue</span>
-          </div>
-          <div class="pill-group" data-group="language">
-            <button class="pill active" data-value="fr" data-multiplier="1.0">FR</button>
-            <button class="pill" data-value="en" data-multiplier="1.12">EN</button>
-            <button class="pill" data-value="bi" data-multiplier="1.22">Bilingue</button>
-          </div>
-        </div>
-
-        <div class="control-group">
-          <div class="control-label">
-            <span class="control-label-text">Horaires de couverture</span>
+            <span class="control-label-text">Plage horaire</span>
           </div>
           <div class="pill-group" data-group="schedule">
-            <button class="pill active" data-value="office" data-multiplier="1.0">Bureau</button>
-            <button class="pill" data-value="extended" data-multiplier="1.15">Étendu</button>
-            <button class="pill" data-value="weekend" data-multiplier="1.28">Week-end</button>
-            <button class="pill" data-value="247" data-multiplier="1.45">24/7</button>
+            <button class="pill active" data-value="day" data-multiplier="1.0">Journée 8h–20h</button>
+            <button class="pill" data-value="evening" data-multiplier="1.10">+ Soirée 20h–22h</button>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <div class="control-label">
+            <span class="control-label-text">Intégration agenda</span>
+          </div>
+          <div class="pill-group" data-group="integration">
+            <button class="pill active" data-value="doctolib" data-multiplier="1.0">Doctolib</button>
+            <button class="pill" data-value="maiia" data-multiplier="1.0">Maiia</button>
+            <button class="pill" data-value="medistory" data-multiplier="1.0">Médistory</button>
+            <button class="pill" data-value="other" data-multiplier="1.0">Autre</button>
           </div>
         </div>
       </div>
@@ -736,39 +706,41 @@
         <div class="result-primary">
           <div class="result-label">Votre forfait mensuel</div>
           <div>
-            <span class="result-price" id="price-monthly">1 290</span><span class="result-price-unit">€/mois</span>
+            <span class="result-price" id="price-monthly">350</span><span class="result-price-unit">€/mois</span>
           </div>
-          <div class="result-strikethrough">
-            Équivalent salarié France : <span class="old" id="price-fr-hourly">16,2 €/h</span> · <span class="old" id="price-fr">2 800 €/mois</span>
+          <div class="result-strikethrough" id="compare-line">
+            Facturation à l'appel ailleurs : <span class="old" id="price-percall">400 €/mois</span>
           </div>
-          <div class="savings-badge" id="savings-badge">Économie : 54 %</div>
+          <div class="savings-badge" id="savings-badge">Économie : 12 % vs à l'appel</div>
         </div>
 
         <div class="result-grid">
           <div class="result-stat">
-            <div class="result-stat-label">Heures / mois</div>
-            <div class="result-stat-value" id="hours-monthly">152 h</div>
+            <div class="result-stat-label">Appels traités / mois</div>
+            <div class="result-stat-value" id="calls-monthly">250</div>
           </div>
           <div class="result-stat">
-            <div class="result-stat-label">Tarif horaire affiché</div>
-            <div class="result-stat-value" id="hourly-displayed">8,5 €</div>
+            <div class="result-stat-label">Coût par appel traité</div>
+            <div class="result-stat-value" id="cost-percall">1,40 €</div>
           </div>
           <div class="result-stat">
-            <div class="result-stat-label">Tarif horaire productif</div>
-            <div class="result-stat-value accent" id="hourly-productive">10,0 €</div>
+            <div class="result-stat-label">Couverture</div>
+            <div class="result-stat-value" id="coverage">5 j · 8h–20h</div>
           </div>
           <div class="result-stat">
-            <div class="result-stat-label">Économie annuelle</div>
-            <div class="result-stat-value accent" id="annual-savings">18 120 €</div>
+            <div class="result-stat-label">RDV récupérés / mois</div>
+            <div class="result-stat-value accent" id="rdv-recovered">≈ 30</div>
           </div>
         </div>
 
         <div class="recommendation">
           <div class="recommendation-label">★ Recommandé pour vous</div>
           <div class="recommendation-text" id="recommendation">
-            Forfait <strong>Growth</strong> — meilleur rapport coût / disponibilité.
+            Forfait <strong>Essentiel</strong> — idéal pour un praticien.
           </div>
         </div>
+
+        <div class="disclaimer">Montants indicatifs à valider · Essai 15 jours offert, sans engagement.</div>
       </div>
     </div>
   </div>
@@ -779,63 +751,62 @@
   <div class="container">
     <div class="section-header">
       <h2>Trois forfaits, une logique</h2>
-      <p>Choisissez l'offre packagée, ou configurez sur mesure ci-dessus.</p>
+      <p>Facturation au forfait mensuel selon votre volume — jamais à l'appel.</p>
     </div>
 
     <div class="packages-grid">
       <div class="package">
-        <div class="package-name">Starter</div>
-        <div class="package-tagline">Premier pas dans l'externalisation</div>
+        <div class="package-name">Essentiel</div>
+        <div class="package-tagline">Pour un praticien seul</div>
         <div>
-          <span class="package-price">690</span><span class="package-price-unit"> €/mois</span>
+          <span class="package-price">350</span><span class="package-price-unit"> €/mois</span>
         </div>
-        <div class="package-equiv">≈ 8 €/h · Économie ~ 55 %</div>
+        <div class="package-equiv">jusqu'à ~250 appels/mois</div>
         <ul class="package-features">
-          <li>1 poste partagé · 20 h / semaine</li>
-          <li>Support email + appels</li>
-          <li>SLA standard · réponse &lt; 4 h</li>
-          <li>Reporting mensuel</li>
-          <li>Onboarding 5 jours</li>
+          <li>Prise d'appels 8h–20h, 5j/7</li>
+          <li>Gestion d'agenda Doctolib / Maiia</li>
+          <li>Télésecrétaires formées au secret médical</li>
+          <li>Messages transmis en temps réel</li>
+          <li>Essai 15 jours sans engagement</li>
         </ul>
         <a href="#contact" class="package-cta">Démarrer</a>
       </div>
 
       <div class="package featured">
         <div class="package-badge">★ Le plus choisi</div>
-        <div class="package-name">Growth</div>
-        <div class="package-tagline">L'équivalent d'une embauche, sans le coût</div>
+        <div class="package-name">Confort</div>
+        <div class="package-tagline">Pour un cabinet actif</div>
         <div>
-          <span class="package-price">1 290</span><span class="package-price-unit"> €/mois</span>
+          <span class="package-price">590</span><span class="package-price-unit"> €/mois</span>
         </div>
-        <div class="package-equiv">≈ 8,5 €/h · Économie ~ 54 %</div>
+        <div class="package-equiv">jusqu'à ~500 appels/mois</div>
         <ul class="package-features">
-          <li>1 poste 100 % dédié · 35 h / semaine</li>
-          <li>Téléphone + CRM + email + chat</li>
-          <li>Temps de réponse prioritaire</li>
-          <li>Reporting hebdomadaire + KPI</li>
-          <li>Backup agent inclus</li>
-          <li>Supervision QA mensuelle</li>
+          <li>Tout l'Essentiel, volume doublé</li>
+          <li>Gestion complète des agendas</li>
+          <li>Confirmations &amp; rappels de RDV</li>
+          <li>Filtrage urgences selon vos consignes</li>
+          <li>Reporting mensuel des appels</li>
+          <li>Essai 15 jours sans engagement</li>
         </ul>
-        <a href="#contact" class="package-cta">Choisir Growth</a>
+        <a href="#contact" class="package-cta">Choisir Confort</a>
       </div>
 
       <div class="package">
-        <div class="package-name">Scale</div>
-        <div class="package-tagline">Équipe complète, couverture étendue</div>
+        <div class="package-name">Intensif</div>
+        <div class="package-tagline">Cabinet de groupe / fort volume</div>
         <div>
-          <span class="package-price">2 490</span><span class="package-price-unit"> €/mois</span>
+          <span class="package-price">950</span><span class="package-price-unit"> €/mois</span>
         </div>
-        <div class="package-equiv">≈ 8 €/h · Économie ~ 56 %</div>
+        <div class="package-equiv">jusqu'à ~900 appels/mois</div>
         <ul class="package-features">
-          <li>2 postes dédiés · 35 h / semaine chacun</li>
-          <li>Superviseur dédié</li>
-          <li>Horaires étendus (8 h – 20 h)</li>
-          <li>KPI personnalisés mensuels</li>
-          <li>Agent de backup garanti</li>
-          <li>Formation continue incluse</li>
-          <li>Account manager dédié</li>
+          <li>Tout le Confort, volume étendu</li>
+          <li>Plusieurs praticiens / agendas</li>
+          <li>Plage horaire étendue possible</li>
+          <li>Protocoles personnalisés par médecin</li>
+          <li>Interlocuteur dédié</li>
+          <li>Essai 15 jours sans engagement</li>
         </ul>
-        <a href="#contact" class="package-cta">Passer à Scale</a>
+        <a href="#contact" class="package-cta">Passer à Intensif</a>
       </div>
     </div>
   </div>
@@ -846,65 +817,58 @@
   <div class="container">
     <div class="section-header">
       <h2>Ce que vous remplacez vraiment</h2>
-      <p>Comparaison réaliste pour un poste équivalent temps plein.</p>
+      <p>Comparaison réaliste pour la gestion des appels d'un cabinet.</p>
     </div>
 
     <div class="compare-table">
       <div class="compare-row header">
         <div class="col-feature">Critère</div>
-        <div class="compare-cell">Salarié France</div>
-        <div class="compare-cell col-freelance">Freelance</div>
-        <div class="compare-cell col-assistant">Assistant virtuel</div>
-        <div class="compare-cell">Valones</div>
+        <div class="compare-cell">Secrétaire au cabinet</div>
+        <div class="compare-cell col-standard">Standard externe à l'appel</div>
+        <div class="compare-cell col-repondeur">Répondeur</div>
+        <div class="compare-cell">Salverys</div>
       </div>
       <div class="compare-row highlight">
-        <div class="col-feature">Coût mensuel chargé</div>
-        <div class="compare-cell bad">2 800 €</div>
-        <div class="compare-cell col-freelance neutral">1 800-3 200 €</div>
-        <div class="compare-cell col-assistant neutral">600-1 200 €</div>
-        <div class="compare-cell valones">1 290 €</div>
+        <div class="col-feature">Coût mensuel</div>
+        <div class="compare-cell bad">2 200 € +</div>
+        <div class="compare-cell col-standard neutral">Variable à l'appel</div>
+        <div class="compare-cell col-repondeur good">~ 0 €</div>
+        <div class="compare-cell salverys">350 – 950 €</div>
       </div>
       <div class="compare-row">
-        <div class="col-feature">Disponibilité garantie</div>
-        <div class="compare-cell good">Oui (35 h)</div>
-        <div class="compare-cell col-freelance bad">Variable</div>
-        <div class="compare-cell col-assistant neutral">Partielle</div>
-        <div class="compare-cell valones">Oui + backup</div>
+        <div class="col-feature">Appels pris en direct</div>
+        <div class="compare-cell good">Aux heures de présence</div>
+        <div class="compare-cell col-standard good">Oui</div>
+        <div class="compare-cell col-repondeur bad">Non</div>
+        <div class="compare-cell salverys">Oui · 8h–20h</div>
       </div>
       <div class="compare-row highlight">
-        <div class="col-feature">Congés / arrêts gérés</div>
+        <div class="col-feature">RDV posés sur l'agenda</div>
+        <div class="compare-cell good">Oui</div>
+        <div class="compare-cell col-standard neutral">Parfois</div>
+        <div class="compare-cell col-repondeur bad">Non</div>
+        <div class="compare-cell salverys">Oui · Doctolib / Maiia</div>
+      </div>
+      <div class="compare-row">
+        <div class="col-feature">Secret médical</div>
+        <div class="compare-cell good">Oui</div>
+        <div class="compare-cell col-standard neutral">Variable</div>
+        <div class="compare-cell col-repondeur neutral">—</div>
+        <div class="compare-cell salverys">Télésecrétaires formées</div>
+      </div>
+      <div class="compare-row highlight">
+        <div class="col-feature">Continuité (congés / absence)</div>
         <div class="compare-cell bad">À votre charge</div>
-        <div class="compare-cell col-freelance neutral">Sans remplacement</div>
-        <div class="compare-cell col-assistant neutral">Variable</div>
-        <div class="compare-cell valones">Backup inclus</div>
+        <div class="compare-cell col-standard neutral">Selon prestataire</div>
+        <div class="compare-cell col-repondeur neutral">—</div>
+        <div class="compare-cell salverys">Équipe, jamais d'arrêt</div>
       </div>
       <div class="compare-row">
-        <div class="col-feature">Recrutement / turnover</div>
-        <div class="compare-cell bad">3 à 6 mois</div>
-        <div class="compare-cell col-freelance neutral">À refaire</div>
-        <div class="compare-cell col-assistant neutral">À refaire</div>
-        <div class="compare-cell valones">Géré sous 7 j</div>
-      </div>
-      <div class="compare-row highlight">
-        <div class="col-feature">Formation initiale</div>
-        <div class="compare-cell bad">À votre charge</div>
-        <div class="compare-cell col-freelance bad">À refaire</div>
-        <div class="compare-cell col-assistant neutral">Limitée</div>
-        <div class="compare-cell valones">Incluse</div>
-      </div>
-      <div class="compare-row">
-        <div class="col-feature">Supervision / QA</div>
-        <div class="compare-cell neutral">+ Manager</div>
-        <div class="compare-cell col-freelance bad">Aucune</div>
-        <div class="compare-cell col-assistant bad">Aucune</div>
-        <div class="compare-cell valones">Incluse</div>
-      </div>
-      <div class="compare-row highlight">
-        <div class="col-feature">Engagement minimum</div>
+        <div class="col-feature">Engagement</div>
         <div class="compare-cell bad">CDI</div>
-        <div class="compare-cell col-freelance good">Flexible</div>
-        <div class="compare-cell col-assistant good">Flexible</div>
-        <div class="compare-cell valones">3 mois</div>
+        <div class="compare-cell col-standard neutral">Variable</div>
+        <div class="compare-cell col-repondeur good">Aucun</div>
+        <div class="compare-cell salverys">Essai 15 j sans engagement</div>
       </div>
     </div>
   </div>
@@ -913,132 +877,123 @@
 <!-- ============ FOOTER CTA ============ -->
 <section class="footer-cta" id="contact">
   <div class="container">
-    <h2>Votre support, lancé en 10 jours.</h2>
-    <p>Onboarding offert · sans engagement long terme · un interlocuteur unique de bout en bout.</p>
-    <a href="mailto:contact@valones.com" class="footer-cta-button">Réserver un appel découverte →</a>
+    <h2>Votre télésecrétariat, opérationnel en quelques jours.</h2>
+    <p>Essai 15 jours offert · sans engagement · vous gardez la main sur vos agendas.</p>
+    <a href="mailto:contact@salverys.fr" class="footer-cta-button">Réserver un appel découverte →</a>
     <div class="footer-meta">
-      Valones · Support client francophone externalisé · Calculs indicatifs, devis personnalisé sur demande.
+      Salverys · Télésecrétariat médical francophone · Antananarivo → France · Montants indicatifs, devis personnalisé sur demande.
     </div>
   </div>
 </section>
 
 <script>
-  // ============ CALCULS ============
-  // Coût direct par poste temps plein (152h productive / 173h payée)
-  const COST_BASE_FULLTIME = 585.53; // €/mois coût direct agent dédié temps plein (simulateur volontairement au-dessus des forfaits packagés)
-  const MARGIN_TARGET = 0.58; // marge brute cible
-  const HOURS_PRODUCTIVE_RATIO = 0.85;
-  const FR_EMPLOYEE_FULLTIME_COST = 2800; // €/mois coût employeur chargé
-  const FR_SCHEDULE_PENALTY_EXP = 1.35; // un 24/7 en FR = équipes en rotation (coût ^1.35)
+  // ============ MODÈLE TARIFAIRE MÉDICAL ============
+  // Forfaits par palier de volume (grille validée, montants indicatifs à valider)
+  const TIERS = [
+    { name: 'Essentiel', maxCalls: 250, price: 350 },
+    { name: 'Confort',   maxCalls: 500, price: 590 },
+    { name: 'Intensif',  maxCalls: 900, price: 950 },
+  ];
+  const PER_CALL_ELSEWHERE = 1.60; // €/appel facturé chez un standard externe (indicatif)
+  const MARGINAL_PER_100 = 95;     // au-delà de 900 appels : ~95 €/tranche de 100 (sur-mesure)
+  const RDV_VALUE = 30;            // valeur d'un RDV récupéré (€)
+  const RDV_RATE = 0.12;           // part d'appels traités convertis en RDV sauvé (indicatif)
 
-  // État
   const state = {
-    posts: 1,
-    hours: 35,
-    service: 1.0,
-    channels: 1.0,
-    language: 1.0,
-    schedule: 1.0,
+    calls: 250,
+    days: 5,
+    schedule: 1.0,   // plage horaire
+    integration: 1.0 // sans effet sur le prix
   };
 
-  // Multiplicateurs par défaut (alignés sur HTML)
-  const multipliers = {
-    service: { shared: 0.85, dedicated: 1.0, premium: 1.25 },
-    channels: { single: 1.0, multi: 1.08, omni: 1.15 },
-    language: { fr: 1.0, en: 1.12, bi: 1.22 },
-    schedule: { office: 1.0, extended: 1.15, weekend: 1.28, '247': 1.45 },
-  };
+  const daysMultiplier = { 5: 1.0, 6: 1.12, 7: 1.22 };
 
   function formatPrice(n) {
-    return Math.round(n).toLocaleString('fr-FR').replace(/ /g, ' ');
+    return Math.round(n).toLocaleString('fr-FR');
+  }
+  function formatEuro2(n) {
+    return n.toFixed(2).replace('.', ',') + ' €';
   }
 
-  function formatHourly(n) {
-    return n.toFixed(1).replace('.', ',') + ' €';
-  }
-
-  function volumeDiscount(posts) {
-    if (posts >= 6) return 0.90;
-    if (posts >= 3) return 0.95;
-    return 1.0;
+  function tierFor(calls) {
+    for (const t of TIERS) if (calls <= t.maxCalls) return t;
+    return null; // sur-mesure
   }
 
   function calculate() {
-    const hoursPerMonth = state.hours * 4.33;
-    const hoursRatio = hoursPerMonth / 152; // 152h = base temps plein référence
-    // Coût direct selon heures
-    const costPerPost = COST_BASE_FULLTIME * hoursRatio;
-    // Prix de base avant multiplicateurs et marge
-    const basePrice = costPerPost / (1 - MARGIN_TARGET);
-    // Multiplicateurs cumulés
-    const mult = state.service * state.channels * state.language * state.schedule;
-    // Prix unitaire avec multiplicateurs
-    const unitPrice = basePrice * mult;
-    // Remise volume
-    const discount = volumeDiscount(state.posts);
-    // Prix total
-    const totalPrice = unitPrice * state.posts * discount;
-    // Comparaison FR — un employé FR bilingue ou en horaires étendus/24-7 coûte plus cher
-    // (primes, équipes de rotation, recrutement plus rare)
-    const frMultiplier = state.language * Math.pow(state.schedule, FR_SCHEDULE_PENALTY_EXP);
-    const frCost = FR_EMPLOYEE_FULLTIME_COST * hoursRatio * state.posts * frMultiplier;
-    const savings = frCost - totalPrice;
-    const savingsPct = (savings / frCost) * 100;
-    // Tarifs horaires
-    const totalHoursMonth = hoursPerMonth * state.posts;
-    const hourlyDisplayed = totalPrice / totalHoursMonth;
-    const hourlyProductive = totalPrice / (totalHoursMonth * HOURS_PRODUCTIVE_RATIO);
+    const dMult = daysMultiplier[state.days] || 1.0;
+    const mult = dMult * state.schedule;
 
-    // Update DOM
-    document.getElementById('price-monthly').textContent = formatPrice(totalPrice);
-    const frHourly = frCost / totalHoursMonth;
-    document.getElementById('price-fr-hourly').textContent = frHourly.toFixed(1).replace('.', ',') + ' €/h';
-    document.getElementById('price-fr').textContent = formatPrice(frCost) + ' €/mois';
-    document.getElementById('savings-badge').textContent = 'Économie : ' + Math.round(savingsPct) + ' %';
-    document.getElementById('hours-monthly').textContent = Math.round(totalHoursMonth) + ' h';
-    document.getElementById('hourly-displayed').textContent = formatHourly(hourlyDisplayed);
-    document.getElementById('hourly-productive').textContent = formatHourly(hourlyProductive);
-    document.getElementById('annual-savings').textContent = formatPrice(savings * 12) + ' €';
+    const tier = tierFor(state.calls);
+    let baseName, basePrice, isCustom = false;
+    if (tier) {
+      baseName = tier.name;
+      basePrice = tier.price;
+    } else {
+      isCustom = true;
+      baseName = 'Sur-mesure';
+      basePrice = 950 + Math.ceil((state.calls - 900) / 100) * MARGINAL_PER_100;
+    }
+
+    const price = basePrice * mult;
+    const elsewhere = state.calls * PER_CALL_ELSEWHERE * mult;
+    const costPerCall = price / state.calls;
+    const rdvRecovered = Math.round(state.calls * RDV_RATE);
+
+    // Affichage
+    document.getElementById('price-monthly').textContent = formatPrice(price);
+    document.getElementById('calls-monthly').textContent = state.calls.toLocaleString('fr-FR');
+    document.getElementById('cost-percall').textContent = formatEuro2(costPerCall);
+    document.getElementById('rdv-recovered').textContent = '≈ ' + rdvRecovered;
+
+    const coverage = state.days + ' j · ' + (state.schedule > 1.0 ? '8h–22h' : '8h–20h');
+    document.getElementById('coverage').textContent = coverage;
+
+    // Comparaison vs facturation à l'appel — affichée seulement si en notre faveur
+    const savings = elsewhere - price;
+    const compareLine = document.getElementById('compare-line');
+    const badge = document.getElementById('savings-badge');
+    if (savings > 0) {
+      const pct = Math.round((savings / elsewhere) * 100);
+      compareLine.innerHTML = 'Facturation à l\'appel ailleurs : <span class="old">' + formatPrice(elsewhere) + ' €/mois</span>';
+      badge.textContent = 'Économie : ' + pct + ' % vs à l\'appel';
+    } else {
+      compareLine.textContent = 'Forfait tout compris, sans surprise.';
+      badge.textContent = 'Essai 15 jours offert';
+    }
 
     // Recommandation
-    let recommendation;
-    if (state.posts === 1 && state.hours <= 20 && state.service <= 0.85) {
-      recommendation = 'Forfait <strong>Starter</strong> — idéal pour démarrer.';
-    } else if (state.posts >= 2 || (state.posts === 1 && state.hours >= 35 && state.service >= 1.0 && state.schedule > 1.0)) {
-      recommendation = 'Forfait <strong>Scale</strong> — couverture étendue + backup.';
-    } else if (state.posts >= 3) {
-      recommendation = 'Offre <strong>Enterprise</strong> sur mesure — contactez-nous.';
+    let reco;
+    if (isCustom) {
+      reco = 'Offre <strong>Sur-mesure</strong> — parlons-en, on cadre ensemble.';
+    } else if (baseName === 'Essentiel') {
+      reco = 'Forfait <strong>Essentiel</strong> — idéal pour un praticien.';
+    } else if (baseName === 'Confort') {
+      reco = 'Forfait <strong>Confort</strong> — le meilleur rapport volume / prix.';
     } else {
-      recommendation = 'Forfait <strong>Growth</strong> — meilleur rapport coût / disponibilité.';
+      reco = 'Forfait <strong>Intensif</strong> — pensé pour les cabinets de groupe.';
     }
-    document.getElementById('recommendation').innerHTML = recommendation;
+    document.getElementById('recommendation').innerHTML = reco;
 
-    // Animation
-    document.getElementById('price-monthly').classList.remove('animate');
-    void document.getElementById('price-monthly').offsetWidth;
-    document.getElementById('price-monthly').classList.add('animate');
+    const el = document.getElementById('price-monthly');
+    el.classList.remove('animate');
+    void el.offsetWidth;
+    el.classList.add('animate');
   }
 
-  // ============ EVENT HANDLERS ============
-  document.getElementById('posts').addEventListener('input', e => {
-    state.posts = parseInt(e.target.value);
-    document.getElementById('posts-value').textContent =
-      state.posts + ' poste' + (state.posts > 1 ? 's' : '');
+  // ============ EVENTS ============
+  document.getElementById('calls').addEventListener('input', e => {
+    state.calls = parseInt(e.target.value);
+    document.getElementById('calls-value').textContent = state.calls.toLocaleString('fr-FR') + ' appels';
     calculate();
   });
 
-  document.getElementById('hours').addEventListener('input', e => {
-    state.hours = parseInt(e.target.value);
-    let label;
-    if (state.hours <= 20) label = state.hours + ' h · temps partiel';
-    else if (state.hours <= 30) label = state.hours + ' h · 4/5e';
-    else if (state.hours === 35) label = '35 h · temps plein FR';
-    else label = state.hours + ' h · temps plein +';
-    document.getElementById('hours-value').textContent = label;
+  document.getElementById('days').addEventListener('input', e => {
+    state.days = parseInt(e.target.value);
+    document.getElementById('days-value').textContent = state.days + ' j';
     calculate();
   });
 
-  // Pills
   document.querySelectorAll('.pill-group').forEach(group => {
     const groupName = group.dataset.group;
     group.querySelectorAll('.pill').forEach(pill => {
@@ -1051,7 +1006,6 @@
     });
   });
 
-  // Initial calculation
   calculate();
 </script>
 
