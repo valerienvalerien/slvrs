@@ -116,7 +116,7 @@ Bonjour {prenom},
 
 Un repère rapide sur le débordement : une permanence soir + week-end internalisée en France, c'est ~1 ETP chargé, difficile à rentabiliser tant que le volume n'est pas plein.
 
-En marque blanche offshore, vous payez à l'usage (à l'appel ou au forfait) : la capacité tampon ne devient un coût que quand elle sert. C'est ce qui permet de dire oui à un nouveau client sans CapEx ni recrutement.
+En marque blanche offshore, vous payez par tranches de volume — un forfait qui s'ajuste au débordement réel : la capacité tampon ne devient un coût que quand elle sert. C'est ce qui permet de dire oui à un nouveau client sans CapEx ni recrutement.
 
 Je vous laisse y penser — content d'en parler si c'est un sujet chez {entreprise}.
 
