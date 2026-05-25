@@ -1,13 +1,13 @@
 # Séquence Cold Email — Segment « Cabinets médicaux directs » (niche n°1)
 
 **Cible :** médecins libéraux, MSP, cabinets de groupe, centres de santé (France)
-**Émetteur :** Nesvalo — télésecrétariat médical (offre directe, marque propre)
+**Émetteur :** Salverys — télésecrétariat médical (offre directe, marque propre)
 **Canal :** Emelia (email) ± appel de relance
 **Date :** 2026-05-25
 **Outreach Readiness Score : 70/100**
 **Framework retenu :** Problème → Preuve → Demande
 
-> Cette séquence complète les 3 templates `telemed` déjà présents dans le CRM Nesvalo. Variables **identiques au CRM** pour réutilisation directe : `{prenom}`, `{nom}`, `{structure}`, `{ville_dept}`.
+> Cette séquence complète les 3 templates `telemed` déjà présents dans le CRM Salverys. Variables **identiques au CRM** pour réutilisation directe : `{prenom}`, `{nom}`, `{structure}`, `{ville_dept}`.
 
 ---
 
@@ -45,7 +45,7 @@ Bonjour {prenom},
 
 Au {structure}, comme dans la plupart des cabinets de {ville_dept}, une partie des appels patients sonne dans le vide pendant les consultations — et chaque appel manqué, c'est un patient qui rappelle ailleurs ou un RDV qui ne se prend pas.
 
-Chez Nesvalo, on prend ces appels pour des médecins libéraux : télésecrétaires francophones formées au secret médical, 8h–20h, intégrées à Doctolib ou Maiia. Vous gardez la main sur vos agendas.
+Chez Salverys, on prend ces appels pour des médecins libéraux : télésecrétaires francophones formées au secret médical, 8h–20h, intégrées à Doctolib ou Maiia. Vous gardez la main sur vos agendas.
 
 À partir de 350 €/mois, et 15 jours d'essai sans engagement.
 
@@ -215,4 +215,4 @@ Bonne continuation,
 
 ---
 
-*Généré via le skill `sales-outreach` (ai-sales-team-claude), adapté à la niche n°1 (télésecrétariat médical, offre directe Nesvalo).*
+*Généré via le skill `sales-outreach` (ai-sales-team-claude), adapté à la niche n°1 (télésecrétariat médical, offre directe Salverys).*

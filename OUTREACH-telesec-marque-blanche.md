@@ -1,7 +1,7 @@
 # Séquence Cold Email — Segment « Télésecrétariats FR » (offre marque blanche)
 
 **Cible :** dirigeants des télésecrétariats français (top 10 partenaires prioritaires)
-**Émetteur :** Nesvalo — bras offshore Madagascar en marque blanche
+**Émetteur :** Salverys — bras offshore Madagascar en marque blanche
 **Canal :** Emelia (email) + LinkedIn en appui
 **Date :** 2026-05-25
 **Outreach Readiness Score : 67/100**
@@ -67,7 +67,7 @@
 | `{prenom}` | Roy | obligatoire — sinon ne pas envoyer |
 | `{entreprise}` | Stanpro | nom de la société |
 | `{ville}` | Lyon | optionnel, renforce la perso |
-| `{signature}` | bloc signature Nesvalo | bas de mail |
+| `{signature}` | bloc signature Salverys | bas de mail |
 
 **Positionnement à ne JAMAIS perdre de vue :** on ne se présente PAS comme une alternative aux télésec FR (leurs clients médecins ne nous connaissent pas). On est leur **bras offshore en marque blanche** — leurs clients ne voient que leur marque.
 
@@ -86,7 +86,7 @@ Bonjour {prenom},
 
 Recruter des télésecrétaires qualifiées en France coûte cher et prend du temps — surtout pour absorber les nuits, les week-ends et les pics saisonniers.
 
-Chez Nesvalo (Antananarivo), on opère le débordement d'acteurs comme {entreprise} en marque blanche : télésecrétaires francophones natives, fuseau compatible Paris, à coût ~40 % inférieur à un poste en métropole. Vos clients ne voient que votre marque.
+Chez Salverys (Antananarivo), on opère le débordement d'acteurs comme {entreprise} en marque blanche : télésecrétaires francophones natives, fuseau compatible Paris, à coût ~40 % inférieur à un poste en métropole. Vos clients ne voient que votre marque.
 
 Pas une alternative à {entreprise} — votre bras offshore, sur les créneaux que vous ne voulez pas internaliser.
 
@@ -254,4 +254,4 @@ Bonne continuation,
 
 ---
 
-*Généré via le skill `sales-outreach` (ai-sales-team-claude), adapté au positionnement marque blanche Nesvalo.*
+*Généré via le skill `sales-outreach` (ai-sales-team-claude), adapté au positionnement marque blanche Salverys.*
