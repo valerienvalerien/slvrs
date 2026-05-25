@@ -9,22 +9,54 @@
 
 ---
 
-## Top 10 cibles & décideurs identifiés
+## Top 10 cibles & décideurs (appariement vérifié — source : 02_decideurs_identifies.csv)
 
-| Entreprise | Décideur (source : stratégie B2B) | Canal prioritaire |
-|---|---|---|
-| Stanpro | Roy | LinkedIn DM → email |
-| Simplify | Garcia | LinkedIn DM → email |
-| Médi Services | Gomez | LinkedIn DM → email |
-| IPContact | Hueber | LinkedIn DM → email |
-| Tellma | Duhem | LinkedIn DM → email |
-| Optilib | Fourmy | LinkedIn DM → email |
-| A3COM | à identifier | email |
-| Médiphone | à identifier | email |
-| Vocallz | à identifier | email |
-| Cmondoc | à identifier | email |
+| Entreprise | Décideur (vérifié) | Localisation | Canal prioritaire |
+|---|---|---|---|
+| Simplify Télésecrétariat Médical | **Stéphane Roy**, fondateur & dirigeant | Bois d'Arcy (78) | LinkedIn DM → email |
+| Médi Services | **Daniel Garcia**, fondateur & dirigeant | Franconville (95) / IDF | LinkedIn DM → email |
+| IPContact Group | **Patrick Gomez**, fondateur / CEO | Le Tholonet (13) | LinkedIn DM → email |
+| Stanpro | **Christiane Hueber**, fondatrice & gérante | Vaudeville (54) | LinkedIn + **courrier postal** |
+| Tellma | **Damien Duhem**, dirigeant | Abbeville (80) | LinkedIn + cold email |
+| Optilib / Telodoc | **Guillaume Fourmy**, co-gérant (+ Mathieu Boucher) | Montpellier (34) | LinkedIn + email |
+| A3COM | fondateurs non publics | Fontenay-sous-Bois (94) | email via SIRET / standard |
+| Médiphone | à identifier | — | email |
+| Vocallz | à identifier | — | email |
+| Cmondoc | à identifier | — | email |
 
-> Stratégie : sur les 6 décideurs nominatifs, **LinkedIn DM personnalisé d'abord (sem. 1-2)**, puis cette séquence email en relais. Sur les 4 sans contact nominatif, email direct via Emelia.
+> ⚠️ **Correction d'appariement** : une version antérieure de ce tableau mélangeait les noms (Roy↔Stanpro, etc.). Le tableau ci-dessus est l'appariement **vérifié** (CSV décideurs + recherche web). À utiliser tel quel.
+>
+> Stratégie : sur les 6 décideurs nominatifs, **LinkedIn DM personnalisé d'abord (sem. 1-2)**, puis cette séquence email en relais. Hueber = profil traditionnel zone rurale → ajouter le **courrier postal**. Sur A3COM + les 3 sans contact, email direct via Emelia après identification.
+
+---
+
+## Accroches personnalisées vérifiées (à substituer à la 1re ligne de l'Email 1)
+
+> Triggers issus de recherche web, classés du plus solide au plus faible. **À revérifier d'un coup d'œil avant envoi** quand c'est signalé (dates non confirmées).
+
+**1. Simplify — Stéphane Roy** · trigger FORT et daté
+> « Bonjour Stéphane, j'ai vu que Simplify avait poussé l'IA hybride de prise de RDV jusqu'aux JFR 2025, avec l'intégration Enovacom/GXD5 en imagerie — votre logique "IA quand c'est possible, humain quand c'est nécessaire" est exactement le point où je voulais vous parler. »
+> *(source : simplify.fr/blog JFR 2025, enovacom.com)*
+
+**2. Optilib — Guillaume Fourmy** · trigger ACTIONNABLE
+> « Bonjour Guillaume, j'ai vu qu'Optilib recrute des téléconseillers en appels entrants à Montpellier — c'est souvent le signe d'une charge d'appels qui grimpe plus vite que les plannings. C'est précisément là que je peux vous aider, sans toucher à Telodoc ni à votre marque. »
+> *(source : optilib.com/nous-rejoindre, France Travail)*
+
+**3. Tellma — Damien Duhem** · trigger à VÉRIFIER (date non confirmée)
+> « Bonjour Damien, en ouvrant à Lille et en élargissant Tellma au-delà du médical, vous multipliez les standards à tenir en parallèle — c'est exactement le moment où un bras de débordement change la donne. »
+> *(à valider : l'ouverture Lille est récente mais non datée — vérifier avant envoi)*
+
+**4. Médi Services — Daniel Garcia** · ancrage entreprise (pas de trigger daté)
+> « Bonjour Daniel, votre approche hybride humain + automatisation chez Médi Services est exactement ce que je cherche à compléter : une couche humaine francophone supplémentaire sur vos pics, sans CapEx en France. »
+> *(25+ ans, +20 M d'appels, serveurs HDS — angle factuel vérifiable)*
+
+**5. IPContact — Patrick Gomez** · pas de trigger perso fiable → angle techno + secteur
+> « Bonjour Patrick, votre architecture Logicielnet est assez unique sur le marché — l'idée serait de brancher une capacité offshore en marque blanche via vos API, pour étendre la capacité sans diluer votre techno. »
+> *(NB : profil multi-secteurs, déjà très orienté IA — à requalifier avant d'investir du temps)*
+
+**6. Stanpro — Christiane Hueber** · pas de trigger récent → ancrage + secteur (canal courrier)
+> « Bonjour Madame Hueber, vingt ans après la fondation de Stanpro, vos 7 pôles sont à pleine maturité — la vraie question devient comment soutenir la croissance sans saturer vos équipes. »
+> *(seul contenu LinkedIn daté = 2023, trop ancien ; décideuse traditionnelle → privilégier LinkedIn + courrier postal)*
 
 ---
 
