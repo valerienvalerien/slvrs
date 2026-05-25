@@ -1,0 +1,1059 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Valones — Simulateur de votre support externalisé</title>
+<style>
+  :root {
+    /* Palette greige chaud / vert sauge / bleu profond désaturé */
+    --bg: #F4EFE6;
+    --bg-card: #FBF7F0;
+    --bg-elevated: #FFFFFF;
+    --greige: #E5DCCB;
+    --greige-dark: #CFC2AC;
+    --sage: #8FA38F;
+    --sage-dark: #6F8770;
+    --sage-light: #C5D2C5;
+    --blue: #2E3B4E;
+    --blue-soft: #4A5A70;
+    --blue-light: #7B8BA1;
+    --gold: #B89968;
+    --gold-soft: #D4B98A;
+    --text: #2A2620;
+    --text-soft: #5C5448;
+    --text-mute: #8A8275;
+    --danger: #B6604D;
+    --shadow-sm: 0 1px 2px rgba(46, 59, 78, 0.06), 0 1px 3px rgba(46, 59, 78, 0.04);
+    --shadow-md: 0 4px 12px rgba(46, 59, 78, 0.08), 0 2px 6px rgba(46, 59, 78, 0.04);
+    --shadow-lg: 0 12px 32px rgba(46, 59, 78, 0.12), 0 4px 12px rgba(46, 59, 78, 0.06);
+    --radius-sm: 6px;
+    --radius-md: 12px;
+    --radius-lg: 20px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  /* ============ HERO ============ */
+  .hero {
+    padding: 80px 0 60px;
+    text-align: center;
+    background: linear-gradient(180deg, var(--bg) 0%, var(--bg-card) 100%);
+  }
+
+  .hero-badge {
+    display: inline-block;
+    background: var(--sage-light);
+    color: var(--sage-dark);
+    padding: 6px 14px;
+    border-radius: 100px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+
+  .hero h1 {
+    font-family: 'Georgia', 'Times New Roman', serif;
+    font-size: clamp(36px, 5vw, 56px);
+    font-weight: 500;
+    color: var(--blue);
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    margin-bottom: 20px;
+  }
+
+  .hero h1 em {
+    font-style: italic;
+    color: var(--sage-dark);
+  }
+
+  .hero p {
+    font-size: 18px;
+    color: var(--text-soft);
+    max-width: 640px;
+    margin: 0 auto 36px;
+  }
+
+  .hero-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--blue);
+    color: white;
+    padding: 14px 28px;
+    border-radius: 100px;
+    font-size: 15px;
+    font-weight: 500;
+    text-decoration: none;
+    box-shadow: var(--shadow-md);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .hero-cta:hover { transform: translateY(-1px); box-shadow: var(--shadow-lg); }
+
+  /* ============ SIMULATEUR ============ */
+  .simulator-section {
+    padding: 40px 0 80px;
+  }
+
+  .section-header {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+
+  .section-header h2 {
+    font-family: 'Georgia', serif;
+    font-size: 36px;
+    font-weight: 500;
+    color: var(--blue);
+    letter-spacing: -0.01em;
+    margin-bottom: 12px;
+  }
+
+  .section-header p {
+    color: var(--text-soft);
+    font-size: 16px;
+  }
+
+  .simulator-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    align-items: start;
+  }
+
+  @media (max-width: 900px) {
+    .simulator-grid { grid-template-columns: 1fr; }
+  }
+
+  .controls-card, .results-card {
+    background: var(--bg-card);
+    border: 1px solid var(--greige);
+    border-radius: var(--radius-lg);
+    padding: 32px;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .results-card {
+    background: var(--blue);
+    color: white;
+    border-color: var(--blue);
+    position: sticky;
+    top: 24px;
+  }
+
+  .control-group {
+    margin-bottom: 28px;
+  }
+
+  .control-group:last-child { margin-bottom: 0; }
+
+  .control-label {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 12px;
+  }
+
+  .control-label-text {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--blue);
+    letter-spacing: 0.01em;
+  }
+
+  .control-value {
+    font-family: 'Georgia', serif;
+    font-size: 18px;
+    color: var(--sage-dark);
+    font-weight: 500;
+  }
+
+  /* Slider styles */
+  .slider-wrap {
+    position: relative;
+    padding: 8px 0;
+  }
+
+  input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 6px;
+    background: var(--greige);
+    border-radius: 100px;
+    outline: none;
+  }
+
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 22px;
+    height: 22px;
+    background: var(--sage);
+    border: 3px solid white;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    transition: transform 0.15s;
+  }
+
+  input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.15); }
+
+  input[type="range"]::-moz-range-thumb {
+    width: 22px;
+    height: 22px;
+    background: var(--sage);
+    border: 3px solid white;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  }
+
+  /* Pill selectors */
+  .pill-group {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .pill {
+    flex: 1;
+    min-width: fit-content;
+    padding: 10px 14px;
+    background: white;
+    border: 1px solid var(--greige-dark);
+    border-radius: 100px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-soft);
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.15s;
+  }
+
+  .pill:hover { border-color: var(--sage); color: var(--blue); }
+
+  .pill.active {
+    background: var(--sage);
+    border-color: var(--sage);
+    color: white;
+  }
+
+  /* Results panel */
+  .result-primary {
+    text-align: center;
+    padding-bottom: 24px;
+    border-bottom: 1px solid rgba(255,255,255,0.12);
+    margin-bottom: 24px;
+  }
+
+  .result-label {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 8px;
+  }
+
+  .result-price {
+    font-family: 'Georgia', serif;
+    font-size: 56px;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    line-height: 1;
+  }
+
+  .result-price-unit {
+    font-size: 18px;
+    color: rgba(255,255,255,0.7);
+    font-family: 'Inter', sans-serif;
+    margin-left: 4px;
+  }
+
+  .result-strikethrough {
+    margin-top: 12px;
+    font-size: 14px;
+    color: rgba(255,255,255,0.55);
+  }
+
+  .result-strikethrough .old {
+    text-decoration: line-through;
+    text-decoration-color: var(--danger);
+    text-decoration-thickness: 2px;
+  }
+
+  .savings-badge {
+    display: inline-block;
+    margin-top: 14px;
+    background: var(--sage);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 100px;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+  }
+
+  .result-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .result-stat {
+    background: rgba(255,255,255,0.06);
+    border-radius: var(--radius-md);
+    padding: 16px;
+  }
+
+  .result-stat-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: rgba(255,255,255,0.55);
+    margin-bottom: 6px;
+  }
+
+  .result-stat-value {
+    font-family: 'Georgia', serif;
+    font-size: 22px;
+    font-weight: 500;
+    color: white;
+  }
+
+  .result-stat-value.accent { color: var(--gold-soft); }
+
+  .recommendation {
+    background: linear-gradient(135deg, rgba(143,163,143,0.15), rgba(184,153,104,0.1));
+    border: 1px solid rgba(143,163,143,0.3);
+    border-radius: var(--radius-md);
+    padding: 16px;
+    text-align: center;
+  }
+
+  .recommendation-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--gold-soft);
+    margin-bottom: 6px;
+    font-weight: 600;
+  }
+
+  .recommendation-text {
+    font-family: 'Georgia', serif;
+    font-size: 16px;
+    color: white;
+  }
+
+  .recommendation-text strong { color: var(--gold-soft); }
+
+  /* ============ FORFAITS ============ */
+  .packages-section {
+    padding: 80px 0;
+    background: var(--bg-card);
+  }
+
+  .packages-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-top: 48px;
+  }
+
+  @media (max-width: 900px) {
+    .packages-grid { grid-template-columns: 1fr; }
+  }
+
+  .package {
+    background: var(--bg-elevated);
+    border: 1px solid var(--greige);
+    border-radius: var(--radius-lg);
+    padding: 32px 28px;
+    position: relative;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .package:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
+
+  .package.featured {
+    background: var(--blue);
+    color: white;
+    border-color: var(--blue);
+    transform: scale(1.04);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .package.featured:hover { transform: scale(1.04) translateY(-4px); }
+
+  .package-badge {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--gold);
+    color: white;
+    padding: 5px 14px;
+    border-radius: 100px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .package-name {
+    font-family: 'Georgia', serif;
+    font-size: 26px;
+    font-weight: 500;
+    color: var(--blue);
+    margin-bottom: 6px;
+  }
+
+  .package.featured .package-name { color: white; }
+
+  .package-tagline {
+    font-size: 13px;
+    color: var(--text-mute);
+    margin-bottom: 24px;
+  }
+
+  .package.featured .package-tagline { color: rgba(255,255,255,0.65); }
+
+  .package-price {
+    font-family: 'Georgia', serif;
+    font-size: 44px;
+    font-weight: 500;
+    color: var(--blue);
+    letter-spacing: -0.02em;
+    line-height: 1;
+  }
+
+  .package.featured .package-price { color: white; }
+
+  .package-price-unit {
+    font-size: 16px;
+    font-family: 'Inter', sans-serif;
+    color: var(--text-mute);
+  }
+
+  .package.featured .package-price-unit { color: rgba(255,255,255,0.7); }
+
+  .package-equiv {
+    font-size: 13px;
+    color: var(--sage-dark);
+    margin-top: 8px;
+    margin-bottom: 28px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--greige);
+  }
+
+  .package.featured .package-equiv {
+    color: var(--gold-soft);
+    border-bottom-color: rgba(255,255,255,0.15);
+  }
+
+  .package-features {
+    list-style: none;
+  }
+
+  .package-features li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 8px 0;
+    font-size: 14px;
+    color: var(--text-soft);
+  }
+
+  .package.featured .package-features li { color: rgba(255,255,255,0.85); }
+
+  .package-features li::before {
+    content: "✓";
+    color: var(--sage);
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .package.featured .package-features li::before { color: var(--gold-soft); }
+
+  .package-cta {
+    display: block;
+    width: 100%;
+    margin-top: 28px;
+    padding: 13px 20px;
+    background: transparent;
+    border: 1.5px solid var(--blue);
+    color: var(--blue);
+    border-radius: 100px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    transition: all 0.15s;
+  }
+
+  .package-cta:hover { background: var(--blue); color: white; }
+
+  .package.featured .package-cta {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: white;
+  }
+
+  .package.featured .package-cta:hover { background: var(--gold-soft); border-color: var(--gold-soft); }
+
+  /* ============ COMPARAISON ============ */
+  .compare-section {
+    padding: 80px 0;
+  }
+
+  .compare-table {
+    background: var(--bg-card);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    border: 1px solid var(--greige);
+    margin-top: 48px;
+  }
+
+  .compare-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+    align-items: center;
+    padding: 18px 24px;
+    border-bottom: 1px solid var(--greige);
+  }
+
+  .compare-row:last-child { border-bottom: none; }
+
+  .compare-row.header {
+    background: var(--blue);
+    color: white;
+    font-weight: 600;
+    font-size: 13px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .compare-row.header .col-feature { color: rgba(255,255,255,0.85); }
+
+  .compare-row.highlight {
+    background: linear-gradient(90deg, rgba(143,163,143,0.06), transparent);
+  }
+
+  .col-feature {
+    color: var(--text);
+    font-weight: 500;
+    font-size: 14px;
+  }
+
+  .compare-cell {
+    text-align: center;
+    font-size: 13px;
+    color: var(--text-soft);
+  }
+
+  .compare-cell.valones {
+    color: var(--sage-dark);
+    font-weight: 600;
+  }
+
+  .compare-cell.good { color: var(--sage-dark); font-weight: 600; }
+  .compare-cell.bad { color: var(--danger); }
+  .compare-cell.neutral { color: var(--text-mute); }
+
+  @media (max-width: 800px) {
+    .compare-row { grid-template-columns: 1.5fr 1fr 1fr; font-size: 12px; }
+    .col-freelance, .col-assistant { display: none; }
+  }
+
+  /* ============ FOOTER CTA ============ */
+  .footer-cta {
+    background: var(--blue);
+    color: white;
+    padding: 80px 0;
+    text-align: center;
+  }
+
+  .footer-cta h2 {
+    font-family: 'Georgia', serif;
+    font-size: 40px;
+    font-weight: 500;
+    margin-bottom: 16px;
+    letter-spacing: -0.01em;
+  }
+
+  .footer-cta p {
+    font-size: 17px;
+    color: rgba(255,255,255,0.75);
+    max-width: 540px;
+    margin: 0 auto 32px;
+  }
+
+  .footer-cta-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--gold);
+    color: white;
+    padding: 16px 32px;
+    border-radius: 100px;
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: transform 0.15s;
+  }
+
+  .footer-cta-button:hover { transform: translateY(-2px); }
+
+  .footer-meta {
+    margin-top: 40px;
+    padding-top: 32px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    font-size: 13px;
+    color: rgba(255,255,255,0.5);
+  }
+
+  /* ============ ANIMATIONS ============ */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .animate { animation: fadeIn 0.3s ease-out; }
+
+</style>
+</head>
+<body>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-badge">Support client externalisé · Francophone</div>
+    <h1>Un poste opérationnel<br/><em>à moitié coût</em>.</h1>
+    <p>Construisez votre équipe support sur-mesure. Agents francophones dédiés, supervisés, formés. Calculez votre forfait en 30 secondes.</p>
+    <a href="#simulator" class="hero-cta">Simuler mon coût →</a>
+  </div>
+</section>
+
+<!-- ============ SIMULATEUR ============ -->
+<section class="simulator-section" id="simulator">
+  <div class="container">
+    <div class="section-header">
+      <h2>Configurez votre équipe</h2>
+      <p>Ajustez les paramètres — votre tarif se calcule en temps réel.</p>
+    </div>
+
+    <div class="simulator-grid">
+      <!-- CONTRÔLES -->
+      <div class="controls-card">
+
+        <div class="control-group">
+          <div class="control-label">
+            <span class="control-label-text">Nombre de postes</span>
+            <span class="control-value" id="posts-value">1 poste</span>
+          </div>
+          <div class="slider-wrap">
+            <input type="range" id="posts" min="1" max="10" value="1" step="1" />
+          </div>
+        </div>
+
+        <div class="control-group">
+          <div class="control-label">
+            <span class="control-label-text">Heures / semaine / poste</span>
+            <span class="control-value" id="hours-value">35 h</span>
+          </div>
+          <div class="slider-wrap">
+            <input type="range" id="hours" min="10" max="40" value="35" step="5" />
+          </div>
+        </div>
+
+        <div class="control-group">
+          <div class="control-label">
+            <span class="control-label-text">Niveau de service</span>
+          </div>
+          <div class="pill-group" data-group="service">
+            <button class="pill" data-value="shared" data-multiplier="0.85">Mutualisé</button>
+            <button class="pill active" data-value="dedicated" data-multiplier="1.0">Dédié</button>
+            <button class="pill" data-value="premium" data-multiplier="1.25">Premium</button>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <div class="control-label">
+            <span class="control-label-text">Canaux</span>
+          </div>
+          <div class="pill-group" data-group="channels">
+            <button class="pill active" data-value="single" data-multiplier="1.0">1 canal</button>
+            <button class="pill" data-value="multi" data-multiplier="1.08">2-3 canaux</button>
+            <button class="pill" data-value="omni" data-multiplier="1.15">Omnicanal</button>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <div class="control-label">
+            <span class="control-label-text">Langue</span>
+          </div>
+          <div class="pill-group" data-group="language">
+            <button class="pill active" data-value="fr" data-multiplier="1.0">FR</button>
+            <button class="pill" data-value="en" data-multiplier="1.12">EN</button>
+            <button class="pill" data-value="bi" data-multiplier="1.22">Bilingue</button>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <div class="control-label">
+            <span class="control-label-text">Horaires de couverture</span>
+          </div>
+          <div class="pill-group" data-group="schedule">
+            <button class="pill active" data-value="office" data-multiplier="1.0">Bureau</button>
+            <button class="pill" data-value="extended" data-multiplier="1.15">Étendu</button>
+            <button class="pill" data-value="weekend" data-multiplier="1.28">Week-end</button>
+            <button class="pill" data-value="247" data-multiplier="1.45">24/7</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- RÉSULTATS -->
+      <div class="results-card">
+        <div class="result-primary">
+          <div class="result-label">Votre forfait mensuel</div>
+          <div>
+            <span class="result-price" id="price-monthly">1 290</span><span class="result-price-unit">€/mois</span>
+          </div>
+          <div class="result-strikethrough">
+            Équivalent salarié France : <span class="old" id="price-fr-hourly">16,2 €/h</span> · <span class="old" id="price-fr">2 800 €/mois</span>
+          </div>
+          <div class="savings-badge" id="savings-badge">Économie : 54 %</div>
+        </div>
+
+        <div class="result-grid">
+          <div class="result-stat">
+            <div class="result-stat-label">Heures / mois</div>
+            <div class="result-stat-value" id="hours-monthly">152 h</div>
+          </div>
+          <div class="result-stat">
+            <div class="result-stat-label">Tarif horaire affiché</div>
+            <div class="result-stat-value" id="hourly-displayed">8,5 €</div>
+          </div>
+          <div class="result-stat">
+            <div class="result-stat-label">Tarif horaire productif</div>
+            <div class="result-stat-value accent" id="hourly-productive">10,0 €</div>
+          </div>
+          <div class="result-stat">
+            <div class="result-stat-label">Économie annuelle</div>
+            <div class="result-stat-value accent" id="annual-savings">18 120 €</div>
+          </div>
+        </div>
+
+        <div class="recommendation">
+          <div class="recommendation-label">★ Recommandé pour vous</div>
+          <div class="recommendation-text" id="recommendation">
+            Forfait <strong>Growth</strong> — meilleur rapport coût / disponibilité.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FORFAITS ============ -->
+<section class="packages-section">
+  <div class="container">
+    <div class="section-header">
+      <h2>Trois forfaits, une logique</h2>
+      <p>Choisissez l'offre packagée, ou configurez sur mesure ci-dessus.</p>
+    </div>
+
+    <div class="packages-grid">
+      <div class="package">
+        <div class="package-name">Starter</div>
+        <div class="package-tagline">Premier pas dans l'externalisation</div>
+        <div>
+          <span class="package-price">690</span><span class="package-price-unit"> €/mois</span>
+        </div>
+        <div class="package-equiv">≈ 8 €/h · Économie ~ 55 %</div>
+        <ul class="package-features">
+          <li>1 poste partagé · 20 h / semaine</li>
+          <li>Support email + appels</li>
+          <li>SLA standard · réponse &lt; 4 h</li>
+          <li>Reporting mensuel</li>
+          <li>Onboarding 5 jours</li>
+        </ul>
+        <a href="#contact" class="package-cta">Démarrer</a>
+      </div>
+
+      <div class="package featured">
+        <div class="package-badge">★ Le plus choisi</div>
+        <div class="package-name">Growth</div>
+        <div class="package-tagline">L'équivalent d'une embauche, sans le coût</div>
+        <div>
+          <span class="package-price">1 290</span><span class="package-price-unit"> €/mois</span>
+        </div>
+        <div class="package-equiv">≈ 8,5 €/h · Économie ~ 54 %</div>
+        <ul class="package-features">
+          <li>1 poste 100 % dédié · 35 h / semaine</li>
+          <li>Téléphone + CRM + email + chat</li>
+          <li>Temps de réponse prioritaire</li>
+          <li>Reporting hebdomadaire + KPI</li>
+          <li>Backup agent inclus</li>
+          <li>Supervision QA mensuelle</li>
+        </ul>
+        <a href="#contact" class="package-cta">Choisir Growth</a>
+      </div>
+
+      <div class="package">
+        <div class="package-name">Scale</div>
+        <div class="package-tagline">Équipe complète, couverture étendue</div>
+        <div>
+          <span class="package-price">2 490</span><span class="package-price-unit"> €/mois</span>
+        </div>
+        <div class="package-equiv">≈ 8 €/h · Économie ~ 56 %</div>
+        <ul class="package-features">
+          <li>2 postes dédiés · 35 h / semaine chacun</li>
+          <li>Superviseur dédié</li>
+          <li>Horaires étendus (8 h – 20 h)</li>
+          <li>KPI personnalisés mensuels</li>
+          <li>Agent de backup garanti</li>
+          <li>Formation continue incluse</li>
+          <li>Account manager dédié</li>
+        </ul>
+        <a href="#contact" class="package-cta">Passer à Scale</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ COMPARAISON ============ -->
+<section class="compare-section">
+  <div class="container">
+    <div class="section-header">
+      <h2>Ce que vous remplacez vraiment</h2>
+      <p>Comparaison réaliste pour un poste équivalent temps plein.</p>
+    </div>
+
+    <div class="compare-table">
+      <div class="compare-row header">
+        <div class="col-feature">Critère</div>
+        <div class="compare-cell">Salarié France</div>
+        <div class="compare-cell col-freelance">Freelance</div>
+        <div class="compare-cell col-assistant">Assistant virtuel</div>
+        <div class="compare-cell">Valones</div>
+      </div>
+      <div class="compare-row highlight">
+        <div class="col-feature">Coût mensuel chargé</div>
+        <div class="compare-cell bad">2 800 €</div>
+        <div class="compare-cell col-freelance neutral">1 800-3 200 €</div>
+        <div class="compare-cell col-assistant neutral">600-1 200 €</div>
+        <div class="compare-cell valones">1 290 €</div>
+      </div>
+      <div class="compare-row">
+        <div class="col-feature">Disponibilité garantie</div>
+        <div class="compare-cell good">Oui (35 h)</div>
+        <div class="compare-cell col-freelance bad">Variable</div>
+        <div class="compare-cell col-assistant neutral">Partielle</div>
+        <div class="compare-cell valones">Oui + backup</div>
+      </div>
+      <div class="compare-row highlight">
+        <div class="col-feature">Congés / arrêts gérés</div>
+        <div class="compare-cell bad">À votre charge</div>
+        <div class="compare-cell col-freelance neutral">Sans remplacement</div>
+        <div class="compare-cell col-assistant neutral">Variable</div>
+        <div class="compare-cell valones">Backup inclus</div>
+      </div>
+      <div class="compare-row">
+        <div class="col-feature">Recrutement / turnover</div>
+        <div class="compare-cell bad">3 à 6 mois</div>
+        <div class="compare-cell col-freelance neutral">À refaire</div>
+        <div class="compare-cell col-assistant neutral">À refaire</div>
+        <div class="compare-cell valones">Géré sous 7 j</div>
+      </div>
+      <div class="compare-row highlight">
+        <div class="col-feature">Formation initiale</div>
+        <div class="compare-cell bad">À votre charge</div>
+        <div class="compare-cell col-freelance bad">À refaire</div>
+        <div class="compare-cell col-assistant neutral">Limitée</div>
+        <div class="compare-cell valones">Incluse</div>
+      </div>
+      <div class="compare-row">
+        <div class="col-feature">Supervision / QA</div>
+        <div class="compare-cell neutral">+ Manager</div>
+        <div class="compare-cell col-freelance bad">Aucune</div>
+        <div class="compare-cell col-assistant bad">Aucune</div>
+        <div class="compare-cell valones">Incluse</div>
+      </div>
+      <div class="compare-row highlight">
+        <div class="col-feature">Engagement minimum</div>
+        <div class="compare-cell bad">CDI</div>
+        <div class="compare-cell col-freelance good">Flexible</div>
+        <div class="compare-cell col-assistant good">Flexible</div>
+        <div class="compare-cell valones">3 mois</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER CTA ============ -->
+<section class="footer-cta" id="contact">
+  <div class="container">
+    <h2>Votre support, lancé en 10 jours.</h2>
+    <p>Onboarding offert · sans engagement long terme · un interlocuteur unique de bout en bout.</p>
+    <a href="mailto:contact@valones.com" class="footer-cta-button">Réserver un appel découverte →</a>
+    <div class="footer-meta">
+      Valones · Support client francophone externalisé · Calculs indicatifs, devis personnalisé sur demande.
+    </div>
+  </div>
+</section>
+
+<script>
+  // ============ CALCULS ============
+  // Coût direct par poste temps plein (152h productive / 173h payée)
+  const COST_BASE_FULLTIME = 585.53; // €/mois coût direct agent dédié temps plein (simulateur volontairement au-dessus des forfaits packagés)
+  const MARGIN_TARGET = 0.58; // marge brute cible
+  const HOURS_PRODUCTIVE_RATIO = 0.85;
+  const FR_EMPLOYEE_FULLTIME_COST = 2800; // €/mois coût employeur chargé
+  const FR_SCHEDULE_PENALTY_EXP = 1.35; // un 24/7 en FR = équipes en rotation (coût ^1.35)
+
+  // État
+  const state = {
+    posts: 1,
+    hours: 35,
+    service: 1.0,
+    channels: 1.0,
+    language: 1.0,
+    schedule: 1.0,
+  };
+
+  // Multiplicateurs par défaut (alignés sur HTML)
+  const multipliers = {
+    service: { shared: 0.85, dedicated: 1.0, premium: 1.25 },
+    channels: { single: 1.0, multi: 1.08, omni: 1.15 },
+    language: { fr: 1.0, en: 1.12, bi: 1.22 },
+    schedule: { office: 1.0, extended: 1.15, weekend: 1.28, '247': 1.45 },
+  };
+
+  function formatPrice(n) {
+    return Math.round(n).toLocaleString('fr-FR').replace(/ /g, ' ');
+  }
+
+  function formatHourly(n) {
+    return n.toFixed(1).replace('.', ',') + ' €';
+  }
+
+  function volumeDiscount(posts) {
+    if (posts >= 6) return 0.90;
+    if (posts >= 3) return 0.95;
+    return 1.0;
+  }
+
+  function calculate() {
+    const hoursPerMonth = state.hours * 4.33;
+    const hoursRatio = hoursPerMonth / 152; // 152h = base temps plein référence
+    // Coût direct selon heures
+    const costPerPost = COST_BASE_FULLTIME * hoursRatio;
+    // Prix de base avant multiplicateurs et marge
+    const basePrice = costPerPost / (1 - MARGIN_TARGET);
+    // Multiplicateurs cumulés
+    const mult = state.service * state.channels * state.language * state.schedule;
+    // Prix unitaire avec multiplicateurs
+    const unitPrice = basePrice * mult;
+    // Remise volume
+    const discount = volumeDiscount(state.posts);
+    // Prix total
+    const totalPrice = unitPrice * state.posts * discount;
+    // Comparaison FR — un employé FR bilingue ou en horaires étendus/24-7 coûte plus cher
+    // (primes, équipes de rotation, recrutement plus rare)
+    const frMultiplier = state.language * Math.pow(state.schedule, FR_SCHEDULE_PENALTY_EXP);
+    const frCost = FR_EMPLOYEE_FULLTIME_COST * hoursRatio * state.posts * frMultiplier;
+    const savings = frCost - totalPrice;
+    const savingsPct = (savings / frCost) * 100;
+    // Tarifs horaires
+    const totalHoursMonth = hoursPerMonth * state.posts;
+    const hourlyDisplayed = totalPrice / totalHoursMonth;
+    const hourlyProductive = totalPrice / (totalHoursMonth * HOURS_PRODUCTIVE_RATIO);
+
+    // Update DOM
+    document.getElementById('price-monthly').textContent = formatPrice(totalPrice);
+    const frHourly = frCost / totalHoursMonth;
+    document.getElementById('price-fr-hourly').textContent = frHourly.toFixed(1).replace('.', ',') + ' €/h';
+    document.getElementById('price-fr').textContent = formatPrice(frCost) + ' €/mois';
+    document.getElementById('savings-badge').textContent = 'Économie : ' + Math.round(savingsPct) + ' %';
+    document.getElementById('hours-monthly').textContent = Math.round(totalHoursMonth) + ' h';
+    document.getElementById('hourly-displayed').textContent = formatHourly(hourlyDisplayed);
+    document.getElementById('hourly-productive').textContent = formatHourly(hourlyProductive);
+    document.getElementById('annual-savings').textContent = formatPrice(savings * 12) + ' €';
+
+    // Recommandation
+    let recommendation;
+    if (state.posts === 1 && state.hours <= 20 && state.service <= 0.85) {
+      recommendation = 'Forfait <strong>Starter</strong> — idéal pour démarrer.';
+    } else if (state.posts >= 2 || (state.posts === 1 && state.hours >= 35 && state.service >= 1.0 && state.schedule > 1.0)) {
+      recommendation = 'Forfait <strong>Scale</strong> — couverture étendue + backup.';
+    } else if (state.posts >= 3) {
+      recommendation = 'Offre <strong>Enterprise</strong> sur mesure — contactez-nous.';
+    } else {
+      recommendation = 'Forfait <strong>Growth</strong> — meilleur rapport coût / disponibilité.';
+    }
+    document.getElementById('recommendation').innerHTML = recommendation;
+
+    // Animation
+    document.getElementById('price-monthly').classList.remove('animate');
+    void document.getElementById('price-monthly').offsetWidth;
+    document.getElementById('price-monthly').classList.add('animate');
+  }
+
+  // ============ EVENT HANDLERS ============
+  document.getElementById('posts').addEventListener('input', e => {
+    state.posts = parseInt(e.target.value);
+    document.getElementById('posts-value').textContent =
+      state.posts + ' poste' + (state.posts > 1 ? 's' : '');
+    calculate();
+  });
+
+  document.getElementById('hours').addEventListener('input', e => {
+    state.hours = parseInt(e.target.value);
+    let label;
+    if (state.hours <= 20) label = state.hours + ' h · temps partiel';
+    else if (state.hours <= 30) label = state.hours + ' h · 4/5e';
+    else if (state.hours === 35) label = '35 h · temps plein FR';
+    else label = state.hours + ' h · temps plein +';
+    document.getElementById('hours-value').textContent = label;
+    calculate();
+  });
+
+  // Pills
+  document.querySelectorAll('.pill-group').forEach(group => {
+    const groupName = group.dataset.group;
+    group.querySelectorAll('.pill').forEach(pill => {
+      pill.addEventListener('click', () => {
+        group.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+        pill.classList.add('active');
+        state[groupName] = parseFloat(pill.dataset.multiplier);
+        calculate();
+      });
+    });
+  });
+
+  // Initial calculation
+  calculate();
+</script>
+
+</body>
+</html>
