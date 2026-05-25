@@ -1,0 +1,14 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "pip3 install -q reportlab beautifulsoup4 >/dev/null 2>&1 || true"
+          }
+        ]
+      }
+    ]
+  }
+}
