@@ -3,669 +3,77 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Salverys — Simulateur télésecrétariat médical</title>
-<style>
-  :root {
-    /* Palette greige chaud / vert sauge / bleu profond — univers médical */
-    --bg: #F4EFE6;
-    --bg-card: #FBF7F0;
-    --bg-elevated: #FFFFFF;
-    --greige: #E5DCCB;
-    --greige-dark: #CFC2AC;
-    --sage: #8FA38F;
-    --sage-dark: #6F8770;
-    --sage-light: #C5D2C5;
-    --blue: #2E3B4E;
-    --blue-soft: #4A5A70;
-    --blue-light: #7B8BA1;
-    --gold: #B89968;
-    --gold-soft: #D4B98A;
-    --text: #2A2620;
-    --text-soft: #5C5448;
-    --text-mute: #8A8275;
-    --danger: #B6604D;
-    --shadow-sm: 0 1px 2px rgba(46, 59, 78, 0.06), 0 1px 3px rgba(46, 59, 78, 0.04);
-    --shadow-md: 0 4px 12px rgba(46, 59, 78, 0.08), 0 2px 6px rgba(46, 59, 78, 0.04);
-    --shadow-lg: 0 12px 32px rgba(46, 59, 78, 0.12), 0 4px 12px rgba(46, 59, 78, 0.06);
-    --radius-sm: 6px;
-    --radius-md: 12px;
-    --radius-lg: 20px;
-  }
-
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-
-  body {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    line-height: 1.5;
-    -webkit-font-smoothing: antialiased;
-  }
-
-  .container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 24px;
-  }
-
-  a { color: inherit; }
-
-  /* ============ NAV ============ */
-  .nav {
-    position: sticky;
-    top: 0;
-    z-index: 50;
-    background: rgba(251, 247, 240, 0.85);
-    backdrop-filter: saturate(160%) blur(10px);
-    border-bottom: 1px solid var(--greige);
-  }
-  .nav-inner {
-    display: flex;
-    align-items: center;
-    gap: 24px;
-    height: 64px;
-  }
-  .brand {
-    font-family: 'Georgia', serif;
-    font-size: 22px;
-    font-weight: 600;
-    color: var(--blue);
-    text-decoration: none;
-    letter-spacing: -0.01em;
-  }
-  .brand span { color: var(--sage-dark); }
-  .nav-links {
-    display: flex;
-    gap: 22px;
-    margin-left: 12px;
-    flex: 1;
-  }
-  .nav-links a {
-    font-size: 14px;
-    font-weight: 500;
-    color: var(--text-soft);
-    text-decoration: none;
-    padding: 6px 0;
-    border-bottom: 2px solid transparent;
-    transition: color 0.15s, border-color 0.15s;
-  }
-  .nav-links a:hover { color: var(--blue); }
-  .nav-links a.active { color: var(--blue); border-bottom-color: var(--sage); }
-  .nav-cta {
-    background: var(--blue);
-    color: #fff;
-    padding: 9px 18px;
-    border-radius: 100px;
-    font-size: 13px;
-    font-weight: 600;
-    text-decoration: none;
-    white-space: nowrap;
-    transition: transform 0.15s;
-  }
-  .nav-cta:hover { transform: translateY(-1px); }
-  @media (max-width: 720px) {
-    .nav-links { display: none; }
-  }
-
-  /* ============ HERO ============ */
-  .hero {
-    padding: 80px 0 60px;
-    text-align: center;
-    background: linear-gradient(180deg, var(--bg) 0%, var(--bg-card) 100%);
-  }
-
-  .hero-badge {
-    display: inline-block;
-    background: var(--sage-light);
-    color: var(--sage-dark);
-    padding: 6px 14px;
-    border-radius: 100px;
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    margin-bottom: 24px;
-  }
-
-  .hero h1 {
-    font-family: 'Georgia', 'Times New Roman', serif;
-    font-size: clamp(36px, 5vw, 56px);
-    font-weight: 500;
-    color: var(--blue);
-    letter-spacing: -0.02em;
-    line-height: 1.1;
-    margin-bottom: 20px;
-  }
-
-  .hero h1 em {
-    font-style: italic;
-    color: var(--sage-dark);
-  }
-
-  .hero p {
-    font-size: 18px;
-    color: var(--text-soft);
-    max-width: 640px;
-    margin: 0 auto 36px;
-  }
-
-  .hero-cta {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    background: var(--blue);
-    color: white;
-    padding: 14px 28px;
-    border-radius: 100px;
-    font-size: 15px;
-    font-weight: 500;
-    text-decoration: none;
-    box-shadow: var(--shadow-md);
-    transition: transform 0.2s, box-shadow 0.2s;
-  }
-
-  .hero-cta:hover { transform: translateY(-1px); box-shadow: var(--shadow-lg); }
-
-  /* ============ SIMULATEUR ============ */
-  .simulator-section { padding: 40px 0 80px; }
-
-  .section-header { text-align: center; margin-bottom: 48px; }
-
-  .section-header h2 {
-    font-family: 'Georgia', serif;
-    font-size: 36px;
-    font-weight: 500;
-    color: var(--blue);
-    letter-spacing: -0.01em;
-    margin-bottom: 12px;
-  }
-
-  .section-header p { color: var(--text-soft); font-size: 16px; }
-
-  .simulator-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 32px;
-    align-items: start;
-  }
-
-  @media (max-width: 900px) { .simulator-grid { grid-template-columns: 1fr; } }
-
-  .controls-card, .results-card {
-    background: var(--bg-card);
-    border: 1px solid var(--greige);
-    border-radius: var(--radius-lg);
-    padding: 32px;
-    box-shadow: var(--shadow-sm);
-  }
-
-  .results-card {
-    background: var(--blue);
-    color: white;
-    border-color: var(--blue);
-    position: sticky;
-    top: 88px;
-  }
-
-  .control-group { margin-bottom: 28px; }
-  .control-group:last-child { margin-bottom: 0; }
-
-  .control-label {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    margin-bottom: 12px;
-  }
-
-  .control-label-text {
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--blue);
-    letter-spacing: 0.01em;
-  }
-
-  .control-value {
-    font-family: 'Georgia', serif;
-    font-size: 18px;
-    color: var(--sage-dark);
-    font-weight: 500;
-  }
-
-  .slider-wrap { position: relative; padding: 8px 0; }
-
-  input[type="range"] {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 100%;
-    height: 6px;
-    background: var(--greige);
-    border-radius: 100px;
-    outline: none;
-  }
-
-  input[type="range"]::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    width: 22px;
-    height: 22px;
-    background: var(--sage);
-    border: 3px solid white;
-    border-radius: 50%;
-    cursor: pointer;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-    transition: transform 0.15s;
-  }
-
-  input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.15); }
-
-  input[type="range"]::-moz-range-thumb {
-    width: 22px;
-    height: 22px;
-    background: var(--sage);
-    border: 3px solid white;
-    border-radius: 50%;
-    cursor: pointer;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-  }
-
-  .pill-group { display: flex; gap: 8px; flex-wrap: wrap; }
-
-  .pill {
-    flex: 1;
-    min-width: fit-content;
-    padding: 10px 14px;
-    background: white;
-    border: 1px solid var(--greige-dark);
-    border-radius: 100px;
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--text-soft);
-    cursor: pointer;
-    text-align: center;
-    transition: all 0.15s;
-  }
-
-  .pill:hover { border-color: var(--sage); color: var(--blue); }
-
-  .pill.active { background: var(--sage); border-color: var(--sage); color: white; }
-
-  .result-primary {
-    text-align: center;
-    padding-bottom: 24px;
-    border-bottom: 1px solid rgba(255,255,255,0.12);
-    margin-bottom: 24px;
-  }
-
-  .result-label {
-    font-size: 12px;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: rgba(255,255,255,0.6);
-    margin-bottom: 8px;
-  }
-
-  .result-price {
-    font-family: 'Georgia', serif;
-    font-size: 56px;
-    font-weight: 500;
-    letter-spacing: -0.02em;
-    line-height: 1;
-  }
-
-  .result-price-unit {
-    font-size: 18px;
-    color: rgba(255,255,255,0.7);
-    font-family: 'Inter', sans-serif;
-    margin-left: 4px;
-  }
-
-  .result-strikethrough {
-    margin-top: 12px;
-    font-size: 14px;
-    color: rgba(255,255,255,0.55);
-  }
-
-  .result-strikethrough .old {
-    text-decoration: line-through;
-    text-decoration-color: var(--danger);
-    text-decoration-thickness: 2px;
-  }
-
-  .savings-badge {
-    display: inline-block;
-    margin-top: 14px;
-    background: var(--sage);
-    color: white;
-    padding: 8px 16px;
-    border-radius: 100px;
-    font-size: 13px;
-    font-weight: 600;
-    letter-spacing: 0.02em;
-  }
-
-  .result-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-    margin-bottom: 24px;
-  }
-
-  .result-stat {
-    background: rgba(255,255,255,0.06);
-    border-radius: var(--radius-md);
-    padding: 16px;
-  }
-
-  .result-stat-label {
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: rgba(255,255,255,0.55);
-    margin-bottom: 6px;
-  }
-
-  .result-stat-value {
-    font-family: 'Georgia', serif;
-    font-size: 22px;
-    font-weight: 500;
-    color: white;
-  }
-
-  .result-stat-value.accent { color: var(--gold-soft); }
-
-  .recommendation {
-    background: linear-gradient(135deg, rgba(143,163,143,0.15), rgba(184,153,104,0.1));
-    border: 1px solid rgba(143,163,143,0.3);
-    border-radius: var(--radius-md);
-    padding: 16px;
-    text-align: center;
-  }
-
-  .recommendation-label {
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--gold-soft);
-    margin-bottom: 6px;
-    font-weight: 600;
-  }
-
-  .recommendation-text { font-family: 'Georgia', serif; font-size: 16px; color: white; }
-  .recommendation-text strong { color: var(--gold-soft); }
-
-  .disclaimer {
-    margin-top: 16px;
-    font-size: 12px;
-    color: rgba(255,255,255,0.5);
-    text-align: center;
-  }
-
-  /* ============ FORFAITS ============ */
-  .packages-section { padding: 80px 0; background: var(--bg-card); }
-
-  .packages-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 24px;
-    margin-top: 48px;
-  }
-
-  @media (max-width: 900px) { .packages-grid { grid-template-columns: 1fr; } }
-
-  .package {
-    background: var(--bg-elevated);
-    border: 1px solid var(--greige);
-    border-radius: var(--radius-lg);
-    padding: 32px 28px;
-    position: relative;
-    transition: transform 0.2s, box-shadow 0.2s;
-  }
-
-  .package:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
-
-  .package.featured {
-    background: var(--blue);
-    color: white;
-    border-color: var(--blue);
-    transform: scale(1.04);
-    box-shadow: var(--shadow-lg);
-  }
-
-  .package.featured:hover { transform: scale(1.04) translateY(-4px); }
-
-  .package-badge {
-    position: absolute;
-    top: -12px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: var(--gold);
-    color: white;
-    padding: 5px 14px;
-    border-radius: 100px;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    white-space: nowrap;
-  }
-
-  .package-name {
-    font-family: 'Georgia', serif;
-    font-size: 26px;
-    font-weight: 500;
-    color: var(--blue);
-    margin-bottom: 6px;
-  }
-
-  .package.featured .package-name { color: white; }
-
-  .package-tagline { font-size: 13px; color: var(--text-mute); margin-bottom: 24px; }
-  .package.featured .package-tagline { color: rgba(255,255,255,0.65); }
-
-  .package-price {
-    font-family: 'Georgia', serif;
-    font-size: 44px;
-    font-weight: 500;
-    color: var(--blue);
-    letter-spacing: -0.02em;
-    line-height: 1;
-  }
-
-  .package.featured .package-price { color: white; }
-
-  .package-price-unit { font-size: 16px; font-family: 'Inter', sans-serif; color: var(--text-mute); }
-  .package.featured .package-price-unit { color: rgba(255,255,255,0.7); }
-
-  .package-equiv {
-    font-size: 13px;
-    color: var(--sage-dark);
-    margin-top: 8px;
-    margin-bottom: 28px;
-    padding-bottom: 24px;
-    border-bottom: 1px solid var(--greige);
-  }
-
-  .package.featured .package-equiv { color: var(--gold-soft); border-bottom-color: rgba(255,255,255,0.15); }
-
-  .package-features { list-style: none; }
-
-  .package-features li {
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-    padding: 8px 0;
-    font-size: 14px;
-    color: var(--text-soft);
-  }
-
-  .package.featured .package-features li { color: rgba(255,255,255,0.85); }
-
-  .package-features li::before {
-    content: "✓";
-    color: var(--sage);
-    font-weight: 700;
-    flex-shrink: 0;
-  }
-
-  .package.featured .package-features li::before { color: var(--gold-soft); }
-
-  .package-cta {
-    display: block;
-    width: 100%;
-    margin-top: 28px;
-    padding: 13px 20px;
-    background: transparent;
-    border: 1.5px solid var(--blue);
-    color: var(--blue);
-    border-radius: 100px;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    text-align: center;
-    text-decoration: none;
-    transition: all 0.15s;
-  }
-
-  .package-cta:hover { background: var(--blue); color: white; }
-
-  .package.featured .package-cta { background: var(--gold); border-color: var(--gold); color: white; }
-  .package.featured .package-cta:hover { background: var(--gold-soft); border-color: var(--gold-soft); }
-
-  /* ============ COMPARAISON ============ */
-  .compare-section { padding: 80px 0; }
-
-  .compare-table {
-    background: var(--bg-card);
-    border-radius: var(--radius-lg);
-    overflow: hidden;
-    border: 1px solid var(--greige);
-    margin-top: 48px;
-  }
-
-  .compare-row {
-    display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
-    align-items: center;
-    padding: 18px 24px;
-    border-bottom: 1px solid var(--greige);
-  }
-
-  .compare-row:last-child { border-bottom: none; }
-
-  .compare-row.header {
-    background: var(--blue);
-    color: white;
-    font-weight: 600;
-    font-size: 13px;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-  }
-
-  .compare-row.header .col-feature { color: rgba(255,255,255,0.85); }
-
-  .compare-row.highlight { background: linear-gradient(90deg, rgba(143,163,143,0.06), transparent); }
-
-  .col-feature { color: var(--text); font-weight: 500; font-size: 14px; }
-
-  .compare-cell { text-align: center; font-size: 13px; color: var(--text-soft); }
-  .compare-cell.salverys { color: var(--sage-dark); font-weight: 600; }
-  .compare-cell.good { color: var(--sage-dark); font-weight: 600; }
-  .compare-cell.bad { color: var(--danger); }
-  .compare-cell.neutral { color: var(--text-mute); }
-
-  @media (max-width: 800px) {
-    .compare-row { grid-template-columns: 1.5fr 1fr 1fr; font-size: 12px; }
-    .col-standard, .col-repondeur { display: none; }
-  }
-
-  /* ============ FOOTER CTA ============ */
-  .footer-cta { background: var(--blue); color: white; padding: 80px 0; text-align: center; }
-
-  .footer-cta h2 {
-    font-family: 'Georgia', serif;
-    font-size: 40px;
-    font-weight: 500;
-    margin-bottom: 16px;
-    letter-spacing: -0.01em;
-  }
-
-  .footer-cta p { font-size: 17px; color: rgba(255,255,255,0.75); max-width: 540px; margin: 0 auto 32px; }
-
-  .footer-cta-button {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    background: var(--gold);
-    color: white;
-    padding: 16px 32px;
-    border-radius: 100px;
-    font-size: 15px;
-    font-weight: 600;
-    text-decoration: none;
-    transition: transform 0.15s;
-  }
-
-  .footer-cta-button:hover { transform: translateY(-2px); }
-
-  .footer-meta {
-    margin-top: 40px;
-    padding-top: 32px;
-    border-top: 1px solid rgba(255,255,255,0.1);
-    font-size: 13px;
-    color: rgba(255,255,255,0.5);
-  }
-
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(8px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  .animate { animation: fadeIn 0.3s ease-out; }
-</style>
+<title>Salverys — Télésecrétariat médical : simulateur de forfait</title>
+<meta name="description" content="Télésecrétariat médical francophone : prise d'appels 8h–20h, gestion d'agendas Doctolib/Maiia, formé au secret médical. Forfait dès 350 €/mois. Simulez en direct." />
+<link rel="preconnect" href="https://images.unsplash.com" />
+<link rel="stylesheet" href="assets/site.css" />
 </head>
 <body>
 
-<!-- ============ NAV ============ -->
+<!-- NAV -->
 <header class="nav">
   <div class="container nav-inner">
-    <a class="brand" href="index.html">Sal<span>verys</span></a>
+    <a class="brand" href="index.html">Sal<b>verys</b></a>
     <nav class="nav-links">
       <a href="index.html">Accueil</a>
       <a href="simulateur-salverys.html" class="active">Télésecrétariat médical</a>
       <a href="simulateur-informatique.html">Support &amp; Helpdesk IT</a>
     </nav>
-    <a href="#contact" class="nav-cta">Réserver un appel</a>
+    <a href="#simulator" class="nav-cta">Simuler mon forfait</a>
+    <button class="nav-burger" aria-label="Menu">☰</button>
   </div>
 </header>
 
-<!-- ============ HERO ============ -->
+<!-- HERO -->
 <section class="hero">
-  <div class="container">
-    <div class="hero-badge">Télésecrétariat médical · Francophone</div>
-    <h1>Plus aucun appel patient<br/><em>qui sonne dans le vide</em>.</h1>
-    <p>Des télésecrétaires francophones natives, formées au secret médical, prennent vos appels et gèrent vos agendas pendant que vous consultez. Calculez votre forfait en 30 secondes.</p>
-    <a href="#simulator" class="hero-cta">Simuler mon forfait →</a>
+  <span class="hero-bg-blob b1"></span>
+  <div class="container hero-grid">
+    <div class="hero-copy reveal">
+      <span class="eyebrow"><span class="pulse"></span> Télésecrétariat médical · Francophone</span>
+      <h1>Plus aucun appel patient <span class="hl">dans le vide</span>.</h1>
+      <p class="lead">Des télésecrétaires francophones natives, formées au secret médical, prennent vos appels et gèrent vos agendas pendant que vous consultez.</p>
+      <div class="hero-actions">
+        <a href="#simulator" class="btn btn-primary">Simuler mon forfait <span class="arrow">→</span></a>
+        <a href="#forfaits" class="btn btn-outline">Voir les forfaits</a>
+      </div>
+      <div class="hero-trust">
+        <span><b>Doctolib</b> · Maiia · Médistory</span>
+        <span><b>8h–20h</b>, jamais de répondeur</span>
+        <span><b>Essai 15 j</b> sans engagement</span>
+      </div>
+    </div>
+    <div class="hero-visual reveal d1">
+      <div class="photo-wrap">
+        <img class="photo" loading="eager" decoding="async" onerror="this.style.display='none'"
+             src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=1100&q=70"
+             alt="Cabinet médical" />
+      </div>
+      <div class="float-card fc1">
+        <div class="fc-num">350 €</div>
+        <div class="fc-lab">à partir de, par mois</div>
+      </div>
+    </div>
   </div>
 </section>
 
-<!-- ============ SIMULATEUR ============ -->
-<section class="simulator-section" id="simulator">
+<!-- SIMULATEUR -->
+<section class="section soft" id="simulator">
   <div class="container">
-    <div class="section-header">
+    <div class="section-head reveal">
+      <div class="kicker">Simulateur</div>
       <h2>Configurez votre télésecrétariat</h2>
       <p>Ajustez le volume et la couverture — votre forfait se calcule en temps réel.</p>
     </div>
 
-    <div class="simulator-grid">
+    <div class="sim-grid">
       <!-- CONTRÔLES -->
-      <div class="controls-card">
-
+      <div class="controls-card reveal">
         <div class="control-group">
           <div class="control-label">
             <span class="control-label-text">Volume d'appels / mois</span>
             <span class="control-value" id="calls-value">250 appels</span>
           </div>
-          <div class="slider-wrap">
-            <input type="range" id="calls" min="50" max="1200" value="250" step="25" />
-          </div>
+          <div class="slider-wrap"><input type="range" id="calls" min="50" max="1200" value="250" step="25" /></div>
         </div>
 
         <div class="control-group">
@@ -673,15 +81,11 @@
             <span class="control-label-text">Jours couverts / semaine</span>
             <span class="control-value" id="days-value">5 j</span>
           </div>
-          <div class="slider-wrap">
-            <input type="range" id="days" min="5" max="7" value="5" step="1" />
-          </div>
+          <div class="slider-wrap"><input type="range" id="days" min="5" max="7" value="5" step="1" /></div>
         </div>
 
         <div class="control-group">
-          <div class="control-label">
-            <span class="control-label-text">Plage horaire</span>
-          </div>
+          <div class="control-label"><span class="control-label-text">Plage horaire</span></div>
           <div class="pill-group" data-group="schedule">
             <button class="pill active" data-value="day" data-multiplier="1.0">Journée 8h–20h</button>
             <button class="pill" data-value="evening" data-multiplier="1.10">+ Soirée 20h–22h</button>
@@ -689,9 +93,7 @@
         </div>
 
         <div class="control-group">
-          <div class="control-label">
-            <span class="control-label-text">Intégration agenda</span>
-          </div>
+          <div class="control-label"><span class="control-label-text">Intégration agenda</span></div>
           <div class="pill-group" data-group="integration">
             <button class="pill active" data-value="doctolib" data-multiplier="1.0">Doctolib</button>
             <button class="pill" data-value="maiia" data-multiplier="1.0">Maiia</button>
@@ -702,312 +104,190 @@
       </div>
 
       <!-- RÉSULTATS -->
-      <div class="results-card">
+      <div class="results-card reveal d1">
         <div class="result-primary">
           <div class="result-label">Votre forfait mensuel</div>
-          <div>
-            <span class="result-price" id="price-monthly">350</span><span class="result-price-unit">€/mois</span>
-          </div>
+          <div><span class="result-price" id="price-monthly">350</span><span class="result-price-unit">€/mois</span></div>
           <div class="result-strikethrough" id="compare-line">
-            Facturation à l'appel ailleurs : <span class="old" id="price-percall">400 €/mois</span>
+            Facturation à l'appel ailleurs : <span class="old">400 €/mois</span>
           </div>
           <div class="savings-badge" id="savings-badge">Économie : 12 % vs à l'appel</div>
         </div>
 
         <div class="result-grid">
-          <div class="result-stat">
-            <div class="result-stat-label">Appels traités / mois</div>
-            <div class="result-stat-value" id="calls-monthly">250</div>
-          </div>
-          <div class="result-stat">
-            <div class="result-stat-label">Coût par appel traité</div>
-            <div class="result-stat-value" id="cost-percall">1,40 €</div>
-          </div>
-          <div class="result-stat">
-            <div class="result-stat-label">Couverture</div>
-            <div class="result-stat-value" id="coverage">5 j · 8h–20h</div>
-          </div>
-          <div class="result-stat">
-            <div class="result-stat-label">RDV récupérés / mois</div>
-            <div class="result-stat-value accent" id="rdv-recovered">≈ 30</div>
-          </div>
+          <div class="result-stat"><div class="result-stat-label">Appels traités / mois</div><div class="result-stat-value" id="calls-monthly">250</div></div>
+          <div class="result-stat"><div class="result-stat-label">Coût par appel traité</div><div class="result-stat-value" id="cost-percall">1,40 €</div></div>
+          <div class="result-stat"><div class="result-stat-label">Couverture</div><div class="result-stat-value" id="coverage">5 j · 8h–20h</div></div>
+          <div class="result-stat"><div class="result-stat-label">RDV récupérés / mois</div><div class="result-stat-value accent" id="rdv-recovered">≈ 30</div></div>
         </div>
 
         <div class="recommendation">
           <div class="recommendation-label">★ Recommandé pour vous</div>
-          <div class="recommendation-text" id="recommendation">
-            Forfait <strong>Essentiel</strong> — idéal pour un praticien.
-          </div>
+          <div class="recommendation-text" id="recommendation">Forfait <strong>Essentiel</strong> — idéal pour un praticien.</div>
         </div>
-
         <div class="disclaimer">Montants indicatifs à valider · Essai 15 jours offert, sans engagement.</div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ============ FORFAITS ============ -->
-<section class="packages-section">
+<!-- FORFAITS -->
+<section class="section" id="forfaits">
   <div class="container">
-    <div class="section-header">
+    <div class="section-head reveal">
+      <div class="kicker">Forfaits</div>
       <h2>Trois forfaits, une logique</h2>
       <p>Facturation au forfait mensuel selon votre volume — jamais à l'appel.</p>
     </div>
-
-    <div class="packages-grid">
-      <div class="package">
-        <div class="package-name">Essentiel</div>
-        <div class="package-tagline">Pour un praticien seul</div>
-        <div>
-          <span class="package-price">350</span><span class="package-price-unit"> €/mois</span>
-        </div>
-        <div class="package-equiv">jusqu'à ~250 appels/mois</div>
-        <ul class="package-features">
+    <div class="packages">
+      <div class="pkg reveal">
+        <div class="pkg-name">Essentiel</div>
+        <div class="pkg-tag">Pour un praticien seul</div>
+        <div><span class="pkg-price">350</span><span class="pkg-unit"> €/mois</span></div>
+        <div class="pkg-equiv">jusqu'à ~250 appels/mois</div>
+        <ul class="pkg-feat">
           <li>Prise d'appels 8h–20h, 5j/7</li>
           <li>Gestion d'agenda Doctolib / Maiia</li>
-          <li>Télésecrétaires formées au secret médical</li>
+          <li>Formé au secret médical</li>
           <li>Messages transmis en temps réel</li>
           <li>Essai 15 jours sans engagement</li>
         </ul>
-        <a href="#contact" class="package-cta">Démarrer</a>
+        <a href="#contact" class="pkg-cta">Démarrer</a>
       </div>
 
-      <div class="package featured">
-        <div class="package-badge">★ Le plus choisi</div>
-        <div class="package-name">Confort</div>
-        <div class="package-tagline">Pour un cabinet actif</div>
-        <div>
-          <span class="package-price">590</span><span class="package-price-unit"> €/mois</span>
-        </div>
-        <div class="package-equiv">jusqu'à ~500 appels/mois</div>
-        <ul class="package-features">
+      <div class="pkg featured reveal d1">
+        <div class="pkg-badge">★ Le plus choisi</div>
+        <div class="pkg-name">Confort</div>
+        <div class="pkg-tag">Pour un cabinet actif</div>
+        <div><span class="pkg-price">590</span><span class="pkg-unit"> €/mois</span></div>
+        <div class="pkg-equiv">jusqu'à ~500 appels/mois</div>
+        <ul class="pkg-feat">
           <li>Tout l'Essentiel, volume doublé</li>
-          <li>Gestion complète des agendas</li>
           <li>Confirmations &amp; rappels de RDV</li>
           <li>Filtrage urgences selon vos consignes</li>
           <li>Reporting mensuel des appels</li>
           <li>Essai 15 jours sans engagement</li>
         </ul>
-        <a href="#contact" class="package-cta">Choisir Confort</a>
+        <a href="#contact" class="pkg-cta">Choisir Confort</a>
       </div>
 
-      <div class="package">
-        <div class="package-name">Intensif</div>
-        <div class="package-tagline">Cabinet de groupe / fort volume</div>
-        <div>
-          <span class="package-price">950</span><span class="package-price-unit"> €/mois</span>
-        </div>
-        <div class="package-equiv">jusqu'à ~900 appels/mois</div>
-        <ul class="package-features">
-          <li>Tout le Confort, volume étendu</li>
+      <div class="pkg reveal d2">
+        <div class="pkg-name">Intensif</div>
+        <div class="pkg-tag">Cabinet de groupe / fort volume</div>
+        <div><span class="pkg-price">950</span><span class="pkg-unit"> €/mois</span></div>
+        <div class="pkg-equiv">jusqu'à ~900 appels/mois</div>
+        <ul class="pkg-feat">
           <li>Plusieurs praticiens / agendas</li>
           <li>Plage horaire étendue possible</li>
           <li>Protocoles personnalisés par médecin</li>
           <li>Interlocuteur dédié</li>
           <li>Essai 15 jours sans engagement</li>
         </ul>
-        <a href="#contact" class="package-cta">Passer à Intensif</a>
+        <a href="#contact" class="pkg-cta">Passer à Intensif</a>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ============ COMPARAISON ============ -->
-<section class="compare-section">
+<!-- COMPARAISON -->
+<section class="section soft">
   <div class="container">
-    <div class="section-header">
+    <div class="section-head reveal">
+      <div class="kicker">Comparaison</div>
       <h2>Ce que vous remplacez vraiment</h2>
-      <p>Comparaison réaliste pour la gestion des appels d'un cabinet.</p>
+      <p>Pour la gestion des appels d'un cabinet.</p>
     </div>
-
-    <div class="compare-table">
-      <div class="compare-row header">
-        <div class="col-feature">Critère</div>
-        <div class="compare-cell">Secrétaire au cabinet</div>
-        <div class="compare-cell col-standard">Standard externe à l'appel</div>
-        <div class="compare-cell col-repondeur">Répondeur</div>
-        <div class="compare-cell">Salverys</div>
+    <div class="compare reveal d1">
+      <div class="crow head">
+        <div class="cfeat">Critère</div>
+        <div class="ccell">Secrétaire au cabinet</div>
+        <div class="ccell c-hide">Standard à l'appel</div>
+        <div class="ccell c-hide">Répondeur</div>
+        <div class="ccell salv">Salverys</div>
       </div>
-      <div class="compare-row highlight">
-        <div class="col-feature">Coût mensuel</div>
-        <div class="compare-cell bad">2 200 € +</div>
-        <div class="compare-cell col-standard neutral">Variable à l'appel</div>
-        <div class="compare-cell col-repondeur good">~ 0 €</div>
-        <div class="compare-cell salverys">350 – 950 €</div>
+      <div class="crow alt">
+        <div class="cfeat">Coût mensuel</div>
+        <div class="ccell bad">2 200 € +</div>
+        <div class="ccell c-hide neu">Variable</div>
+        <div class="ccell c-hide good">~ 0 €</div>
+        <div class="ccell salv">350 – 950 €</div>
       </div>
-      <div class="compare-row">
-        <div class="col-feature">Appels pris en direct</div>
-        <div class="compare-cell good">Aux heures de présence</div>
-        <div class="compare-cell col-standard good">Oui</div>
-        <div class="compare-cell col-repondeur bad">Non</div>
-        <div class="compare-cell salverys">Oui · 8h–20h</div>
+      <div class="crow">
+        <div class="cfeat">Appels pris en direct</div>
+        <div class="ccell good">Aux heures de présence</div>
+        <div class="ccell c-hide good">Oui</div>
+        <div class="ccell c-hide bad">Non</div>
+        <div class="ccell salv">Oui · 8h–20h</div>
       </div>
-      <div class="compare-row highlight">
-        <div class="col-feature">RDV posés sur l'agenda</div>
-        <div class="compare-cell good">Oui</div>
-        <div class="compare-cell col-standard neutral">Parfois</div>
-        <div class="compare-cell col-repondeur bad">Non</div>
-        <div class="compare-cell salverys">Oui · Doctolib / Maiia</div>
+      <div class="crow alt">
+        <div class="cfeat">RDV posés sur l'agenda</div>
+        <div class="ccell good">Oui</div>
+        <div class="ccell c-hide neu">Parfois</div>
+        <div class="ccell c-hide bad">Non</div>
+        <div class="ccell salv">Oui · Doctolib</div>
       </div>
-      <div class="compare-row">
-        <div class="col-feature">Secret médical</div>
-        <div class="compare-cell good">Oui</div>
-        <div class="compare-cell col-standard neutral">Variable</div>
-        <div class="compare-cell col-repondeur neutral">—</div>
-        <div class="compare-cell salverys">Télésecrétaires formées</div>
+      <div class="crow">
+        <div class="cfeat">Secret médical</div>
+        <div class="ccell good">Oui</div>
+        <div class="ccell c-hide neu">Variable</div>
+        <div class="ccell c-hide neu">—</div>
+        <div class="ccell salv">Formées</div>
       </div>
-      <div class="compare-row highlight">
-        <div class="col-feature">Continuité (congés / absence)</div>
-        <div class="compare-cell bad">À votre charge</div>
-        <div class="compare-cell col-standard neutral">Selon prestataire</div>
-        <div class="compare-cell col-repondeur neutral">—</div>
-        <div class="compare-cell salverys">Équipe, jamais d'arrêt</div>
+      <div class="crow alt">
+        <div class="cfeat">Continuité (congés)</div>
+        <div class="ccell bad">À votre charge</div>
+        <div class="ccell c-hide neu">Selon presta</div>
+        <div class="ccell c-hide neu">—</div>
+        <div class="ccell salv">Équipe + backup</div>
       </div>
-      <div class="compare-row">
-        <div class="col-feature">Engagement</div>
-        <div class="compare-cell bad">CDI</div>
-        <div class="compare-cell col-standard neutral">Variable</div>
-        <div class="compare-cell col-repondeur good">Aucun</div>
-        <div class="compare-cell salverys">Essai 15 j sans engagement</div>
+      <div class="crow">
+        <div class="cfeat">Engagement</div>
+        <div class="ccell bad">CDI</div>
+        <div class="ccell c-hide neu">Variable</div>
+        <div class="ccell c-hide good">Aucun</div>
+        <div class="ccell salv">Essai 15 j</div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ============ FOOTER CTA ============ -->
-<section class="footer-cta" id="contact">
+<!-- CTA BAND -->
+<section class="cta-band" id="contact">
+  <span class="hero-bg-blob b1"></span>
   <div class="container">
-    <h2>Votre télésecrétariat, opérationnel en quelques jours.</h2>
+    <h2>Votre télésecrétariat, <span class="hl">opérationnel en quelques jours</span>.</h2>
     <p>Essai 15 jours offert · sans engagement · vous gardez la main sur vos agendas.</p>
-    <a href="mailto:contact@salverys.fr" class="footer-cta-button">Réserver un appel découverte →</a>
-    <div class="footer-meta">
-      Salverys · Télésecrétariat médical francophone · Antananarivo → France · Montants indicatifs, devis personnalisé sur demande.
-    </div>
+    <a href="mailto:contact@salverys.fr" class="btn btn-primary">Réserver un appel découverte <span class="arrow">→</span></a>
   </div>
 </section>
 
-<script>
-  // ============ MODÈLE TARIFAIRE MÉDICAL ============
-  // Forfaits par palier de volume (grille validée, montants indicatifs à valider)
-  const TIERS = [
-    { name: 'Essentiel', maxCalls: 250, price: 350 },
-    { name: 'Confort',   maxCalls: 500, price: 590 },
-    { name: 'Intensif',  maxCalls: 900, price: 950 },
-  ];
-  const PER_CALL_ELSEWHERE = 1.60; // €/appel facturé chez un standard externe (indicatif)
-  const MARGINAL_PER_100 = 95;     // au-delà de 900 appels : ~95 €/tranche de 100 (sur-mesure)
-  const RDV_VALUE = 30;            // valeur d'un RDV récupéré (€)
-  const RDV_RATE = 0.12;           // part d'appels traités convertis en RDV sauvé (indicatif)
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-top">
+      <div>
+        <a class="brand" href="index.html">Sal<b>verys</b></a>
+        <p style="max-width:280px;margin-top:12px;font-size:14px;">Télésecrétariat médical francophone, depuis Antananarivo vers la France.</p>
+      </div>
+      <div class="footer-cols">
+        <div class="footer-col">
+          <h5>Métiers</h5>
+          <a href="simulateur-salverys.html">Télésecrétariat médical</a>
+          <a href="simulateur-informatique.html">Support &amp; Helpdesk IT</a>
+        </div>
+        <div class="footer-col">
+          <h5>Contact</h5>
+          <a href="mailto:contact@salverys.fr">contact@salverys.fr</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-meta">
+      <span>© Salverys — Antananarivo → France</span>
+      <span>Montants indicatifs · devis personnalisé sur demande</span>
+    </div>
+  </div>
+</footer>
 
-  const state = {
-    calls: 250,
-    days: 5,
-    schedule: 1.0,   // plage horaire
-    integration: 1.0 // sans effet sur le prix
-  };
-
-  const daysMultiplier = { 5: 1.0, 6: 1.12, 7: 1.22 };
-
-  function formatPrice(n) {
-    return Math.round(n).toLocaleString('fr-FR');
-  }
-  function formatEuro2(n) {
-    return n.toFixed(2).replace('.', ',') + ' €';
-  }
-
-  function tierFor(calls) {
-    for (const t of TIERS) if (calls <= t.maxCalls) return t;
-    return null; // sur-mesure
-  }
-
-  function calculate() {
-    const dMult = daysMultiplier[state.days] || 1.0;
-    const mult = dMult * state.schedule;
-
-    const tier = tierFor(state.calls);
-    let baseName, basePrice, isCustom = false;
-    if (tier) {
-      baseName = tier.name;
-      basePrice = tier.price;
-    } else {
-      isCustom = true;
-      baseName = 'Sur-mesure';
-      basePrice = 950 + Math.ceil((state.calls - 900) / 100) * MARGINAL_PER_100;
-    }
-
-    const price = basePrice * mult;
-    const elsewhere = state.calls * PER_CALL_ELSEWHERE * mult;
-    const costPerCall = price / state.calls;
-    const rdvRecovered = Math.round(state.calls * RDV_RATE);
-
-    // Affichage
-    document.getElementById('price-monthly').textContent = formatPrice(price);
-    document.getElementById('calls-monthly').textContent = state.calls.toLocaleString('fr-FR');
-    document.getElementById('cost-percall').textContent = formatEuro2(costPerCall);
-    document.getElementById('rdv-recovered').textContent = '≈ ' + rdvRecovered;
-
-    const coverage = state.days + ' j · ' + (state.schedule > 1.0 ? '8h–22h' : '8h–20h');
-    document.getElementById('coverage').textContent = coverage;
-
-    // Comparaison vs facturation à l'appel — affichée seulement si en notre faveur
-    const savings = elsewhere - price;
-    const compareLine = document.getElementById('compare-line');
-    const badge = document.getElementById('savings-badge');
-    if (savings > 0) {
-      const pct = Math.round((savings / elsewhere) * 100);
-      compareLine.innerHTML = 'Facturation à l\'appel ailleurs : <span class="old">' + formatPrice(elsewhere) + ' €/mois</span>';
-      badge.textContent = 'Économie : ' + pct + ' % vs à l\'appel';
-    } else {
-      compareLine.textContent = 'Forfait tout compris, sans surprise.';
-      badge.textContent = 'Essai 15 jours offert';
-    }
-
-    // Recommandation
-    let reco;
-    if (isCustom) {
-      reco = 'Offre <strong>Sur-mesure</strong> — parlons-en, on cadre ensemble.';
-    } else if (baseName === 'Essentiel') {
-      reco = 'Forfait <strong>Essentiel</strong> — idéal pour un praticien.';
-    } else if (baseName === 'Confort') {
-      reco = 'Forfait <strong>Confort</strong> — le meilleur rapport volume / prix.';
-    } else {
-      reco = 'Forfait <strong>Intensif</strong> — pensé pour les cabinets de groupe.';
-    }
-    document.getElementById('recommendation').innerHTML = reco;
-
-    const el = document.getElementById('price-monthly');
-    el.classList.remove('animate');
-    void el.offsetWidth;
-    el.classList.add('animate');
-  }
-
-  // ============ EVENTS ============
-  document.getElementById('calls').addEventListener('input', e => {
-    state.calls = parseInt(e.target.value);
-    document.getElementById('calls-value').textContent = state.calls.toLocaleString('fr-FR') + ' appels';
-    calculate();
-  });
-
-  document.getElementById('days').addEventListener('input', e => {
-    state.days = parseInt(e.target.value);
-    document.getElementById('days-value').textContent = state.days + ' j';
-    calculate();
-  });
-
-  document.querySelectorAll('.pill-group').forEach(group => {
-    const groupName = group.dataset.group;
-    group.querySelectorAll('.pill').forEach(pill => {
-      pill.addEventListener('click', () => {
-        group.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
-        pill.classList.add('active');
-        state[groupName] = parseFloat(pill.dataset.multiplier);
-        calculate();
-      });
-    });
-  });
-
-  calculate();
-</script>
-
+<script src="assets/site.js"></script>
 </body>
 </html>

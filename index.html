@@ -3,283 +3,255 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Salverys — Back-office francophone externalisé</title>
-<style>
-  :root {
-    --bg: #F4EFE6;
-    --bg-card: #FBF7F0;
-    --bg-elevated: #FFFFFF;
-    --greige: #E5DCCB;
-    --greige-dark: #CFC2AC;
-    --sage: #8FA38F;
-    --sage-dark: #6F8770;
-    --sage-light: #C5D2C5;
-    --blue: #2E3B4E;
-    --blue-soft: #4A5A70;
-    --gold: #B89968;
-    --gold-soft: #D4B98A;
-    --yellow: #FFC400;
-    --ink: #15161D;
-    --text: #2A2620;
-    --text-soft: #5C5448;
-    --text-mute: #8A8275;
-    --shadow-sm: 0 1px 2px rgba(46,59,78,0.06), 0 1px 3px rgba(46,59,78,0.04);
-    --shadow-md: 0 4px 12px rgba(46,59,78,0.08), 0 2px 6px rgba(46,59,78,0.04);
-    --shadow-lg: 0 12px 32px rgba(46,59,78,0.12), 0 4px 12px rgba(46,59,78,0.06);
-    --radius-md: 12px;
-    --radius-lg: 20px;
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    line-height: 1.5;
-    -webkit-font-smoothing: antialiased;
-  }
-  .container { max-width: 1140px; margin: 0 auto; padding: 0 24px; }
-  a { color: inherit; }
-
-  /* NAV */
-  .nav { position: sticky; top: 0; z-index: 50; background: rgba(251,247,240,0.85); backdrop-filter: saturate(160%) blur(10px); border-bottom: 1px solid var(--greige); }
-  .nav-inner { display: flex; align-items: center; gap: 24px; height: 64px; }
-  .brand { font-family: 'Georgia', serif; font-size: 22px; font-weight: 600; color: var(--blue); text-decoration: none; letter-spacing: -0.01em; }
-  .brand span { color: var(--sage-dark); }
-  .nav-links { display: flex; gap: 22px; margin-left: 12px; flex: 1; }
-  .nav-links a { font-size: 14px; font-weight: 500; color: var(--text-soft); text-decoration: none; padding: 6px 0; border-bottom: 2px solid transparent; transition: color .15s, border-color .15s; }
-  .nav-links a:hover { color: var(--blue); }
-  .nav-links a.active { color: var(--blue); border-bottom-color: var(--sage); }
-  .nav-cta { background: var(--blue); color: #fff; padding: 9px 18px; border-radius: 100px; font-size: 13px; font-weight: 600; text-decoration: none; white-space: nowrap; transition: transform .15s; }
-  .nav-cta:hover { transform: translateY(-1px); }
-  @media (max-width: 720px) { .nav-links { display: none; } }
-
-  /* HERO */
-  .hero { padding: 88px 0 64px; text-align: center; background: linear-gradient(180deg, var(--bg) 0%, var(--bg-card) 100%); }
-  .hero-badge { display: inline-block; background: var(--sage-light); color: var(--sage-dark); padding: 6px 14px; border-radius: 100px; font-size: 12px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; margin-bottom: 24px; }
-  .hero h1 { font-family: 'Georgia', serif; font-size: clamp(38px, 5.2vw, 58px); font-weight: 500; color: var(--blue); letter-spacing: -0.02em; line-height: 1.08; margin-bottom: 20px; }
-  .hero h1 em { font-style: italic; color: var(--sage-dark); }
-  .hero p { font-size: 19px; color: var(--text-soft); max-width: 660px; margin: 0 auto 36px; }
-  .hero-actions { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
-  .btn { display: inline-flex; align-items: center; gap: 9px; padding: 14px 26px; border-radius: 100px; font-size: 15px; font-weight: 600; text-decoration: none; transition: transform .18s, box-shadow .18s; }
-  .btn-med { background: var(--blue); color: #fff; box-shadow: var(--shadow-md); }
-  .btn-med:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
-  .btn-it { background: var(--ink); color: #fff; border: 1px solid var(--ink); }
-  .btn-it .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--yellow); }
-  .btn-it:hover { transform: translateY(-2px); box-shadow: 0 10px 26px rgba(255,196,0,.3); }
-
-  /* SECTIONS */
-  .section { padding: 76px 0; }
-  .section.alt { background: var(--bg-card); }
-  .section-head { text-align: center; max-width: 640px; margin: 0 auto 48px; }
-  .section-head .kicker { font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--sage-dark); margin-bottom: 12px; }
-  .section-head h2 { font-family: 'Georgia', serif; font-size: 34px; font-weight: 500; color: var(--blue); letter-spacing: -0.01em; margin-bottom: 12px; }
-  .section-head p { color: var(--text-soft); font-size: 16px; }
-
-  /* ADVANTAGE CARDS */
-  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
-  @media (max-width: 860px) { .grid-3 { grid-template-columns: 1fr; } }
-  .adv {
-    background: var(--bg-elevated);
-    border: 1px solid var(--greige);
-    border-radius: var(--radius-lg);
-    padding: 32px 28px;
-    box-shadow: var(--shadow-sm);
-  }
-  .adv-num { font-family: 'Georgia', serif; font-size: 30px; color: var(--gold); margin-bottom: 14px; }
-  .adv h3 { font-size: 18px; color: var(--blue); margin-bottom: 8px; }
-  .adv p { font-size: 14px; color: var(--text-soft); }
-
-  /* NICHE CARDS */
-  .niche {
-    background: var(--bg-elevated);
-    border: 1px solid var(--greige);
-    border-radius: var(--radius-lg);
-    padding: 32px 28px;
-    display: flex;
-    flex-direction: column;
-    position: relative;
-    overflow: hidden;
-    transition: transform .2s, box-shadow .2s;
-  }
-  .niche:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
-  .niche::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 4px; }
-  .niche.med::before { background: var(--sage); }
-  .niche.it::before { background: var(--yellow); }
-  .niche-tag { display: inline-block; align-self: flex-start; font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; padding: 4px 11px; border-radius: 100px; margin-bottom: 16px; }
-  .niche.med .niche-tag { background: var(--sage-light); color: var(--sage-dark); }
-  .niche.it .niche-tag { background: var(--ink); color: var(--yellow); }
-  .niche h3 { font-family: 'Georgia', serif; font-size: 23px; font-weight: 500; color: var(--blue); margin-bottom: 10px; }
-  .niche p { font-size: 14px; color: var(--text-soft); margin-bottom: 20px; flex: 1; }
-  .niche ul { list-style: none; margin-bottom: 24px; }
-  .niche li { font-size: 13.5px; color: var(--text-soft); padding: 5px 0; display: flex; gap: 9px; }
-  .niche li::before { content: "—"; color: var(--gold); }
-  .niche-link { font-size: 14px; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 7px; }
-  .niche.med .niche-link { color: var(--sage-dark); }
-  .niche.it .niche-link { color: var(--yellow-deep, #B07F00); }
-  .niche-link:hover { gap: 11px; }
-
-  /* STEPS */
-  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
-  @media (max-width: 860px) { .steps { grid-template-columns: 1fr; } }
-  .step { text-align: center; padding: 24px; }
-  .step-num { width: 44px; height: 44px; border-radius: 50%; background: var(--blue); color: #fff; font-family: 'Georgia', serif; font-size: 20px; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; }
-  .step h3 { font-size: 17px; color: var(--blue); margin-bottom: 8px; }
-  .step p { font-size: 14px; color: var(--text-soft); }
-
-  /* FOOTER CTA */
-  .footer-cta { background: var(--blue); color: #fff; padding: 80px 0; text-align: center; }
-  .footer-cta h2 { font-family: 'Georgia', serif; font-size: 38px; font-weight: 500; margin-bottom: 16px; letter-spacing: -0.01em; }
-  .footer-cta p { font-size: 17px; color: rgba(255,255,255,.75); max-width: 540px; margin: 0 auto 32px; }
-  .footer-cta-button { display: inline-flex; align-items: center; gap: 10px; background: var(--gold); color: #fff; padding: 16px 32px; border-radius: 100px; font-size: 15px; font-weight: 600; text-decoration: none; transition: transform .15s; }
-  .footer-cta-button:hover { transform: translateY(-2px); }
-  .footer-meta { margin-top: 40px; padding-top: 32px; border-top: 1px solid rgba(255,255,255,.1); font-size: 13px; color: rgba(255,255,255,.5); }
-</style>
+<title>Salverys — Externalisation francophone, à 40 % du coût</title>
+<meta name="description" content="Salverys externalise vos appels et votre support avec des équipes francophones natives basées à Madagascar, sur le fuseau horaire français — à environ 40 % du coût d'un prestataire en France." />
+<link rel="preconnect" href="https://images.unsplash.com" />
+<link rel="stylesheet" href="assets/site.css" />
 </head>
 <body>
 
 <!-- NAV -->
 <header class="nav">
   <div class="container nav-inner">
-    <a class="brand" href="index.html">Sal<span>verys</span></a>
+    <a class="brand" href="index.html">Sal<b>verys</b></a>
     <nav class="nav-links">
       <a href="index.html" class="active">Accueil</a>
       <a href="simulateur-salverys.html">Télésecrétariat médical</a>
       <a href="simulateur-informatique.html">Support &amp; Helpdesk IT</a>
     </nav>
     <a href="#contact" class="nav-cta">Réserver un appel</a>
+    <button class="nav-burger" aria-label="Menu">☰</button>
   </div>
 </header>
 
 <!-- HERO -->
 <section class="hero">
-  <div class="container">
-    <div class="hero-badge">BPO francophone · Antananarivo → France</div>
-    <h1>Votre back-office <em>francophone</em>,<br/>à 40 % du coût.</h1>
-    <p>Salverys externalise vos tâches à forte intensité d'appels et de support, avec des équipes francophones natives basées à Madagascar — sur le même fuseau horaire que la France.</p>
-    <div class="hero-actions">
-      <a href="simulateur-salverys.html" class="btn btn-med">Télésecrétariat médical →</a>
-      <a href="simulateur-informatique.html" class="btn btn-it"><span class="dot"></span>Support &amp; Helpdesk IT →</a>
+  <span class="hero-bg-blob b1"></span>
+  <span class="hero-bg-blob b2"></span>
+  <div class="container hero-grid">
+    <div class="hero-copy reveal">
+      <span class="eyebrow"><span class="pulse"></span> BPO francophone · Antananarivo → France</span>
+      <h1>Votre relation client, <span class="hl">en français</span>, à 40 % du coût.</h1>
+      <p class="lead">Salverys prend en charge vos appels, votre télésecrétariat et votre support — avec des équipes francophones natives, sur le même fuseau horaire que la France.</p>
+      <div class="hero-actions">
+        <a href="simulateur-salverys.html" class="btn btn-primary">Télésecrétariat médical <span class="arrow">→</span></a>
+        <a href="simulateur-informatique.html" class="btn btn-outline">Support &amp; Helpdesk IT <span class="arrow">→</span></a>
+      </div>
+      <div class="hero-trust">
+        <span><b>Français</b> langue maternelle</span>
+        <span><b>8h–20h</b> en temps réel</span>
+        <span><b>−40 %</b> vs la France</span>
+      </div>
+    </div>
+    <div class="hero-visual reveal d1">
+      <div class="photo-wrap">
+        <img class="photo" loading="eager" decoding="async" onerror="this.style.display='none'"
+             src="https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=1100&q=70"
+             alt="Équipe support francophone au travail" />
+      </div>
+      <div class="float-card fc1">
+        <div class="fc-num">−40 %</div>
+        <div class="fc-lab">de coût vs un prestataire en France</div>
+      </div>
+      <div class="float-card fc2">
+        <div class="fc-num">8h–20h</div>
+        <div class="fc-lab">vos appels pris en direct</div>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- LE PROJET -->
+<!-- MARQUEE -->
+<div class="marquee" aria-hidden="true">
+  <div class="marquee-track">
+    <span>Télésecrétariat médical&nbsp;&nbsp;Support applicatif N1&nbsp;&nbsp;Helpdesk IT&nbsp;&nbsp;Gestion d'agendas&nbsp;&nbsp;Doctolib · Maiia&nbsp;&nbsp;Français natif&nbsp;&nbsp;Fuseau France</span>
+    <span>Télésecrétariat médical&nbsp;&nbsp;Support applicatif N1&nbsp;&nbsp;Helpdesk IT&nbsp;&nbsp;Gestion d'agendas&nbsp;&nbsp;Doctolib · Maiia&nbsp;&nbsp;Français natif&nbsp;&nbsp;Fuseau France</span>
+  </div>
+</div>
+
+<!-- STATS -->
+<section class="section soft">
+  <div class="container">
+    <div class="stats">
+      <div class="stat reveal">
+        <div class="num" data-to="40" data-pre="−" data-suf=" %">−0 %</div>
+        <div class="lab">de coût vs un prestataire hexagonal</div>
+      </div>
+      <div class="stat reveal d1">
+        <div class="num" data-to="100" data-suf=" %">0 %</div>
+        <div class="lab">d'agents francophones natifs</div>
+      </div>
+      <div class="stat reveal d2">
+        <div class="num" data-to="15" data-suf=" j">0 j</div>
+        <div class="lab">d'essai offert, sans engagement</div>
+      </div>
+      <div class="stat reveal d3">
+        <div class="num" data-to="7" data-suf=" j">0 j</div>
+        <div class="lab">pour démarrer votre service</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MÉTIERS -->
 <section class="section">
   <div class="container">
-    <div class="section-head">
-      <div class="kicker">Le projet</div>
-      <h2>Une direction expérimentée qui repart à l'essentiel</h2>
-      <p>Issus d'une structure de 1 000 collaborateurs, nous repartons d'une équipe resserrée de 10 personnes, avec un objectif simple : un service francophone irréprochable, à un coût imbattable.</p>
+    <div class="section-head reveal">
+      <div class="kicker">Nos métiers</div>
+      <h2>Trois savoir-faire, un même standard</h2>
+      <p>Chaque métier a son simulateur de tarif : bougez les curseurs, le forfait s'affiche en direct.</p>
     </div>
-    <div class="grid-3">
-      <div class="adv">
-        <div class="adv-num">①</div>
-        <h3>Fuseau compatible France</h3>
-        <p>Madagascar est sur un fuseau proche du vôtre : vos appels sont pris en temps réel, aux heures ouvrées françaises.</p>
-      </div>
-      <div class="adv">
-        <div class="adv-num">②</div>
-        <h3>Français langue maternelle</h3>
-        <p>Des collaborateurs francophones natifs : ni accent déroutant, ni barrière de langue avec vos clients ou patients.</p>
-      </div>
-      <div class="adv">
-        <div class="adv-num">③</div>
-        <h3>~40 % moins cher</h3>
-        <p>Un coût structurellement inférieur à un prestataire hexagonal, à qualité de service équivalente.</p>
-      </div>
+    <div class="cards-3">
+
+      <a class="ncard med reveal" href="simulateur-salverys.html">
+        <div class="photo-wrap">
+          <span class="ncard-tag">Priorité</span>
+          <img class="photo" loading="lazy" decoding="async" onerror="this.style.display='none'"
+               src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=800&q=70"
+               alt="Cabinet médical" />
+        </div>
+        <div class="ncard-body">
+          <h3>Télésecrétariat médical</h3>
+          <p>Prise d'appels et gestion d'agendas pour praticiens, par des télésecrétaires formées au secret médical. Dès 350 €/mois.</p>
+          <span class="ncard-link">Simuler mon forfait <span class="arrow">→</span></span>
+        </div>
+      </a>
+
+      <a class="ncard it reveal d1" href="simulateur-informatique.html">
+        <div class="photo-wrap">
+          <span class="ncard-tag">Éditeurs SaaS</span>
+          <img class="photo" loading="lazy" decoding="async" onerror="this.style.display='none'"
+               src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=800&q=70"
+               alt="Support applicatif" />
+        </div>
+        <div class="ncard-body">
+          <h3>Support applicatif N1</h3>
+          <p>Premier niveau pour éditeurs de logiciels français : tickets, appels, escalade cadrée vers vos équipes N2.</p>
+          <span class="ncard-link">Simuler mon équipe <span class="arrow">→</span></span>
+        </div>
+      </a>
+
+      <a class="ncard it reveal d2" href="simulateur-informatique.html">
+        <div class="photo-wrap">
+          <span class="ncard-tag">IT distant</span>
+          <img class="photo" loading="lazy" decoding="async" onerror="this.style.display='none'"
+               src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=800&q=70"
+               alt="Helpdesk informatique" />
+        </div>
+        <div class="ncard-body">
+          <h3>Helpdesk IT N1</h3>
+          <p>Support informatique de premier niveau à distance : incidents, demandes courantes, base de connaissance.</p>
+          <span class="ncard-link">Simuler mon équipe <span class="arrow">→</span></span>
+        </div>
+      </a>
+
     </div>
   </div>
 </section>
 
-<!-- NOS MÉTIERS -->
-<section class="section alt">
+<!-- FEATURES ZIGZAG -->
+<section class="section soft">
   <div class="container">
-    <div class="section-head">
-      <div class="kicker">Nos métiers</div>
-      <h2>Trois savoir-faire, un même standard</h2>
-      <p>Chaque métier dispose de son simulateur de tarif : ajustez vos paramètres, le forfait s'affiche en direct.</p>
+
+    <div class="feature">
+      <div class="feat-media reveal">
+        <div class="photo-wrap">
+          <img class="photo" loading="lazy" decoding="async" onerror="this.style.display='none'"
+               src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1000&q=70"
+               alt="Équipe collaborative" />
+        </div>
+      </div>
+      <div class="feat-body reveal d1">
+        <div class="kicker">L'avantage francophone</div>
+        <h3>Le français natif, sur votre fuseau horaire</h3>
+        <p>Madagascar partage des heures ouvrées compatibles avec la France, et le français y est langue maternelle. Vos clients et patients sont accueillis sans accent déroutant, en temps réel.</p>
+        <ul class="tick">
+          <li>Appels pris en direct de 8h à 20h, jamais de répondeur</li>
+          <li>Aucune barrière de langue ni décalage horaire</li>
+          <li>Télésecrétaires formées au secret médical, agents formés à vos outils</li>
+        </ul>
+      </div>
     </div>
-    <div class="grid-3">
 
-      <div class="niche med">
-        <span class="niche-tag">Priorité</span>
-        <h3>Télésecrétariat médical</h3>
-        <p>Prise d'appels et gestion d'agendas pour praticiens et cabinets, par des télésecrétaires formées au secret médical.</p>
-        <ul>
-          <li>Intégration Doctolib / Maiia / Médistory</li>
-          <li>Couverture 8h–20h, jamais de répondeur</li>
-          <li>Forfait mensuel dès 350 €</li>
-        </ul>
-        <a href="simulateur-salverys.html" class="niche-link">Simuler mon forfait →</a>
+    <div class="feature flip">
+      <div class="feat-media reveal">
+        <div class="photo-wrap">
+          <img class="photo" loading="lazy" decoding="async" onerror="this.style.display='none'"
+               src="https://images.unsplash.com/photo-1497032628192-86f99bcd76bc?auto=format&fit=crop&w=1000&q=70"
+               alt="Bureau Salverys" />
+        </div>
       </div>
-
-      <div class="niche it">
-        <span class="niche-tag">Éditeurs SaaS</span>
-        <h3>Support applicatif N1</h3>
-        <p>Premier niveau de support pour éditeurs de logiciels français : tickets, appels, escalade cadrée vers vos équipes N2.</p>
-        <ul>
-          <li>Agents formés à vos outils</li>
-          <li>Téléphone + ticketing + chat</li>
-          <li>Reporting et KPI inclus</li>
+      <div class="feat-body reveal d1">
+        <div class="kicker">Le bon calcul</div>
+        <h3>Environ 40 % moins cher, sans rogner sur la qualité</h3>
+        <p>Une structure de coûts à Antananarivo, une direction issue d'une organisation de 1 000 collaborateurs : vous obtenez un service supervisé et fiable, à une fraction du prix d'une embauche ou d'un prestataire en métropole.</p>
+        <ul class="tick">
+          <li>Forfait mensuel clair, jamais de facturation à l'acte</li>
+          <li>Continuité de service : équipe et backup, pas de jour d'arrêt</li>
+          <li>Reporting et supervision qualité inclus</li>
         </ul>
-        <a href="simulateur-informatique.html" class="niche-link">Simuler mon équipe →</a>
       </div>
-
-      <div class="niche it">
-        <span class="niche-tag">IT distant</span>
-        <h3>Helpdesk IT N1</h3>
-        <p>Support informatique de premier niveau à distance pour vos utilisateurs : incidents, demandes courantes, suivi.</p>
-        <ul>
-          <li>Base de connaissance partagée</li>
-          <li>Horaires étendus / astreinte possibles</li>
-          <li>Supervision QA mensuelle</li>
-        </ul>
-        <a href="simulateur-informatique.html" class="niche-link">Simuler mon équipe →</a>
-      </div>
-
     </div>
+
   </div>
 </section>
 
 <!-- APPROCHE -->
 <section class="section">
   <div class="container">
-    <div class="section-head">
+    <div class="section-head reveal">
       <div class="kicker">Notre approche</div>
-      <h2>Sans engagement, montée en charge progressive</h2>
-      <p>On démarre petit, on prouve la valeur, puis on grandit avec vous — au forfait, jamais à l'acte.</p>
+      <h2>On démarre petit, on grandit avec vous</h2>
+      <p>Au forfait, jamais à l'acte. Vous montez de palier seulement quand votre volume le justifie.</p>
     </div>
     <div class="steps">
-      <div class="step">
-        <div class="step-num">1</div>
-        <h3>Essai 15 jours offert</h3>
-        <p>Vous testez le service en conditions réelles, sans engagement et sans frais.</p>
-      </div>
-      <div class="step">
-        <div class="step-num">2</div>
-        <h3>Forfait adapté</h3>
-        <p>On cale le forfait sur votre volume réel — paliers clairs, aucune facturation à l'acte.</p>
-      </div>
-      <div class="step">
-        <div class="step-num">3</div>
-        <h3>Montée en charge</h3>
-        <p>Le forfait évolue avec vous : vous changez de palier selon vos besoins, sans friction.</p>
-      </div>
+      <div class="step reveal"><div class="sn">1</div><h4>Échange &amp; cadrage</h4><p>15 minutes pour comprendre votre besoin et vos outils.</p></div>
+      <div class="step reveal d1"><div class="sn">2</div><h4>Essai 15 jours</h4><p>Service en conditions réelles, offert et sans engagement.</p></div>
+      <div class="step reveal d2"><div class="sn">3</div><h4>Forfait adapté</h4><p>On cale le forfait sur votre volume réel, paliers clairs.</p></div>
+      <div class="step reveal d3"><div class="sn">4</div><h4>Montée en charge</h4><p>Le forfait évolue avec vous, sans friction.</p></div>
     </div>
   </div>
 </section>
 
-<!-- FOOTER CTA -->
-<section class="footer-cta" id="contact">
+<!-- CTA BAND -->
+<section class="cta-band" id="contact">
+  <span class="hero-bg-blob b1"></span>
   <div class="container">
-    <h2>Parlons de votre besoin.</h2>
+    <h2>Parlons de votre <span class="hl">besoin</span>.</h2>
     <p>15 minutes pour cadrer votre projet et lancer un essai sans engagement.</p>
-    <a href="mailto:contact@salverys.fr" class="footer-cta-button">Réserver un appel découverte →</a>
-    <div class="footer-meta">
-      Salverys · Back-office francophone externalisé · Antananarivo → France · Télésecrétariat médical · Support applicatif &amp; helpdesk IT.
-    </div>
+    <a href="mailto:contact@salverys.fr" class="btn btn-primary">Réserver un appel découverte <span class="arrow">→</span></a>
   </div>
 </section>
 
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-top">
+      <div>
+        <a class="brand" href="index.html">Sal<b>verys</b></a>
+        <p style="max-width:280px;margin-top:12px;font-size:14px;">Externalisation francophone : télésecrétariat médical &amp; support IT, depuis Antananarivo vers la France.</p>
+      </div>
+      <div class="footer-cols">
+        <div class="footer-col">
+          <h5>Métiers</h5>
+          <a href="simulateur-salverys.html">Télésecrétariat médical</a>
+          <a href="simulateur-informatique.html">Support applicatif N1</a>
+          <a href="simulateur-informatique.html">Helpdesk IT N1</a>
+        </div>
+        <div class="footer-col">
+          <h5>Contact</h5>
+          <a href="mailto:contact@salverys.fr">contact@salverys.fr</a>
+          <a href="#contact">Réserver un appel</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-meta">
+      <span>© Salverys — Antananarivo → France</span>
+      <span>Montants indicatifs · devis personnalisé sur demande</span>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/site.js"></script>
 </body>
 </html>
