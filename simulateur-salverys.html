@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Salverys — Télésecrétariat médical : simulateur de forfait</title>
+<meta name="description" content="Télésecrétariat médical francophone : prise d'appels 8h–20h, gestion d'agendas Doctolib/Maiia, formé au secret médical. Forfait dès 350 €/mois. Simulez en direct." />
+<link rel="preconnect" href="https://images.unsplash.com" />
+<link rel="stylesheet" href="assets/site.css" />
+</head>
+<body>
+
+<!-- NAV -->
+<header class="nav">
+  <div class="container nav-inner">
+    <a class="brand" href="index.html">Sal<b>verys</b></a>
+    <nav class="nav-links">
+      <a href="index.html">Accueil</a>
+      <a href="simulateur-salverys.html" class="active">Télésecrétariat médical</a>
+      <a href="simulateur-informatique.html">Support &amp; Helpdesk IT</a>
+    </nav>
+    <a href="#simulator" class="nav-cta">Simuler mon forfait</a>
+    <button class="nav-burger" aria-label="Menu">☰</button>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <span class="hero-bg-blob b1"></span>
+  <div class="container hero-grid">
+    <div class="hero-copy reveal">
+      <span class="eyebrow"><span class="pulse"></span> Télésecrétariat médical · Francophone</span>
+      <h1>Plus aucun appel patient <span class="hl">dans le vide</span>.</h1>
+      <p class="lead">Des télésecrétaires francophones natives, formées au secret médical, prennent vos appels et gèrent vos agendas pendant que vous consultez.</p>
+      <div class="hero-actions">
+        <a href="#simulator" class="btn btn-primary">Simuler mon forfait <span class="arrow">→</span></a>
+        <a href="#forfaits" class="btn btn-outline">Voir les forfaits</a>
+      </div>
+      <div class="hero-trust">
+        <span><b>Doctolib</b> · Maiia · Médistory</span>
+        <span><b>8h–20h</b>, jamais de répondeur</span>
+        <span><b>Essai 15 j</b> sans engagement</span>
+      </div>
+    </div>
+    <div class="hero-visual reveal d1">
+      <div class="photo-wrap">
+        <img class="photo" loading="eager" decoding="async" onerror="this.style.display='none'"
+             src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=1100&q=70"
+             alt="Cabinet médical" />
+      </div>
+      <div class="float-card fc1">
+        <div class="fc-num">350 €</div>
+        <div class="fc-lab">à partir de, par mois</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SIMULATEUR -->
+<section class="section soft" id="simulator">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="kicker">Simulateur</div>
+      <h2>Configurez votre télésecrétariat</h2>
+      <p>Ajustez le volume et la couverture — votre forfait se calcule en temps réel.</p>
+    </div>
+
+    <div class="sim-grid">
+      <!-- CONTRÔLES -->
+      <div class="controls-card reveal">
+        <div class="control-group">
+          <div class="control-label">
+            <span class="control-label-text">Volume d'appels / mois</span>
+            <span class="control-value" id="calls-value">250 appels</span>
+          </div>
+          <div class="slider-wrap"><input type="range" id="calls" min="50" max="1200" value="250" step="25" /></div>
+        </div>
+
+        <div class="control-group">
+          <div class="control-label">
+            <span class="control-label-text">Jours couverts / semaine</span>
+            <span class="control-value" id="days-value">5 j</span>
+          </div>
+          <div class="slider-wrap"><input type="range" id="days" min="5" max="7" value="5" step="1" /></div>
+        </div>
+
+        <div class="control-group">
+          <div class="control-label"><span class="control-label-text">Plage horaire</span></div>
+          <div class="pill-group" data-group="schedule">
+            <button class="pill active" data-value="day" data-multiplier="1.0">Journée 8h–20h</button>
+            <button class="pill" data-value="evening" data-multiplier="1.10">+ Soirée 20h–22h</button>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <div class="control-label"><span class="control-label-text">Intégration agenda</span></div>
+          <div class="pill-group" data-group="integration">
+            <button class="pill active" data-value="doctolib" data-multiplier="1.0">Doctolib</button>
+            <button class="pill" data-value="maiia" data-multiplier="1.0">Maiia</button>
+            <button class="pill" data-value="medistory" data-multiplier="1.0">Médistory</button>
+            <button class="pill" data-value="other" data-multiplier="1.0">Autre</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- RÉSULTATS -->
+      <div class="results-card reveal d1">
+        <div class="result-primary">
+          <div class="result-label">Votre forfait mensuel</div>
+          <div><span class="result-price" id="price-monthly">350</span><span class="result-price-unit">€/mois</span></div>
+          <div class="result-strikethrough" id="compare-line">
+            Facturation à l'appel ailleurs : <span class="old">400 €/mois</span>
+          </div>
+          <div class="savings-badge" id="savings-badge">Économie : 12 % vs à l'appel</div>
+        </div>
+
+        <div class="result-grid">
+          <div class="result-stat"><div class="result-stat-label">Appels traités / mois</div><div class="result-stat-value" id="calls-monthly">250</div></div>
+          <div class="result-stat"><div class="result-stat-label">Coût par appel traité</div><div class="result-stat-value" id="cost-percall">1,40 €</div></div>
+          <div class="result-stat"><div class="result-stat-label">Couverture</div><div class="result-stat-value" id="coverage">5 j · 8h–20h</div></div>
+          <div class="result-stat"><div class="result-stat-label">RDV récupérés / mois</div><div class="result-stat-value accent" id="rdv-recovered">≈ 30</div></div>
+        </div>
+
+        <div class="recommendation">
+          <div class="recommendation-label">★ Recommandé pour vous</div>
+          <div class="recommendation-text" id="recommendation">Forfait <strong>Essentiel</strong> — idéal pour un praticien.</div>
+        </div>
+        <div class="disclaimer">Montants indicatifs à valider · Essai 15 jours offert, sans engagement.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FORFAITS -->
+<section class="section" id="forfaits">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="kicker">Forfaits</div>
+      <h2>Trois forfaits, une logique</h2>
+      <p>Facturation au forfait mensuel selon votre volume — jamais à l'appel.</p>
+    </div>
+    <div class="packages">
+      <div class="pkg reveal">
+        <div class="pkg-name">Essentiel</div>
+        <div class="pkg-tag">Pour un praticien seul</div>
+        <div><span class="pkg-price">350</span><span class="pkg-unit"> €/mois</span></div>
+        <div class="pkg-equiv">jusqu'à ~250 appels/mois</div>
+        <ul class="pkg-feat">
+          <li>Prise d'appels 8h–20h, 5j/7</li>
+          <li>Gestion d'agenda Doctolib / Maiia</li>
+          <li>Formé au secret médical</li>
+          <li>Messages transmis en temps réel</li>
+          <li>Essai 15 jours sans engagement</li>
+        </ul>
+        <a href="#contact" class="pkg-cta">Démarrer</a>
+      </div>
+
+      <div class="pkg featured reveal d1">
+        <div class="pkg-badge">★ Le plus choisi</div>
+        <div class="pkg-name">Confort</div>
+        <div class="pkg-tag">Pour un cabinet actif</div>
+        <div><span class="pkg-price">590</span><span class="pkg-unit"> €/mois</span></div>
+        <div class="pkg-equiv">jusqu'à ~500 appels/mois</div>
+        <ul class="pkg-feat">
+          <li>Tout l'Essentiel, volume doublé</li>
+          <li>Confirmations &amp; rappels de RDV</li>
+          <li>Filtrage urgences selon vos consignes</li>
+          <li>Reporting mensuel des appels</li>
+          <li>Essai 15 jours sans engagement</li>
+        </ul>
+        <a href="#contact" class="pkg-cta">Choisir Confort</a>
+      </div>
+
+      <div class="pkg reveal d2">
+        <div class="pkg-name">Intensif</div>
+        <div class="pkg-tag">Cabinet de groupe / fort volume</div>
+        <div><span class="pkg-price">950</span><span class="pkg-unit"> €/mois</span></div>
+        <div class="pkg-equiv">jusqu'à ~900 appels/mois</div>
+        <ul class="pkg-feat">
+          <li>Plusieurs praticiens / agendas</li>
+          <li>Plage horaire étendue possible</li>
+          <li>Protocoles personnalisés par médecin</li>
+          <li>Interlocuteur dédié</li>
+          <li>Essai 15 jours sans engagement</li>
+        </ul>
+        <a href="#contact" class="pkg-cta">Passer à Intensif</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPARAISON -->
+<section class="section soft">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="kicker">Comparaison</div>
+      <h2>Ce que vous remplacez vraiment</h2>
+      <p>Pour la gestion des appels d'un cabinet.</p>
+    </div>
+    <div class="compare reveal d1">
+      <div class="crow head">
+        <div class="cfeat">Critère</div>
+        <div class="ccell">Secrétaire au cabinet</div>
+        <div class="ccell c-hide">Standard à l'appel</div>
+        <div class="ccell c-hide">Répondeur</div>
+        <div class="ccell salv">Salverys</div>
+      </div>
+      <div class="crow alt">
+        <div class="cfeat">Coût mensuel</div>
+        <div class="ccell bad">2 200 € +</div>
+        <div class="ccell c-hide neu">Variable</div>
+        <div class="ccell c-hide good">~ 0 €</div>
+        <div class="ccell salv">350 – 950 €</div>
+      </div>
+      <div class="crow">
+        <div class="cfeat">Appels pris en direct</div>
+        <div class="ccell good">Aux heures de présence</div>
+        <div class="ccell c-hide good">Oui</div>
+        <div class="ccell c-hide bad">Non</div>
+        <div class="ccell salv">Oui · 8h–20h</div>
+      </div>
+      <div class="crow alt">
+        <div class="cfeat">RDV posés sur l'agenda</div>
+        <div class="ccell good">Oui</div>
+        <div class="ccell c-hide neu">Parfois</div>
+        <div class="ccell c-hide bad">Non</div>
+        <div class="ccell salv">Oui · Doctolib</div>
+      </div>
+      <div class="crow">
+        <div class="cfeat">Secret médical</div>
+        <div class="ccell good">Oui</div>
+        <div class="ccell c-hide neu">Variable</div>
+        <div class="ccell c-hide neu">—</div>
+        <div class="ccell salv">Formées</div>
+      </div>
+      <div class="crow alt">
+        <div class="cfeat">Continuité (congés)</div>
+        <div class="ccell bad">À votre charge</div>
+        <div class="ccell c-hide neu">Selon presta</div>
+        <div class="ccell c-hide neu">—</div>
+        <div class="ccell salv">Équipe + backup</div>
+      </div>
+      <div class="crow">
+        <div class="cfeat">Engagement</div>
+        <div class="ccell bad">CDI</div>
+        <div class="ccell c-hide neu">Variable</div>
+        <div class="ccell c-hide good">Aucun</div>
+        <div class="ccell salv">Essai 15 j</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA BAND -->
+<section class="cta-band" id="contact">
+  <span class="hero-bg-blob b1"></span>
+  <div class="container">
+    <h2>Votre télésecrétariat, <span class="hl">opérationnel en quelques jours</span>.</h2>
+    <p>Essai 15 jours offert · sans engagement · vous gardez la main sur vos agendas.</p>
+    <a href="mailto:contact@salverys.fr" class="btn btn-primary">Réserver un appel découverte <span class="arrow">→</span></a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-top">
+      <div>
+        <a class="brand" href="index.html">Sal<b>verys</b></a>
+        <p style="max-width:280px;margin-top:12px;font-size:14px;">Télésecrétariat médical francophone, depuis Antananarivo vers la France.</p>
+      </div>
+      <div class="footer-cols">
+        <div class="footer-col">
+          <h5>Métiers</h5>
+          <a href="simulateur-salverys.html">Télésecrétariat médical</a>
+          <a href="simulateur-informatique.html">Support &amp; Helpdesk IT</a>
+        </div>
+        <div class="footer-col">
+          <h5>Contact</h5>
+          <a href="mailto:contact@salverys.fr">contact@salverys.fr</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-meta">
+      <span>© Salverys — Antananarivo → France</span>
+      <span>Montants indicatifs · devis personnalisé sur demande</span>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/site.js"></script>
+</body>
+</html>

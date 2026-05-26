@@ -1,13 +1,13 @@
 # Séquence Cold Email — Segment « Cabinets médicaux directs » (niche n°1)
 
 **Cible :** médecins libéraux, MSP, cabinets de groupe, centres de santé (France)
-**Émetteur :** Nesvalo — télésecrétariat médical (offre directe, marque propre)
+**Émetteur :** Salverys — télésecrétariat médical (offre directe, marque propre)
 **Canal :** Emelia (email) ± appel de relance
 **Date :** 2026-05-25
 **Outreach Readiness Score : 70/100**
 **Framework retenu :** Problème → Preuve → Demande
 
-> Cette séquence complète les 3 templates `telemed` déjà présents dans le CRM Nesvalo. Variables **identiques au CRM** pour réutilisation directe : `{prenom}`, `{nom}`, `{structure}`, `{ville_dept}`.
+> Cette séquence complète les 3 templates `telemed` déjà présents dans le CRM Salverys. Variables **identiques au CRM** pour réutilisation directe : `{prenom}`, `{nom}`, `{structure}`, `{ville_dept}`.
 
 ---
 
@@ -15,9 +15,20 @@
 
 - Télésecrétaires **francophones natives**, formées au secret médical, **8h–20h**.
 - Intégration **Doctolib / Maiia / Médistory / Cegedim**.
-- **1,20 €/appel** ou forfait à partir de **350 €/mois**.
+- **Facturation au forfait mensuel** (paliers par volume d'appels) — pas de facturation à l'appel.
 - **Essai 15 jours sans engagement**, le praticien garde la main sur les agendas.
 - Fuseau compatible France, coût ~40 % inférieur à une secrétaire en métropole.
+
+### Grille de forfaits (proposition à valider)
+
+| Forfait | Volume inclus | Prix mensuel* |
+|---|---|---|
+| **Essentiel** | jusqu'à ~250 appels/mois | 350 € |
+| **Confort** | jusqu'à ~500 appels/mois | 590 € |
+| **Intensif** | jusqu'à ~900 appels/mois | 950 € |
+| **Sur-mesure** | > 900 appels/mois | sur devis |
+
+\* Montants **indicatifs à valider**. En cas de dépassement, bascule sur le palier supérieur (jamais de surfacturation à l'appel). Essai 15 jours offert sur tous les forfaits.
 
 ---
 
@@ -45,7 +56,7 @@ Bonjour {prenom},
 
 Au {structure}, comme dans la plupart des cabinets de {ville_dept}, une partie des appels patients sonne dans le vide pendant les consultations — et chaque appel manqué, c'est un patient qui rappelle ailleurs ou un RDV qui ne se prend pas.
 
-Chez Nesvalo, on prend ces appels pour des médecins libéraux : télésecrétaires francophones formées au secret médical, 8h–20h, intégrées à Doctolib ou Maiia. Vous gardez la main sur vos agendas.
+Chez Salverys, on prend ces appels pour des médecins libéraux : télésecrétaires francophones formées au secret médical, 8h–20h, intégrées à Doctolib ou Maiia. Vous gardez la main sur vos agendas.
 
 À partir de 350 €/mois, et 15 jours d'essai sans engagement.
 
@@ -215,4 +226,4 @@ Bonne continuation,
 
 ---
 
-*Généré via le skill `sales-outreach` (ai-sales-team-claude), adapté à la niche n°1 (télésecrétariat médical, offre directe Nesvalo).*
+*Généré via le skill `sales-outreach` (ai-sales-team-claude), adapté à la niche n°1 (télésecrétariat médical, offre directe Salverys).*

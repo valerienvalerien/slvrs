@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Salverys — Support &amp; Helpdesk IT : simulateur d'équipe</title>
+<meta name="description" content="Support applicatif N1 et helpdesk IT francophone : agents dédiés formés à vos outils, escalade N2 cadrée, reporting. Configurez votre équipe et simulez le tarif en direct." />
+<link rel="preconnect" href="https://images.unsplash.com" />
+<link rel="stylesheet" href="assets/site.css" />
+</head>
+<body class="theme-it">
+
+<!-- NAV -->
+<header class="nav">
+  <div class="container nav-inner">
+    <a class="brand" href="index.html">Sal<b>verys</b></a>
+    <nav class="nav-links">
+      <a href="index.html">Accueil</a>
+      <a href="simulateur-salverys.html">Télésecrétariat médical</a>
+      <a href="simulateur-informatique.html" class="active">Support &amp; Helpdesk IT</a>
+    </nav>
+    <a href="#simulator" class="nav-cta">Simuler mon équipe</a>
+    <button class="nav-burger" aria-label="Menu">☰</button>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <span class="hero-bg-blob b1"></span>
+  <div class="container hero-grid">
+    <div class="hero-copy reveal">
+      <span class="eyebrow"><span class="pulse"></span> Support applicatif &amp; Helpdesk IT · N1</span>
+      <h1>Votre support N1, <span class="hl">réactif</span> et francophone.</h1>
+      <p class="lead">Des agents techniques dédiés, formés à vos outils : support applicatif pour éditeurs SaaS et helpdesk IT distant. Configurez votre équipe, le tarif s'affiche en direct.</p>
+      <div class="hero-actions">
+        <a href="#simulator" class="btn btn-primary">Simuler mon équipe <span class="arrow">→</span></a>
+        <a href="#forfaits" class="btn btn-outline">Voir les forfaits</a>
+      </div>
+      <div class="hero-trust">
+        <span><b>Tickets</b> · téléphone · chat</span>
+        <span><b>Escalade N2</b> cadrée</span>
+        <span><b>−40 %</b> vs un technicien interne</span>
+      </div>
+    </div>
+    <div class="hero-visual reveal d1">
+      <div class="photo-wrap">
+        <img class="photo" loading="eager" decoding="async" onerror="this.style.display='none'"
+             src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1100&q=70"
+             alt="Support informatique" />
+      </div>
+      <div class="float-card fc1">
+        <div class="fc-num">1 290 €</div>
+        <div class="fc-lab">par agent dédié, par mois</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SIMULATEUR -->
+<section class="section soft" id="simulator">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="kicker">Simulateur</div>
+      <h2>Configurez votre équipe support</h2>
+      <p>Ajustez les paramètres — votre tarif se calcule en temps réel.</p>
+    </div>
+
+    <div class="sim-grid">
+      <!-- CONTRÔLES -->
+      <div class="controls-card reveal">
+        <div class="control-group">
+          <div class="control-label">
+            <span class="control-label-text">Nombre d'agents</span>
+            <span class="control-value" id="posts-value">1 agent</span>
+          </div>
+          <div class="slider-wrap"><input type="range" id="posts" min="1" max="10" value="1" step="1" /></div>
+        </div>
+
+        <div class="control-group">
+          <div class="control-label">
+            <span class="control-label-text">Heures / semaine / agent</span>
+            <span class="control-value" id="hours-value">35 h</span>
+          </div>
+          <div class="slider-wrap"><input type="range" id="hours" min="10" max="40" value="35" step="5" /></div>
+        </div>
+
+        <div class="control-group">
+          <div class="control-label"><span class="control-label-text">Niveau de service</span></div>
+          <div class="pill-group" data-group="service">
+            <button class="pill" data-value="shared" data-multiplier="0.85">Mutualisé</button>
+            <button class="pill active" data-value="dedicated" data-multiplier="1.0">Dédié</button>
+            <button class="pill" data-value="premium" data-multiplier="1.25">Premium</button>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <div class="control-label"><span class="control-label-text">Canaux traités</span></div>
+          <div class="pill-group" data-group="channels">
+            <button class="pill active" data-value="single" data-multiplier="1.0">Ticket / email</button>
+            <button class="pill" data-value="multi" data-multiplier="1.08">Tél + ticket</button>
+            <button class="pill" data-value="omni" data-multiplier="1.15">Omnicanal</button>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <div class="control-label"><span class="control-label-text">Langue</span></div>
+          <div class="pill-group" data-group="language">
+            <button class="pill active" data-value="fr" data-multiplier="1.0">FR</button>
+            <button class="pill" data-value="en" data-multiplier="1.12">EN</button>
+            <button class="pill" data-value="bi" data-multiplier="1.22">Bilingue</button>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <div class="control-label"><span class="control-label-text">Horaires de couverture</span></div>
+          <div class="pill-group" data-group="schedule">
+            <button class="pill active" data-value="office" data-multiplier="1.0">Bureau</button>
+            <button class="pill" data-value="extended" data-multiplier="1.15">Étendu</button>
+            <button class="pill" data-value="weekend" data-multiplier="1.28">Astreinte soir+WE</button>
+            <button class="pill" data-value="247" data-multiplier="1.45">24·7</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- RÉSULTATS -->
+      <div class="results-card reveal d1">
+        <div class="result-primary">
+          <div class="result-label">Votre forfait mensuel</div>
+          <div><span class="result-price" id="price-monthly">1 290</span><span class="result-price-unit">€/mois</span></div>
+          <div class="result-strikethrough">
+            Équivalent technicien France : <span class="old" id="price-fr-hourly">18,5 €/h</span> · <span class="old" id="price-fr">3 200 €/mois</span>
+          </div>
+          <div class="savings-badge" id="savings-badge">Économie : 58 %</div>
+        </div>
+
+        <div class="result-grid">
+          <div class="result-stat"><div class="result-stat-label">Heures / mois</div><div class="result-stat-value" id="hours-monthly">152 h</div></div>
+          <div class="result-stat"><div class="result-stat-label">Tarif horaire affiché</div><div class="result-stat-value" id="hourly-displayed">8,5 €</div></div>
+          <div class="result-stat"><div class="result-stat-label">Tarif horaire productif</div><div class="result-stat-value accent" id="hourly-productive">10,0 €</div></div>
+          <div class="result-stat"><div class="result-stat-label">Économie annuelle</div><div class="result-stat-value accent" id="annual-savings">22 000 €</div></div>
+        </div>
+
+        <div class="recommendation">
+          <div class="recommendation-label">★ Recommandé pour vous</div>
+          <div class="recommendation-text" id="recommendation">Forfait <strong>Support Pro</strong> — meilleur rapport coût / disponibilité.</div>
+        </div>
+        <div class="disclaimer">Montants indicatifs à valider · sans engagement long terme.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FORFAITS -->
+<section class="section" id="forfaits">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="kicker">Forfaits</div>
+      <h2>Trois forfaits, une logique</h2>
+      <p>Choisissez l'offre packagée, ou configurez sur mesure ci-dessus.</p>
+    </div>
+    <div class="packages">
+      <div class="pkg reveal">
+        <div class="pkg-name">Helpdesk Starter</div>
+        <div class="pkg-tag">Premier niveau, sans recruter</div>
+        <div><span class="pkg-price">690</span><span class="pkg-unit"> €/mois</span></div>
+        <div class="pkg-equiv">≈ 8 €/h · Économie ~ 55 %</div>
+        <ul class="pkg-feat">
+          <li>1 agent mutualisé · 20 h / semaine</li>
+          <li>Tickets + email</li>
+          <li>SLA standard · réponse &lt; 4 h</li>
+          <li>Base de connaissance partagée</li>
+          <li>Onboarding 5 jours</li>
+        </ul>
+        <a href="#contact" class="pkg-cta">Démarrer</a>
+      </div>
+
+      <div class="pkg featured reveal d1">
+        <div class="pkg-badge">★ Le plus choisi</div>
+        <div class="pkg-name">Support Pro</div>
+        <div class="pkg-tag">L'équivalent d'un technicien N1, sans le coût</div>
+        <div><span class="pkg-price">1 290</span><span class="pkg-unit"> €/mois</span></div>
+        <div class="pkg-equiv">≈ 8,5 €/h · Économie ~ 58 %</div>
+        <ul class="pkg-feat">
+          <li>1 agent 100 % dédié · 35 h / semaine</li>
+          <li>Téléphone + ticketing + chat</li>
+          <li>Escalade N2 cadrée</li>
+          <li>Reporting hebdomadaire + KPI</li>
+          <li>Backup agent inclus</li>
+        </ul>
+        <a href="#contact" class="pkg-cta">Choisir Support Pro</a>
+      </div>
+
+      <div class="pkg reveal d2">
+        <div class="pkg-name">Centre N1 Scale</div>
+        <div class="pkg-tag">Équipe N1, couverture étendue</div>
+        <div><span class="pkg-price">2 490</span><span class="pkg-unit"> €/mois</span></div>
+        <div class="pkg-equiv">≈ 8 €/h · Économie ~ 60 %</div>
+        <ul class="pkg-feat">
+          <li>2 agents dédiés · 35 h / semaine</li>
+          <li>Superviseur dédié</li>
+          <li>Horaires étendus (8 h – 20 h)</li>
+          <li>Astreinte soir / week-end possible</li>
+          <li>Account manager dédié</li>
+        </ul>
+        <a href="#contact" class="pkg-cta">Passer à Scale</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPARAISON -->
+<section class="section soft">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="kicker">Comparaison</div>
+      <h2>Ce que vous remplacez vraiment</h2>
+      <p>Pour un poste de support N1 équivalent temps plein.</p>
+    </div>
+    <div class="compare reveal d1">
+      <div class="crow head">
+        <div class="cfeat">Critère</div>
+        <div class="ccell">Technicien interne</div>
+        <div class="ccell c-hide">Régie / ESN</div>
+        <div class="ccell c-hide">Offshore générique</div>
+        <div class="ccell salv">Salverys</div>
+      </div>
+      <div class="crow alt">
+        <div class="cfeat">Coût mensuel chargé</div>
+        <div class="ccell bad">3 200 €</div>
+        <div class="ccell c-hide neu">350-550 €/j</div>
+        <div class="ccell c-hide neu">Variable</div>
+        <div class="ccell salv">1 290 €</div>
+      </div>
+      <div class="crow">
+        <div class="cfeat">Disponibilité garantie</div>
+        <div class="ccell good">Oui (35 h)</div>
+        <div class="ccell c-hide neu">Selon contrat</div>
+        <div class="ccell c-hide bad">Variable</div>
+        <div class="ccell salv">Oui + backup</div>
+      </div>
+      <div class="crow alt">
+        <div class="cfeat">Maîtrise du français</div>
+        <div class="ccell good">Native</div>
+        <div class="ccell c-hide good">Native</div>
+        <div class="ccell c-hide bad">Variable</div>
+        <div class="ccell salv">Native</div>
+      </div>
+      <div class="crow">
+        <div class="cfeat">Recrutement / turnover</div>
+        <div class="ccell bad">3 à 6 mois</div>
+        <div class="ccell c-hide neu">Rotation</div>
+        <div class="ccell c-hide neu">À refaire</div>
+        <div class="ccell salv">Géré sous 7 j</div>
+      </div>
+      <div class="crow alt">
+        <div class="cfeat">Supervision / QA</div>
+        <div class="ccell neu">+ Manager</div>
+        <div class="ccell c-hide neu">Selon contrat</div>
+        <div class="ccell c-hide bad">Aucune</div>
+        <div class="ccell salv">Incluse</div>
+      </div>
+      <div class="crow">
+        <div class="cfeat">Engagement minimum</div>
+        <div class="ccell bad">CDI</div>
+        <div class="ccell c-hide neu">Forfait jours</div>
+        <div class="ccell c-hide good">Flexible</div>
+        <div class="ccell salv">3 mois</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA BAND -->
+<section class="cta-band" id="contact">
+  <span class="hero-bg-blob b1"></span>
+  <div class="container">
+    <h2>Votre helpdesk N1, <span class="hl">lancé en 10 jours</span>.</h2>
+    <p>Onboarding offert · sans engagement long terme · un interlocuteur unique de bout en bout.</p>
+    <a href="mailto:contact@salverys.fr" class="btn btn-primary">Réserver un appel découverte <span class="arrow">→</span></a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-top">
+      <div>
+        <a class="brand" href="index.html">Sal<b>verys</b></a>
+        <p style="max-width:280px;margin-top:12px;font-size:14px;">Support applicatif &amp; helpdesk IT francophone, depuis Antananarivo vers la France.</p>
+      </div>
+      <div class="footer-cols">
+        <div class="footer-col">
+          <h5>Métiers</h5>
+          <a href="simulateur-informatique.html">Support applicatif N1</a>
+          <a href="simulateur-informatique.html">Helpdesk IT N1</a>
+          <a href="simulateur-salverys.html">Télésecrétariat médical</a>
+        </div>
+        <div class="footer-col">
+          <h5>Contact</h5>
+          <a href="mailto:contact@salverys.fr">contact@salverys.fr</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-meta">
+      <span>© Salverys — Antananarivo → France</span>
+      <span>Montants indicatifs · devis personnalisé sur demande</span>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/site.js"></script>
+</body>
+</html>

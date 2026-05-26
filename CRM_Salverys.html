@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nesvalo — Mini CRM</title>
+    <title>Salverys — Mini CRM</title>
     <style>
         :root {
             --primary: #2563EB;
@@ -396,7 +396,7 @@
     <!-- SIDEBAR -->
     <nav class="sidebar">
         <div class="sidebar-logo">
-            <h1>Nesvalo</h1>
+            <h1>Salverys</h1>
             <span>Mini CRM · Madagascar</span>
         </div>
         <div class="sidebar-nav">
@@ -523,7 +523,7 @@
                             <h3>3. Signature</h3>
                             <div class="mail-field">
                                 <label>Nom &amp; rôle</label>
-                                <input type="text" id="mail-sig-name" value="Valérien — Directeur Nesvalo" oninput="renderMailPreview()">
+                                <input type="text" id="mail-sig-name" value="Valérien — Directeur Salverys" oninput="renderMailPreview()">
                             </div>
                             <div class="mail-field">
                                 <label>Coordonnées</label>
@@ -2226,9 +2226,9 @@ const MAIL_TEMPLATES = {
 
 Je m'adresse à vous parce que je sais qu'au {structure}, comme dans la plupart des cabinets de {ville_dept}, une part des appels patients sonne dans le vide pendant les consultations.
 
-Chez Nesvalo, on prend en charge ces appels pour des médecins libéraux : télésecrétaires francophones formées, horaires 8h–20h, intégration Doctolib / Maiia, 0 jour d'arrêt.
+Chez Salverys, on prend en charge ces appels pour des médecins libéraux : télésecrétaires francophones formées, horaires 8h–20h, intégration Doctolib / Maiia, 0 jour d'arrêt.
 
-Coût indicatif : 1,20 €/appel ou forfait à partir de 350 €/mois — sans engagement les 15 premiers jours (essai gratuit).
+Forfait mensuel selon votre volume d'appels, à partir de 350 €/mois — sans engagement les 15 premiers jours (essai gratuit).
 
 Si l'idée d'arrêter de rappeler vos patients en fin de journée vous parle, je vous propose 15 minutes pour en discuter cette semaine.
 
@@ -2284,7 +2284,7 @@ Bien à vous,`
 
 Si l'équipe support de {structure} traite encore les tickets N1 en interne, vous êtes probablement en train d'arbitrer entre temps de réponse et coût.
 
-Chez Nesvalo (Madagascar, FR natif, fuseau Paris l'après-midi), on gère le N1 pour des éditeurs SaaS : Zendesk / Freshdesk / Intercom, SLA documenté, KPI First Response Time + CSAT mesurés chaque semaine.
+Chez Salverys (Madagascar, FR natif, fuseau Paris l'après-midi), on gère le N1 pour des éditeurs SaaS : Zendesk / Freshdesk / Intercom, SLA documenté, KPI First Response Time + CSAT mesurés chaque semaine.
 
 Coût : ~40 % inférieur à un agent interne, sans charge RH.
 
@@ -2301,7 +2301,7 @@ Cordialement,`
 
 J'ai vu que {structure} recrute actuellement un Technicien Support N1. Je ne suis pas là pour candidater — juste pour vous proposer une alternative qui pourrait diviser votre coût par 2.
 
-Nesvalo opère une équipe de support N1 francophone à Madagascar : mêmes outils que les vôtres (Zendesk, Freshdesk, Intercom), même fuseau horaire l'après-midi, formation produit prise en charge par nous.
+Salverys opère une équipe de support N1 francophone à Madagascar : mêmes outils que les vôtres (Zendesk, Freshdesk, Intercom), même fuseau horaire l'après-midi, formation produit prise en charge par nous.
 
 → Démarrage en 2 semaines
 → Pilote de 15 jours gratuit
@@ -2337,7 +2337,7 @@ Un créneau cette semaine ?
 
 Je vous contacte parce que pour une structure comme {structure}, le helpdesk N1 représente entre 30 et 50 % du budget support utilisateurs — alors que c'est le niveau le plus standardisable.
 
-Nesvalo opère du helpdesk IT N1 distant depuis Madagascar :
+Salverys opère du helpdesk IT N1 distant depuis Madagascar :
 → Profils ITIL, ServiceNow / JIRA Service Desk / ManageEngine
 → SLA documenté & signé
 → Contrats 12–36 mois, montée en charge progressive
@@ -2358,7 +2358,7 @@ Bien à vous,`
 
 Pour les ESN comme {structure}, le N1 est souvent le maillon le moins margé sur les contrats infogérance. C'est exactement là qu'on intervient.
 
-Nesvalo propose du helpdesk N1 white-label depuis Madagascar :
+Salverys propose du helpdesk N1 white-label depuis Madagascar :
 → Vous gardez la relation client et les SLA
 → On vous fournit la capacité, formée à vos outils (ServiceNow, JIRA, etc.)
 → Vos marges remontent immédiatement sur les contrats N1
@@ -2583,7 +2583,7 @@ function escapeHtml(s) {
 const CALL_STEPS = [
     { id: 'opening',  label: 'Ouverture',         icon: '👋', sub: 'Les 15 premières secondes' },
     { id: 'qualif',   label: 'Qualification',     icon: '🔍', sub: 'Vérifier le besoin réel' },
-    { id: 'pitch',    label: 'Pitch valeur',      icon: '🎯', sub: 'Présenter Nesvalo en 30 sec' },
+    { id: 'pitch',    label: 'Pitch valeur',      icon: '🎯', sub: 'Présenter Salverys en 30 sec' },
     { id: 'objection',label: 'Objections',        icon: '🛡️', sub: 'Arbre de réponses' },
     { id: 'closing',  label: 'Closing',           icon: '🤝', sub: 'Obtenir un engagement' }
 ];
@@ -2591,7 +2591,7 @@ const CALL_STEPS = [
 const CALL_SCRIPTS = {
     'telemed': {
         opening: {
-            script: `Bonjour, <strong>{prenom}</strong> ? Je m'appelle Valérien, je suis directeur chez Nesvalo, on travaille avec des cabinets médicaux comme le vôtre sur la gestion des appels patients.\n\n<strong>Vous avez 2 minutes ?</strong> Je vous appelle parce qu'on aide les cabinets à ne plus rater d'appels pendant les consultations — je voulais vous demander : ça vous parle, ou c'est déjà résolu chez vous ?`,
+            script: `Bonjour, <strong>{prenom}</strong> ? Je m'appelle Valérien, je suis directeur chez Salverys, on travaille avec des cabinets médicaux comme le vôtre sur la gestion des appels patients.\n\n<strong>Vous avez 2 minutes ?</strong> Je vous appelle parce qu'on aide les cabinets à ne plus rater d'appels pendant les consultations — je voulais vous demander : ça vous parle, ou c'est déjà résolu chez vous ?`,
             tip: `Ne dis JAMAIS "je sais que vous êtes occupé". Affirme la valeur en 1 phrase, puis demande la permission de continuer.`,
             danger: `Ne pitche pas. La 1re phrase doit être courte et ouvrir une question.`
         },
@@ -2611,7 +2611,7 @@ const CALL_SCRIPTS = {
     },
     'support-n1': {
         opening: {
-            script: `Bonjour {prenom}, Valérien de Nesvalo. Je m'occupe d'équipes support N1 pour des éditeurs SaaS français — on est basés à Madagascar mais l'équipe est francophone native.\n\n<strong>Vous avez 2 minutes ?</strong> Je vous appelle parce que je vois que {structure} grandit côté produit — et c'est en général là que la file d'attente sur le N1 explose. C'est encore gérable chez vous, ou ça commence à tirer ?`,
+            script: `Bonjour {prenom}, Valérien de Salverys. Je m'occupe d'équipes support N1 pour des éditeurs SaaS français — on est basés à Madagascar mais l'équipe est francophone native.\n\n<strong>Vous avez 2 minutes ?</strong> Je vous appelle parce que je vois que {structure} grandit côté produit — et c'est en général là que la file d'attente sur le N1 explose. C'est encore gérable chez vous, ou ça commence à tirer ?`,
             tip: `Pour les SaaS, mentionne la croissance produit comme déclencheur de pain. C'est un signal qui résonne avec les Heads of CS.`
         },
         qualif: {
@@ -2619,7 +2619,7 @@ const CALL_SCRIPTS = {
             tip: `Note le KPI exact (FRT, CSAT) — tu t'en serviras pour chiffrer le ROI au pitch.`
         },
         pitch: {
-            script: `Ce qu'on fait : <strong>une équipe N1 dédiée à {structure}</strong>, sur vos outils (Zendesk/Freshdesk/Intercom), formée à votre produit en 2 semaines, KPI documentés chaque semaine — FRT, CSAT, taux de résolution.\n\nLe levier économique : ~<strong>40 % de coût en moins qu'un CDI en France</strong>, sans charges RH côté Nesvalo, démarrage en 2 semaines.\n\nOn commence par un <strong>pilote de 15 jours gratuit</strong> — vous comparez nos KPI aux vôtres avant de signer.\n\nÇa correspond au type de scaling que vous cherchez ?`,
+            script: `Ce qu'on fait : <strong>une équipe N1 dédiée à {structure}</strong>, sur vos outils (Zendesk/Freshdesk/Intercom), formée à votre produit en 2 semaines, KPI documentés chaque semaine — FRT, CSAT, taux de résolution.\n\nLe levier économique : ~<strong>40 % de coût en moins qu'un CDI en France</strong>, sans charges RH côté Salverys, démarrage en 2 semaines.\n\nOn commence par un <strong>pilote de 15 jours gratuit</strong> — vous comparez nos KPI aux vôtres avant de signer.\n\nÇa correspond au type de scaling que vous cherchez ?`,
             tip: `Toujours chiffrer le pilote : "15 jours, ~80 tickets, 0€ de votre côté."`
         },
         objection: 'OBJECTIONS_SUPPORT',
@@ -2630,7 +2630,7 @@ const CALL_SCRIPTS = {
     },
     'helpdesk-n1': {
         opening: {
-            script: `Bonjour {prenom}, Valérien de Nesvalo. On opère des plateaux helpdesk IT N1 distants pour des DSI et ESN françaises depuis Madagascar.\n\n<strong>Vous avez 3 minutes ?</strong> Je vous appelle parce que sur une structure comme {structure}, le N1 c'est en général le poste où on a le plus de mal à tenir les SLA tout en gardant les coûts sous contrôle. Vous êtes plutôt où sur ce sujet aujourd'hui ?`,
+            script: `Bonjour {prenom}, Valérien de Salverys. On opère des plateaux helpdesk IT N1 distants pour des DSI et ESN françaises depuis Madagascar.\n\n<strong>Vous avez 3 minutes ?</strong> Je vous appelle parce que sur une structure comme {structure}, le N1 c'est en général le poste où on a le plus de mal à tenir les SLA tout en gardant les coûts sous contrôle. Vous êtes plutôt où sur ce sujet aujourd'hui ?`,
             tip: `Les DSI parlent SLA, ticket volume, et CSAT. Adopte leur vocabulaire dès la 1re phrase.`
         },
         qualif: {
@@ -2655,7 +2655,7 @@ const OBJECTIONS_TELEMED = [
         a: "<strong>Parfait, ce n'est pas l'un ou l'autre.</strong> La plupart de nos cabinets gardent leur secrétaire physique et nous délèguent uniquement les pics d'appels et les heures creuses où elle est en consultation avec vous. Combien d'appels votre secrétaire ne peut pas prendre aujourd'hui pendant les rendez-vous ?",
         branches: [
             { resp: "Si \"presque aucun\" →", act: "\"OK très bien. Et le midi entre 12h et 14h ?\" — creuse pour trouver un trou." },
-            { resp: "Si \"pas mal en fait\" →", act: "\"C'est exactement notre cas d'usage. On prend le relais uniquement sur ces moments-là, à 1,20€/appel.\"" }
+            { resp: "Si \"pas mal en fait\" →", act: "\"C'est exactement notre cas d'usage. On prend le relais uniquement sur ces moments-là, avec un forfait mensuel calé sur votre volume.\"" }
         ]
     },
     {
@@ -2671,7 +2671,7 @@ const OBJECTIONS_TELEMED = [
         a: "<strong>Vous payez aujourd'hui combien pour gérer vos appels — y compris le coût des rendez-vous manqués ?</strong> Un patient qui ne peut pas vous joindre, en moyenne, c'est 30€ de consultation perdue. Si on évite 15 appels manqués par mois, on est déjà à 450€. Notre forfait commence à 350€.",
         branches: [
             { resp: "Si silence ou \"je n'ai jamais calculé\" →", act: "\"Je vous propose de regarder ça ensemble. Sur le pilote gratuit, on chiffre exactement.\"" },
-            { resp: "Si \"pas tant de manqués que ça\" →", act: "\"Tarif à l'appel alors : 1,20€/appel. Vous ne payez que ce qu'on traite.\"" }
+            { resp: "Si \"pas tant de manqués que ça\" →", act: "\"Alors le plus petit forfait suffit largement — et l'essai 15 jours vous le confirme sans engagement.\"" }
         ]
     },
     {
