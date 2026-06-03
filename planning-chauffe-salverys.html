@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Salverys — Suivi de chauffe manuelle (warm-up)</title>
+<style>
+  :root {
+    /* Palette greige chaud / vert sauge / bleu profond désaturé (alignée simulateur) */
+    --bg: #F4EFE6;
+    --bg-card: #FBF7F0;
+    --bg-elevated: #FFFFFF;
+    --greige: #E5DCCB;
+    --greige-dark: #CFC2AC;
+    --sage: #8FA38F;
+    --sage-dark: #6F8770;
+    --sage-light: #C5D2C5;
+    --blue: #2E3B4E;
+    --blue-soft: #4A5A70;
+    --blue-light: #7B8BA1;
+    --gold: #B89968;
+    --gold-soft: #D4B98A;
+    --text: #2A2620;
+    --text-soft: #5C5448;
+    --text-mute: #8A8275;
+    --danger: #B6604D;
+    --shadow-sm: 0 1px 2px rgba(46, 59, 78, 0.06), 0 1px 3px rgba(46, 59, 78, 0.04);
+    --shadow-md: 0 4px 12px rgba(46, 59, 78, 0.08), 0 2px 6px rgba(46, 59, 78, 0.04);
+    --shadow-lg: 0 12px 32px rgba(46, 59, 78, 0.12), 0 4px 12px rgba(46, 59, 78, 0.06);
+    --radius-sm: 6px;
+    --radius-md: 12px;
+    --radius-lg: 20px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    padding-bottom: 60px;
+  }
+
+  .container {
+    max-width: 1320px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  /* ============ HERO compact ============ */
+  .hero {
+    padding: 40px 0 28px;
+    background: linear-gradient(180deg, var(--bg) 0%, var(--bg-card) 100%);
+  }
+  .hero-inner { display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 24px; }
+  .hero-badge {
+    display: inline-block;
+    background: var(--sage-light);
+    color: var(--sage-dark);
+    padding: 6px 14px;
+    border-radius: 100px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .hero h1 {
+    font-family: 'Georgia', 'Times New Roman', serif;
+    font-size: clamp(28px, 4vw, 42px);
+    font-weight: 500;
+    color: var(--blue);
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+  }
+  .hero h1 em { font-style: italic; color: var(--sage-dark); }
+  .hero p { font-size: 15px; color: var(--text-soft); max-width: 560px; margin-top: 10px; }
+
+  .kpi-row { display: flex; gap: 14px; flex-wrap: wrap; }
+  .kpi {
+    background: var(--bg-elevated);
+    border: 1px solid var(--greige);
+    border-radius: var(--radius-md);
+    padding: 14px 18px;
+    box-shadow: var(--shadow-sm);
+    min-width: 110px;
+  }
+  .kpi-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.07em; color: var(--text-mute); margin-bottom: 6px; }
+  .kpi-value { font-family: 'Georgia', serif; font-size: 26px; font-weight: 500; color: var(--blue); line-height: 1; }
+  .kpi-value.accent { color: var(--sage-dark); }
+  .kpi-value.gold { color: var(--gold); }
+
+  /* ============ Cartes génériques ============ */
+  .card {
+    background: var(--bg-card);
+    border: 1px solid var(--greige);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    box-shadow: var(--shadow-sm);
+  }
+  .card-title {
+    font-family: 'Georgia', serif;
+    font-size: 20px;
+    font-weight: 500;
+    color: var(--blue);
+    margin-bottom: 4px;
+  }
+  .card-sub { font-size: 13px; color: var(--text-mute); margin-bottom: 18px; }
+  .section { margin-top: 28px; }
+
+  /* ============ GANTT ============ */
+  .gantt-phases { display: flex; gap: 16px; margin-bottom: 20px; flex-wrap: wrap; }
+  .phase-chip {
+    flex: 1; min-width: 200px;
+    border-radius: var(--radius-md);
+    padding: 12px 16px;
+    border: 1px solid var(--greige);
+    background: var(--bg-elevated);
+    position: relative;
+    transition: all .2s;
+  }
+  .phase-chip.active { border-color: var(--sage); box-shadow: 0 0 0 2px rgba(143,163,143,.25); }
+  .phase-chip .ph-name { font-size: 12px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--blue); }
+  .phase-chip .ph-quota { font-family: 'Georgia', serif; font-size: 22px; color: var(--sage-dark); margin: 4px 0 2px; }
+  .phase-chip .ph-meta { font-size: 12px; color: var(--text-mute); }
+  .phase-chip .ph-dot { position:absolute; top:12px; right:14px; width:10px; height:10px; border-radius:50%; }
+
+  .gantt-wrap { overflow-x: auto; padding-bottom: 6px; }
+  .gantt-timeline { min-width: 840px; position: relative; }
+  .gantt-weeks { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; margin-bottom: 8px; }
+  .gantt-week-head { text-align: center; font-size: 11px; font-weight: 600; color: var(--text-mute); text-transform: uppercase; letter-spacing: .05em; }
+  .gantt-bars { position: relative; }
+  .gantt-bar {
+    height: 30px; border-radius: 100px; display: flex; align-items: center;
+    padding: 0 14px; color: #fff; font-size: 12px; font-weight: 600; margin-bottom: 8px;
+    box-shadow: var(--shadow-sm); white-space: nowrap; overflow: hidden;
+  }
+  .gantt-days { display: grid; grid-template-columns: repeat(42, 1fr); gap: 2px; margin-top: 6px; }
+  .gantt-day { height: 22px; border-radius: 4px; background: var(--greige); position: relative; }
+  .gantt-day.s1 { background: var(--sage-light); }
+  .gantt-day.s2 { background: var(--blue-light); opacity:.5; }
+  .gantt-day.s3 { background: var(--gold-soft); }
+  .gantt-day.done { box-shadow: inset 0 0 0 2px var(--sage-dark); }
+  .gantt-day.today { box-shadow: 0 0 0 2px var(--blue), 0 0 0 4px rgba(46,59,78,.2); z-index:2; }
+  .gantt-day .day-num { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:9px; color: var(--text-soft); }
+  .progress-track { height: 12px; background: var(--greige); border-radius: 100px; overflow: hidden; margin-top: 18px; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, var(--sage), var(--sage-dark)); border-radius: 100px; transition: width .3s; }
+  .progress-legend { display:flex; justify-content: space-between; font-size: 12px; color: var(--text-mute); margin-top: 8px; }
+
+  /* ============ Layout principal ============ */
+  .main-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 24px; align-items: start; margin-top: 28px; }
+  @media (max-width: 980px) { .main-grid { grid-template-columns: 1fr; } }
+
+  /* ============ Grille de suivi ============ */
+  .track-toolbar { display:flex; gap:10px; flex-wrap: wrap; align-items: center; margin-bottom: 16px; }
+  .track-scroll { overflow-x: auto; border: 1px solid var(--greige); border-radius: var(--radius-md); }
+  table.track { border-collapse: collapse; width: 100%; min-width: 760px; font-size: 12px; }
+  table.track th, table.track td { border-bottom: 1px solid var(--greige); padding: 6px 8px; text-align: center; }
+  table.track thead th { background: var(--blue); color: #fff; position: sticky; top: 0; font-weight: 600; }
+  table.track thead th.week-sep { border-left: 2px solid var(--bg-card); }
+  table.track .recip-cell { text-align: left; white-space: nowrap; position: sticky; left: 0; background: var(--bg-card); z-index: 1; min-width: 190px; }
+  table.track .recip-name { font-weight: 600; color: var(--blue); }
+  table.track .recip-email { color: var(--text-mute); font-size: 11px; }
+  table.track tbody tr:hover .recip-cell { background: #fff; }
+  .cell-chk { width: 16px; height: 16px; cursor: pointer; accent-color: var(--sage-dark); }
+  td.dcell.col-today { background: rgba(46,59,78,.06); }
+  td.dcell.col-s1 { background: rgba(197,210,197,.18); }
+  td.dcell.col-s3 { background: rgba(212,185,138,.14); }
+  .del-btn { background:none; border:none; color: var(--danger); cursor:pointer; font-size: 14px; margin-left: 6px; opacity:.6; }
+  .del-btn:hover { opacity: 1; }
+
+  .day-counter { margin-top: 16px; padding: 14px 16px; background: var(--bg-elevated); border: 1px solid var(--greige); border-radius: var(--radius-md); display:flex; gap: 24px; flex-wrap: wrap; align-items: center; }
+  .day-counter b { font-family:'Georgia',serif; font-size: 20px; color: var(--blue); }
+  .day-counter .ok { color: var(--sage-dark); }
+  .day-counter .left { color: var(--gold); }
+
+  /* ============ Encadré adresses ============ */
+  .addr-box { margin-top: 28px; }
+  .addr-list { display:flex; flex-direction: column; gap: 8px; max-height: 320px; overflow-y: auto; }
+  .addr-item { display:flex; justify-content: space-between; align-items:center; gap: 10px; padding: 8px 12px; background: var(--bg-elevated); border: 1px solid var(--greige); border-radius: var(--radius-sm); font-size: 13px; }
+  .addr-item .a-mail { color: var(--blue); font-weight: 500; }
+  .addr-item .a-meta { color: var(--text-mute); font-size: 11px; white-space: nowrap; }
+  .addr-empty { color: var(--text-mute); font-size: 13px; font-style: italic; padding: 8px 0; }
+
+  /* ============ Générateur (colonne droite) ============ */
+  .gen-card { background: var(--blue); color: #fff; border-color: var(--blue); position: sticky; top: 16px; }
+  .gen-card .card-title { color: #fff; }
+  .gen-card .card-sub { color: rgba(255,255,255,.6); }
+  .gen-field { margin-bottom: 14px; }
+  .gen-field label { display:block; font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: rgba(255,255,255,.65); margin-bottom: 6px; }
+  .gen-field select, .gen-field input {
+    width: 100%; padding: 10px 12px; border-radius: var(--radius-sm);
+    border: 1px solid rgba(255,255,255,.2); background: rgba(255,255,255,.08); color:#fff; font-size: 14px;
+    font-family: inherit;
+  }
+  .gen-field select option { color: #2A2620; }
+  .pill-group { display:flex; gap: 6px; }
+  .pill {
+    flex:1; padding: 9px 8px; border-radius: 100px; border: 1px solid rgba(255,255,255,.22);
+    background: rgba(255,255,255,.06); color: rgba(255,255,255,.8); font-size: 12px; font-weight: 600;
+    cursor: pointer; text-align: center; transition: all .15s;
+  }
+  .pill.active { background: var(--gold); border-color: var(--gold); color: #fff; }
+  .gen-output {
+    width:100%; min-height: 190px; resize: vertical; border-radius: var(--radius-md);
+    border: 1px solid rgba(255,255,255,.18); background: rgba(255,255,255,.96); color: var(--text);
+    padding: 14px; font-size: 14px; line-height: 1.55; font-family: inherit; margin-top: 4px;
+  }
+  .gen-rules { font-size: 11px; color: rgba(255,255,255,.55); margin-top: 8px; line-height: 1.5; }
+  .gen-actions { display:flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
+  .btn { padding: 11px 16px; border-radius: 100px; font-size: 13px; font-weight: 600; cursor: pointer; border: none; transition: all .15s; font-family: inherit; }
+  .btn-primary { background: var(--gold); color: #fff; flex: 1; }
+  .btn-primary:hover { background: var(--gold-soft); }
+  .btn-ghost { background: transparent; border: 1.5px solid rgba(255,255,255,.3); color: #fff; }
+  .btn-ghost:hover { background: rgba(255,255,255,.1); }
+  .btn-light { background: rgba(255,255,255,.92); color: var(--blue); }
+  .btn-light:hover { background: #fff; }
+  .btn-add { background: var(--sage); color:#fff; }
+  .btn-add:hover { background: var(--sage-dark); }
+  .btn-copy-addr { background: var(--blue); color:#fff; margin-top: 12px; }
+
+  .inp { padding: 9px 12px; border-radius: var(--radius-sm); border: 1px solid var(--greige-dark); background:#fff; font-size: 13px; font-family: inherit; }
+  .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--blue); color:#fff; padding: 12px 22px; border-radius: 100px; font-size: 14px; box-shadow: var(--shadow-lg); opacity: 0; pointer-events: none; transition: all .25s; z-index: 50; }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="container hero-inner">
+    <div>
+      <span class="hero-badge">Warm-up manuel · Cold mailing</span>
+      <h1>Chauffe de boîte — <em>suivi &amp; cadence</em></h1>
+      <p>Coche à qui tu as envoyé tes mails de chauffe, suis ta montée en charge sur 6 semaines et génère un mail conforme en un clic.</p>
+    </div>
+    <div class="kpi-row">
+      <div class="kpi"><div class="kpi-label">Aujourd'hui</div><div class="kpi-value accent" id="kpi-today">0</div></div>
+      <div class="kpi"><div class="kpi-label">Reste / objectif</div><div class="kpi-value gold" id="kpi-left">—</div></div>
+      <div class="kpi"><div class="kpi-label">Total envoyés</div><div class="kpi-value" id="kpi-total">0</div></div>
+    </div>
+  </div>
+</section>
+
+<div class="container">
+
+  <!-- ============ GANTT ============ -->
+  <div class="card section" style="margin-top:24px">
+    <div class="card-title">Planning de montée en charge — 6 semaines</div>
+    <div class="card-sub" id="gantt-range">Démarré le …</div>
+
+    <div class="gantt-phases" id="gantt-phases"></div>
+
+    <div class="gantt-wrap">
+      <div class="gantt-timeline">
+        <div class="gantt-weeks" id="gantt-weeks"></div>
+        <div class="gantt-bars" id="gantt-bars"></div>
+        <div class="gantt-days" id="gantt-days"></div>
+      </div>
+    </div>
+
+    <div class="progress-track"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+    <div class="progress-legend">
+      <span id="progress-text">0 envoi</span>
+      <span id="progress-pct">0 %</span>
+    </div>
+  </div>
+
+  <!-- ============ MAIN GRID ============ -->
+  <div class="main-grid">
+
+    <!-- COLONNE GAUCHE -->
+    <div>
+      <div class="card">
+        <div class="card-title">Suivi des envois — destinataires × jours</div>
+        <div class="card-sub">Une case = un mail de chauffe envoyé ce jour-là à ce destinataire. La colonne surlignée est aujourd'hui.</div>
+
+        <div class="track-toolbar">
+          <input class="inp" type="text" id="new-name" placeholder="Prénom Nom" />
+          <input class="inp" type="email" id="new-email" placeholder="email@exemple.fr" style="min-width:200px" />
+          <button class="btn btn-add" id="add-recip">+ Ajouter un destinataire</button>
+        </div>
+
+        <div class="track-scroll">
+          <table class="track">
+            <thead id="track-head"></thead>
+            <tbody id="track-body"></tbody>
+          </table>
+        </div>
+
+        <div class="day-counter">
+          <div>Aujourd'hui : <b class="ok" id="dc-done">0</b> envoyé(s)</div>
+          <div>Objectif du jour : <b id="dc-goal">5–10</b></div>
+          <div>Reste à faire : <b class="left" id="dc-left">—</b></div>
+        </div>
+      </div>
+
+      <!-- ENCADRÉ ADRESSES -->
+      <div class="card addr-box">
+        <div class="card-title">Adresses déjà contactées</div>
+        <div class="card-sub">Toutes les boîtes auxquelles au moins un mail de chauffe a été envoyé.</div>
+        <div class="addr-list" id="addr-list"></div>
+        <button class="btn btn-copy-addr" id="copy-addr">Copier toutes les adresses</button>
+      </div>
+    </div>
+
+    <!-- COLONNE DROITE : GÉNÉRATEUR -->
+    <div class="card gen-card">
+      <div class="card-title">Générateur de mail de chauffe</div>
+      <div class="card-sub">Texte brut, une question, ton perso — un mail différent à chaque clic.</div>
+
+      <div class="gen-field">
+        <label>Phase de chauffe</label>
+        <div class="pill-group" id="phase-pills">
+          <div class="pill active" data-phase="0">S1–S2 · 0 lien</div>
+          <div class="pill" data-phase="1">S3–S4 · 1 lien</div>
+          <div class="pill" data-phase="2">S5–S6</div>
+        </div>
+      </div>
+
+      <div class="gen-field">
+        <label>Destinataire</label>
+        <select id="gen-recip"></select>
+      </div>
+
+      <textarea class="gen-output" id="gen-output" placeholder="Clique sur « Générer » pour produire un mail…"></textarea>
+      <div class="gen-rules" id="gen-rules"></div>
+
+      <div class="gen-actions">
+        <button class="btn btn-primary" id="gen-btn">↻ Générer</button>
+        <button class="btn btn-light" id="copy-btn">Copier</button>
+      </div>
+      <div class="gen-actions">
+        <button class="btn btn-ghost" id="mark-btn" style="flex:1">✓ Marquer comme envoyé aujourd'hui</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============================================================
+   Suivi de chauffe manuelle Salverys — page unique autonome
+   Persistance : localStorage, préfixe vinlo_warmup_
+   ============================================================ */
+
+const LS = {
+  recipients: 'vinlo_warmup_recipients',
+  sends:      'vinlo_warmup_sends',
+  start:      'vinlo_warmup_start',
+};
+
+const TOTAL_DAYS = 42;          // 6 semaines
+const DEFAULT_START = '2026-06-03';
+
+/* Phases : index de jour -> infos. Quotas issus du manuel de chauffe. */
+const PHASES = [
+  { name: 'S1–S2', startDay: 0,  endDay: 13, quotaMin: 5,  quotaMax: 10, links: 0, color: 'var(--sage)',  cls: 's1', goal: '≥ 30 % de réponses' },
+  { name: 'S3–S4', startDay: 14, endDay: 27, quotaMin: 20, quotaMax: 30, links: 1, color: 'var(--blue-soft)', cls: 's3', goal: 'Maintenir l’engagement' },
+  { name: 'S5–S6', startDay: 28, endDay: 41, quotaMin: 45, quotaMax: 55, links: 1, color: 'var(--gold)',  cls: 's3', goal: 'Démarrer les campagnes' },
+];
+
+function phaseOfDay(d) {
+  for (const p of PHASES) if (d >= p.startDay && d <= p.endDay) return p;
+  return PHASES[PHASES.length - 1];
+}
+
+/* ---------- État ---------- */
+let recipients = load(LS.recipients, null);
+let sends = load(LS.sends, {});            // { recipientId: [dayIndex, ...] }
+let startDate = load(LS.start, DEFAULT_START);
+
+if (!recipients) {
+  // Destinataires d'exemple (éditables / supprimables)
+  recipients = [
+    { id: rid(), name: 'Camille Durand',  email: 'camille.durand@gmail.com' },
+    { id: rid(), name: 'Thomas Lefèvre',  email: 'thomas.lefevre@outlook.fr' },
+    { id: rid(), name: 'Léa Moreau',      email: 'lea.moreau@orange.fr' },
+    { id: rid(), name: 'Karim Benali',    email: 'k.benali@proton.me' },
+    { id: rid(), name: 'Sophie Marchand', email: 'sophie.marchand@yahoo.fr' },
+  ];
+  persist();
+}
+
+/* ---------- Utilitaires ---------- */
+function rid() { return 'r' + Math.random().toString(36).slice(2, 9); }
+function load(k, fb) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : fb; } catch (e) { return fb; } }
+function save(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+function persist() { save(LS.recipients, recipients); save(LS.sends, sends); save(LS.start, startDate); }
+
+function dayDate(i) { const d = new Date(startDate + 'T00:00:00'); d.setDate(d.getDate() + i); return d; }
+function fmtDate(d) { return d.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit' }); }
+function fmtLong(d) { return d.toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', year: 'numeric' }); }
+
+function todayIndex() {
+  const t = new Date(); t.setHours(0, 0, 0, 0);
+  const s = new Date(startDate + 'T00:00:00');
+  return Math.round((t - s) / 86400000);
+}
+function isSent(rId, day) { return (sends[rId] || []).includes(day); }
+function toggleSend(rId, day, on) {
+  const arr = sends[rId] || (sends[rId] = []);
+  const pos = arr.indexOf(day);
+  if (on && pos === -1) arr.push(day);
+  if (!on && pos !== -1) arr.splice(pos, 1);
+  persist();
+}
+function totalSends() { return Object.values(sends).reduce((a, arr) => a + arr.length, 0); }
+function sentOnDay(day) { return recipients.reduce((a, r) => a + (isSent(r.id, day) ? 1 : 0), 0); }
+
+/* ============================================================
+   GANTT
+   ============================================================ */
+function renderGantt() {
+  const ti = todayIndex();
+  document.getElementById('gantt-range').textContent =
+    'Démarré le ' + fmtLong(dayDate(0)) + ' → ' + fmtLong(dayDate(TOTAL_DAYS - 1));
+
+  // Phases
+  const curPhase = (ti >= 0 && ti < TOTAL_DAYS) ? phaseOfDay(ti) : null;
+  document.getElementById('gantt-phases').innerHTML = PHASES.map(p => `
+    <div class="phase-chip ${p === curPhase ? 'active' : ''}">
+      <span class="ph-dot" style="background:${p.color}"></span>
+      <div class="ph-name">${p.name}</div>
+      <div class="ph-quota">${p.quotaMin}–${p.quotaMax} <span style="font-size:12px;color:var(--text-mute)">mails/jour</span></div>
+      <div class="ph-meta">${p.links === 0 ? 'Texte brut, 0 lien' : 'Texte brut, 1 lien max'} · ${p.goal}</div>
+    </div>`).join('');
+
+  // En-têtes de semaines
+  let weeks = '';
+  for (let w = 0; w < 6; w++) {
+    const d0 = dayDate(w * 7);
+    weeks += `<div class="gantt-week-head">S${w + 1}<br><span style="font-weight:400;text-transform:none">${fmtDate(d0)}</span></div>`;
+  }
+  document.getElementById('gantt-weeks').innerHTML = weeks;
+
+  // Barres de phase (positionnées en % de la timeline)
+  document.getElementById('gantt-bars').innerHTML = PHASES.map(p => {
+    const left = (p.startDay / TOTAL_DAYS) * 100;
+    const width = ((p.endDay - p.startDay + 1) / TOTAL_DAYS) * 100;
+    return `<div class="gantt-bar" style="background:${p.color};margin-left:${left}%;width:${width}%">
+      ${p.name} — ${p.quotaMin}–${p.quotaMax}/j</div>`;
+  }).join('');
+
+  // Cases-jours
+  let days = '';
+  for (let i = 0; i < TOTAL_DAYS; i++) {
+    const p = phaseOfDay(i);
+    const done = sentOnDay(i) > 0;
+    const cls = [p.cls, done ? 'done' : '', i === ti ? 'today' : ''].join(' ');
+    days += `<div class="gantt-day ${cls}" title="${fmtLong(dayDate(i))} — ${sentOnDay(i)} envoi(s)"><span class="day-num">${i + 1}</span></div>`;
+  }
+  document.getElementById('gantt-days').innerHTML = days;
+
+  // Progression globale (cumul des quotas min attendus sur les jours écoulés)
+  let expected = 0;
+  const upto = Math.min(Math.max(ti + 1, 0), TOTAL_DAYS);
+  for (let i = 0; i < upto; i++) expected += phaseOfDay(i).quotaMin;
+  const total = totalSends();
+  const pct = expected > 0 ? Math.min(100, Math.round((total / expected) * 100)) : 0;
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-text').textContent =
+    total + ' envoi' + (total > 1 ? 's' : '') + ' · objectif cumulé à ce jour : ' + expected;
+  document.getElementById('progress-pct').textContent = pct + '%';
+}
+
+/* ============================================================
+   GRILLE DE SUIVI
+   ============================================================ */
+function renderTable() {
+  const ti = todayIndex();
+
+  // En-tête : jour 1..42, séparateurs de semaine
+  let head = '<tr><th class="recip-cell" style="text-align:left">Destinataire</th>';
+  for (let i = 0; i < TOTAL_DAYS; i++) {
+    const sep = i % 7 === 0 ? 'week-sep' : '';
+    const d = dayDate(i);
+    head += `<th class="${sep}" title="${fmtLong(d)}">${fmtDate(d)}</th>`;
+  }
+  head += '</tr>';
+  document.getElementById('track-head').innerHTML = head;
+
+  // Corps
+  let body = '';
+  for (const r of recipients) {
+    body += '<tr>';
+    body += `<td class="recip-cell">
+        <span class="recip-name">${escapeHtml(r.name)}</span>
+        <button class="del-btn" data-del="${r.id}" title="Supprimer">✕</button><br>
+        <span class="recip-email">${escapeHtml(r.email)}</span>
+      </td>`;
+    for (let i = 0; i < TOTAL_DAYS; i++) {
+      const p = phaseOfDay(i);
+      const colCls = [
+        'dcell',
+        i === ti ? 'col-today' : '',
+        p.cls === 's1' ? 'col-s1' : (p.cls === 's3' ? 'col-s3' : ''),
+      ].join(' ');
+      body += `<td class="${colCls}">
+        <input type="checkbox" class="cell-chk" data-r="${r.id}" data-d="${i}" ${isSent(r.id, i) ? 'checked' : ''}>
+      </td>`;
+    }
+    body += '</tr>';
+  }
+  if (recipients.length === 0) body = `<tr><td class="recip-cell" colspan="43" style="padding:18px;color:var(--text-mute)">Aucun destinataire — ajoute-en un ci-dessus.</td></tr>`;
+  document.getElementById('track-body').innerHTML = body;
+
+  // Listeners cases
+  document.querySelectorAll('.cell-chk').forEach(chk => {
+    chk.addEventListener('change', e => {
+      toggleSend(e.target.dataset.r, parseInt(e.target.dataset.d), e.target.checked);
+      refreshDynamic();
+    });
+  });
+  document.querySelectorAll('[data-del]').forEach(b => {
+    b.addEventListener('click', () => removeRecipient(b.dataset.del));
+  });
+}
+
+function renderDayCounter() {
+  const ti = todayIndex();
+  const inRange = ti >= 0 && ti < TOTAL_DAYS;
+  const p = inRange ? phaseOfDay(ti) : null;
+  const done = inRange ? sentOnDay(ti) : 0;
+  document.getElementById('dc-done').textContent = done;
+  document.getElementById('dc-goal').textContent = p ? `${p.quotaMin}–${p.quotaMax}` : '—';
+  const left = p ? Math.max(0, p.quotaMin - done) : 0;
+  document.getElementById('dc-left').textContent = !inRange ? 'hors période' : (left === 0 ? 'objectif atteint ✓' : left + ' min');
+
+  // KPIs hero
+  document.getElementById('kpi-today').textContent = done;
+  document.getElementById('kpi-left').textContent = !inRange ? '—' : (left === 0 ? '✓' : left + '/' + p.quotaMin);
+  document.getElementById('kpi-total').textContent = totalSends();
+}
+
+/* ============================================================
+   ENCADRÉ ADRESSES
+   ============================================================ */
+function renderAddresses() {
+  const box = document.getElementById('addr-list');
+  const contacted = recipients
+    .map(r => ({ r, days: (sends[r.id] || []) }))
+    .filter(x => x.days.length > 0)
+    .map(x => ({ r: x.r, count: x.days.length, last: Math.max(...x.days) }));
+
+  if (contacted.length === 0) {
+    box.innerHTML = `<div class="addr-empty">Aucune adresse contactée pour l'instant — coche une case ou utilise « Marquer comme envoyé ».</div>`;
+    return;
+  }
+  contacted.sort((a, b) => b.last - a.last);
+  box.innerHTML = contacted.map(x => `
+    <div class="addr-item">
+      <div><span class="a-mail">${escapeHtml(x.r.email)}</span><br><span class="a-meta">${escapeHtml(x.r.name)}</span></div>
+      <span class="a-meta">${x.count} envoi(s)<br>dernier : ${fmtDate(dayDate(x.last))}</span>
+    </div>`).join('');
+}
+
+function contactedEmails() {
+  return recipients.filter(r => (sends[r.id] || []).length > 0).map(r => r.email);
+}
+
+/* ============================================================
+   GÉNÉRATEUR DE MAIL
+   ============================================================ */
+const FRAG = {
+  openings: [
+    'Salut {p},',
+    'Hello {p},',
+    'Coucou {p},',
+    'Salut {p}, j’espère que tu vas bien.',
+    'Hello {p}, dis-moi quand tu as deux minutes.',
+  ],
+  contexts: [
+    'j’avance sur le lancement de Salverys (support client externalisé depuis Madagascar pour des clients français)',
+    'je bosse en ce moment sur Salverys, notre projet de télésecrétariat médical externalisé',
+    'on prépare le démarrage de Salverys et je cale notre positionnement sur l’externalisation de support',
+    'je remonte une équipe pour Salverys, du support francophone à coût réduit pour des boîtes françaises',
+    'je creuse le marché du secrétariat médical à distance avec Salverys',
+  ],
+  questions: [
+    'd’après toi, quel est le principal frein des cabinets médicaux pour externaliser leur secrétariat ?',
+    'tu penses que le premier blocage c’est le coût, ou plutôt la confiance ?',
+    'si tu devais externaliser ton support client, qu’est-ce qui te bloquerait en premier ?',
+    'tu connais des éditeurs SaaS qui galèrent avec leur support N1 ? j’essaie de comprendre leurs besoins.',
+    'quel argument te ferait confiance pour confier ton standard à une équipe externe ?',
+    'tu vois un truc qui manque aux prestataires de support que tu as déjà testés ?',
+  ],
+  closings: [
+    'Dis-moi, ça m’aide vraiment.',
+    'Ton avis m’intéresse beaucoup, merci d’avance.',
+    'Même une réponse en deux lignes m’aiderait.',
+    'Pas de pression, juste ton ressenti rapide.',
+    'Curieux d’avoir ton retour franc.',
+  ],
+  linkLines: [
+    'Si ça t’intéresse, j’ai posé l’idée ici : https://salverys-bpo.fr',
+    'Je t’ai mis deux lignes de contexte là : https://salverys-bpo.fr',
+  ],
+};
+function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+
+function generateEmail() {
+  const phaseIdx = parseInt(document.querySelector('#phase-pills .pill.active').dataset.phase);
+  const phase = PHASES[phaseIdx];
+  const sel = document.getElementById('gen-recip');
+  const r = recipients.find(x => x.id === sel.value);
+  const prenom = r ? r.name.split(' ')[0] : 'là';
+
+  let body = pick(FRAG.openings).replace('{p}', prenom) + '\n\n';
+  body += pick(FRAG.contexts) + ', je voulais ton avis rapide : ' + pick(FRAG.questions) + '\n\n';
+  if (phase.links >= 1 && Math.random() < 0.5) body += pick(FRAG.linkLines) + '\n\n';
+  body += pick(FRAG.closings) + '\n\nValérien';
+
+  document.getElementById('gen-output').value = body;
+  document.getElementById('gen-rules').textContent =
+    `Phase ${phase.name} — texte brut, ${phase.links === 0 ? '0 lien' : '1 lien max'}, une question. À varier à chaque envoi.`;
+}
+
+/* ============================================================
+   ACTIONS
+   ============================================================ */
+function addRecipient() {
+  const name = document.getElementById('new-name').value.trim();
+  const email = document.getElementById('new-email').value.trim();
+  if (!name || !email) { toast('Renseigne un nom et un email.'); return; }
+  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { toast('Email invalide.'); return; }
+  recipients.push({ id: rid(), name, email });
+  persist();
+  document.getElementById('new-name').value = '';
+  document.getElementById('new-email').value = '';
+  renderAll();
+  toast('Destinataire ajouté.');
+}
+
+function removeRecipient(id) {
+  const r = recipients.find(x => x.id === id);
+  if (!r) return;
+  if (!confirm('Supprimer ' + r.name + ' ? Les coches associées seront perdues.')) return;
+  recipients = recipients.filter(x => x.id !== id);
+  delete sends[id];
+  persist();
+  renderAll();
+}
+
+function markSentToday() {
+  const ti = todayIndex();
+  if (ti < 0 || ti >= TOTAL_DAYS) { toast('Hors de la période de chauffe.'); return; }
+  const sel = document.getElementById('gen-recip');
+  if (!sel.value) { toast('Choisis un destinataire.'); return; }
+  if (isSent(sel.value, ti)) { toast('Déjà marqué envoyé aujourd’hui.'); return; }
+  toggleSend(sel.value, ti, true);
+  renderAll();
+  toast('Marqué comme envoyé aujourd’hui ✓');
+}
+
+async function copyText(text, msg) {
+  try { await navigator.clipboard.writeText(text); toast(msg); }
+  catch (e) {
+    const ta = document.createElement('textarea'); ta.value = text; document.body.appendChild(ta);
+    ta.select(); try { document.execCommand('copy'); toast(msg); } catch (_) { toast('Copie impossible.'); }
+    document.body.removeChild(ta);
+  }
+}
+
+let toastTimer;
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+function escapeHtml(s) { return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
+
+/* ============================================================
+   RENDU
+   ============================================================ */
+function renderRecipSelect() {
+  const sel = document.getElementById('gen-recip');
+  const prev = sel.value;
+  sel.innerHTML = recipients.map(r => `<option value="${r.id}">${escapeHtml(r.name)} — ${escapeHtml(r.email)}</option>`).join('');
+  if (recipients.some(r => r.id === prev)) sel.value = prev;
+}
+
+function refreshDynamic() {  // recalcule ce qui dépend des coches sans tout reconstruire
+  renderGantt();
+  renderDayCounter();
+  renderAddresses();
+}
+
+function renderAll() {
+  renderGantt();
+  renderTable();
+  renderDayCounter();
+  renderAddresses();
+  renderRecipSelect();
+}
+
+/* ---------- Listeners ---------- */
+document.getElementById('add-recip').addEventListener('click', addRecipient);
+document.getElementById('new-email').addEventListener('keydown', e => { if (e.key === 'Enter') addRecipient(); });
+document.getElementById('gen-btn').addEventListener('click', generateEmail);
+document.getElementById('copy-btn').addEventListener('click', () => {
+  const v = document.getElementById('gen-output').value;
+  if (!v.trim()) { toast('Génère d’abord un mail.'); return; }
+  copyText(v, 'Mail copié ✓');
+});
+document.getElementById('mark-btn').addEventListener('click', markSentToday);
+document.getElementById('copy-addr').addEventListener('click', () => {
+  const list = contactedEmails();
+  if (list.length === 0) { toast('Aucune adresse contactée.'); return; }
+  copyText(list.join(', '), list.length + ' adresse(s) copiée(s) ✓');
+});
+document.querySelectorAll('#phase-pills .pill').forEach(p => {
+  p.addEventListener('click', () => {
+    document.querySelectorAll('#phase-pills .pill').forEach(x => x.classList.remove('active'));
+    p.classList.add('active');
+  });
+});
+
+/* ---------- Init ---------- */
+// Phase par défaut du générateur = phase courante
+(function initPhase() {
+  const ti = todayIndex();
+  if (ti >= 0 && ti < TOTAL_DAYS) {
+    const idx = PHASES.indexOf(phaseOfDay(ti));
+    document.querySelectorAll('#phase-pills .pill').forEach(x => x.classList.toggle('active', parseInt(x.dataset.phase) === idx));
+  }
+})();
+renderAll();
+generateEmail();
+</script>
+
+</body>
+</html>
