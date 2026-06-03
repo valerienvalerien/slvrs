@@ -137,11 +137,13 @@
     padding: 0 14px; color: #fff; font-size: 12px; font-weight: 600; margin-bottom: 8px;
     box-shadow: var(--shadow-sm); white-space: nowrap; overflow: hidden;
   }
-  .gantt-days { display: grid; grid-template-columns: repeat(42, 1fr); gap: 2px; margin-top: 6px; }
+  .gantt-days { display: grid; grid-template-columns: repeat(43, 1fr); gap: 2px; margin-top: 6px; }
   .gantt-day { height: 22px; border-radius: 4px; background: var(--greige); position: relative; }
   .gantt-day.s1 { background: var(--sage-light); }
   .gantt-day.s2 { background: var(--blue-light); opacity:.5; }
   .gantt-day.s3 { background: var(--gold-soft); }
+  .gantt-day.weekend { background: var(--greige-dark); opacity: .4; }
+  .gantt-day.weekend .day-num { color: var(--text-mute); }
   .gantt-day.done { box-shadow: inset 0 0 0 2px var(--sage-dark); }
   .gantt-day.today { box-shadow: 0 0 0 2px var(--blue), 0 0 0 4px rgba(46,59,78,.2); z-index:2; }
   .gantt-day .day-num { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:9px; color: var(--text-soft); }
@@ -165,9 +167,16 @@
   table.track .recip-email { color: var(--text-mute); font-size: 11px; }
   table.track tbody tr:hover .recip-cell { background: #fff; }
   .cell-chk { width: 16px; height: 16px; cursor: pointer; accent-color: var(--sage-dark); }
-  td.dcell.col-today { background: rgba(46,59,78,.06); }
   td.dcell.col-s1 { background: rgba(197,210,197,.18); }
   td.dcell.col-s3 { background: rgba(212,185,138,.14); }
+  td.dcell.col-weekend { background: repeating-linear-gradient(45deg, rgba(0,0,0,.03), rgba(0,0,0,.03) 4px, rgba(0,0,0,.06) 4px, rgba(0,0,0,.06) 8px); }
+  td.dcell.col-weekend .cell-chk { opacity: .45; }
+  td.dcell.col-today { background: rgba(46,59,78,.10); }
+  table.track thead th.th-weekend { color: rgba(255,255,255,.45); font-weight: 400; }
+
+  /* Bandeau créneau / heures de travail */
+  .note-band { display:flex; align-items:flex-start; gap:10px; background: var(--bg-elevated); border:1px solid var(--greige); border-left:3px solid var(--sage); border-radius: var(--radius-sm); padding:10px 14px; font-size:12.5px; color: var(--text-soft); margin: 0 0 18px; line-height:1.5; }
+  .note-band b { color: var(--blue); }
   .del-btn { background:none; border:none; color: var(--danger); cursor:pointer; font-size: 14px; margin-left: 6px; opacity:.6; }
   .del-btn:hover { opacity: 1; }
 
@@ -250,6 +259,14 @@
   <div class="card section" style="margin-top:24px">
     <div class="card-title">Planning de montée en charge — 6 semaines</div>
     <div class="card-sub" id="gantt-range">Démarré le …</div>
+
+    <div class="note-band">
+      <span>🕘</span>
+      <span><b>Jours ouvrés uniquement</b> — les week-ends sont grisés et exclus des objectifs.
+      <b>Créneau d'envoi conseillé : 8 h – 18 h, heure de France.</b> Antananarivo est à UTC+3
+      (≈ +1 h sur la France en été), donc vise plutôt 9 h – 19 h heure de Mada pour rester
+      dans les heures de bureau françaises — recommandation, non imposée.</span>
+    </div>
 
     <div class="gantt-phases" id="gantt-phases"></div>
 
@@ -354,14 +371,14 @@ const LS = {
   start:      'vinlo_warmup_start',
 };
 
-const TOTAL_DAYS = 42;          // 6 semaines
+const TOTAL_DAYS = 43;          // 03 juin → 15 juil. 2026 (aligné sur Salve2, S6 = 8 jours)
 const DEFAULT_START = '2026-06-03';
 
-/* Phases : index de jour -> infos. Quotas issus du manuel de chauffe. */
+/* Phases : index de jour -> infos. Quotas (par jour ouvré) issus du manuel de chauffe. */
 const PHASES = [
   { name: 'S1–S2', startDay: 0,  endDay: 13, quotaMin: 5,  quotaMax: 10, links: 0, color: 'var(--sage)',  cls: 's1', goal: '≥ 30 % de réponses' },
   { name: 'S3–S4', startDay: 14, endDay: 27, quotaMin: 20, quotaMax: 30, links: 1, color: 'var(--blue-soft)', cls: 's3', goal: 'Maintenir l’engagement' },
-  { name: 'S5–S6', startDay: 28, endDay: 41, quotaMin: 45, quotaMax: 55, links: 1, color: 'var(--gold)',  cls: 's3', goal: 'Démarrer les campagnes' },
+  { name: 'S5–S6', startDay: 28, endDay: 42, quotaMin: 45, quotaMax: 55, links: 1, color: 'var(--gold)',  cls: 's3', goal: 'Démarrer les campagnes' },
 ];
 
 function phaseOfDay(d) {
@@ -395,6 +412,10 @@ function persist() { save(LS.recipients, recipients); save(LS.sends, sends); sav
 function dayDate(i) { const d = new Date(startDate + 'T00:00:00'); d.setDate(d.getDate() + i); return d; }
 function fmtDate(d) { return d.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit' }); }
 function fmtLong(d) { return d.toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', year: 'numeric' }); }
+
+/* Jours ouvrés : on n'envoie pas le week-end (samedi/dimanche). */
+function isWeekend(i) { const wd = dayDate(i).getDay(); return wd === 0 || wd === 6; }
+function isWorkday(i) { return !isWeekend(i); }
 
 function todayIndex() {
   const t = new Date(); t.setHours(0, 0, 0, 0);
@@ -450,21 +471,23 @@ function renderGantt() {
   let days = '';
   for (let i = 0; i < TOTAL_DAYS; i++) {
     const p = phaseOfDay(i);
+    const we = isWeekend(i);
     const done = sentOnDay(i) > 0;
-    const cls = [p.cls, done ? 'done' : '', i === ti ? 'today' : ''].join(' ');
-    days += `<div class="gantt-day ${cls}" title="${fmtLong(dayDate(i))} — ${sentOnDay(i)} envoi(s)"><span class="day-num">${i + 1}</span></div>`;
+    const cls = [p.cls, we ? 'weekend' : '', done ? 'done' : '', i === ti ? 'today' : ''].join(' ');
+    const title = fmtLong(dayDate(i)) + (we ? ' — week-end (pas d’envoi)' : ' — ' + sentOnDay(i) + ' envoi(s)');
+    days += `<div class="gantt-day ${cls}" title="${title}"><span class="day-num">${i + 1}</span></div>`;
   }
   document.getElementById('gantt-days').innerHTML = days;
 
-  // Progression globale (cumul des quotas min attendus sur les jours écoulés)
+  // Progression globale (cumul des quotas min attendus sur les JOURS OUVRÉS écoulés)
   let expected = 0;
   const upto = Math.min(Math.max(ti + 1, 0), TOTAL_DAYS);
-  for (let i = 0; i < upto; i++) expected += phaseOfDay(i).quotaMin;
+  for (let i = 0; i < upto; i++) if (isWorkday(i)) expected += phaseOfDay(i).quotaMin;
   const total = totalSends();
   const pct = expected > 0 ? Math.min(100, Math.round((total / expected) * 100)) : 0;
   document.getElementById('progress-fill').style.width = pct + '%';
   document.getElementById('progress-text').textContent =
-    total + ' envoi' + (total > 1 ? 's' : '') + ' · objectif cumulé à ce jour : ' + expected;
+    total + ' envoi' + (total > 1 ? 's' : '') + ' · objectif cumulé (jours ouvrés) : ' + expected;
   document.getElementById('progress-pct').textContent = pct + '%';
 }
 
@@ -474,12 +497,13 @@ function renderGantt() {
 function renderTable() {
   const ti = todayIndex();
 
-  // En-tête : jour 1..42, séparateurs de semaine
+  // En-tête : jours, séparateurs de semaine, week-ends grisés
   let head = '<tr><th class="recip-cell" style="text-align:left">Destinataire</th>';
   for (let i = 0; i < TOTAL_DAYS; i++) {
     const sep = i % 7 === 0 ? 'week-sep' : '';
+    const we = isWeekend(i) ? 'th-weekend' : '';
     const d = dayDate(i);
-    head += `<th class="${sep}" title="${fmtLong(d)}">${fmtDate(d)}</th>`;
+    head += `<th class="${sep} ${we}" title="${fmtLong(d)}${isWeekend(i) ? ' — week-end' : ''}">${fmtDate(d)}</th>`;
   }
   head += '</tr>';
   document.getElementById('track-head').innerHTML = head;
@@ -497,16 +521,17 @@ function renderTable() {
       const p = phaseOfDay(i);
       const colCls = [
         'dcell',
+        isWeekend(i) ? 'col-weekend' : (p.cls === 's1' ? 'col-s1' : (p.cls === 's3' ? 'col-s3' : '')),
         i === ti ? 'col-today' : '',
-        p.cls === 's1' ? 'col-s1' : (p.cls === 's3' ? 'col-s3' : ''),
       ].join(' ');
-      body += `<td class="${colCls}">
+      const title = isWeekend(i) ? 'Week-end — pas d’envoi de chauffe' : '';
+      body += `<td class="${colCls}" title="${title}">
         <input type="checkbox" class="cell-chk" data-r="${r.id}" data-d="${i}" ${isSent(r.id, i) ? 'checked' : ''}>
       </td>`;
     }
     body += '</tr>';
   }
-  if (recipients.length === 0) body = `<tr><td class="recip-cell" colspan="43" style="padding:18px;color:var(--text-mute)">Aucun destinataire — ajoute-en un ci-dessus.</td></tr>`;
+  if (recipients.length === 0) body = `<tr><td class="recip-cell" colspan="${TOTAL_DAYS + 1}" style="padding:18px;color:var(--text-mute)">Aucun destinataire — ajoute-en un ci-dessus.</td></tr>`;
   document.getElementById('track-body').innerHTML = body;
 
   // Listeners cases
@@ -524,16 +549,20 @@ function renderTable() {
 function renderDayCounter() {
   const ti = todayIndex();
   const inRange = ti >= 0 && ti < TOTAL_DAYS;
+  const weekend = inRange && isWeekend(ti);
   const p = inRange ? phaseOfDay(ti) : null;
   const done = inRange ? sentOnDay(ti) : 0;
+  const left = (p && !weekend) ? Math.max(0, p.quotaMin - done) : 0;
+
   document.getElementById('dc-done').textContent = done;
-  document.getElementById('dc-goal').textContent = p ? `${p.quotaMin}–${p.quotaMax}` : '—';
-  const left = p ? Math.max(0, p.quotaMin - done) : 0;
-  document.getElementById('dc-left').textContent = !inRange ? 'hors période' : (left === 0 ? 'objectif atteint ✓' : left + ' min');
+  document.getElementById('dc-goal').textContent = !inRange ? '—' : (weekend ? 'jour non ouvré' : `${p.quotaMin}–${p.quotaMax}`);
+  document.getElementById('dc-left').textContent =
+    !inRange ? 'hors période' : (weekend ? 'repos · pas d’envoi' : (left === 0 ? 'objectif atteint ✓' : left + ' min'));
 
   // KPIs hero
   document.getElementById('kpi-today').textContent = done;
-  document.getElementById('kpi-left').textContent = !inRange ? '—' : (left === 0 ? '✓' : left + '/' + p.quotaMin);
+  document.getElementById('kpi-left').textContent =
+    !inRange ? '—' : (weekend ? 'WE' : (left === 0 ? '✓' : left + '/' + p.quotaMin));
   document.getElementById('kpi-total').textContent = totalSends();
 }
 
